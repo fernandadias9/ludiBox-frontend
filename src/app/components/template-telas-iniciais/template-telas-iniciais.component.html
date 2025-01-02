@@ -1,7 +1,12 @@
 <main class="relative w-screen h-screen overflow-hidden">
-  <div class="absolute top-0 left-0 w-5/12 h-full bg-[#F3A455]">
+  <div class="absolute top-0 left-0 w-5/12 h-full bg-primary">
     <img src="/images/logo.png" alt="Logomarca LudiBox" class="relative z-10 mx-auto mt-24">
     <img src="/images/ondas.png" alt="Ondas amarelas no canto inferior esquerdo da tela" class="absolute bottom-0 left-0 w-full">
   </div>
-  <img src="/images/cabelinho.png" alt="Mancha laranja no canto superior direito da tela" class="absolute top-0 right-0">
+  <div class="absolute top-0 right-0 h-full w-7/12">
+    <img src="/images/cabelinho.png" alt="Mancha laranja no canto superior direito da tela" class="absolute top-0 right-0">
+    <div class="h-full mx-24 my-32">
+      <ng-content></ng-content>
+    </div>
+  </div>
 </main>

@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { TemplateTelasIniciaisComponent } from './components/template-telas-iniciais/template-telas-iniciais.component';
 import { InputComponent } from './components/input/input.component';
 import { FormsModule } from '@angular/forms';
+import { TelaDeLoginComponent } from './pages/tela-de-login/tela-de-login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TemplateTelasIniciaisComponent,
-    InputComponent
+    InputComponent,
+    TelaDeLoginComponent
   ],
   imports: [
     BrowserModule,

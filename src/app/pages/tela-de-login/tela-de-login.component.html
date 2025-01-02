@@ -1,0 +1,31 @@
+<app-template-telas-iniciais>
+  <div class="grid justify-items-center w-full">
+    <header class="grid justify-items-center gap-3 mb-6">
+      <h1 class="text-3xl font-extrabold drop-shadow-lg">Bem-vindo!</h1>
+
+      <p class="text-placeholder_color font-bold">Faça seu login</p>
+    </header>
+
+    <form action="" class="grid gap-3 w-full px-44 mb-2">
+      <app-input
+        for="email"
+        label="E-mail"
+        id="email"
+        type="email"
+        placeholder="E-mail"
+        aria-placeholder="digite seu e-mail"
+      ></app-input>
+
+        <app-input
+          for="password"
+          label="Senha"
+          id="password"
+          type="password"
+          placeholder="Senha"
+          aria-placeholder="digite sua senha"
+      ></app-input>
+    </form>
+    <a href="#" class="font-bold text-primary text-sm underline justify-self-end pr-44 mb-8">Esqueceu sua senha?</a>
+    <button class="flex justify-items-center border-primary border-[3px] rounded-3xl text-xl text-primary font-medium px-8 py-2 drop-shadow-lg">Entrar</button>
+  </div>
+</app-template-telas-iniciais>
