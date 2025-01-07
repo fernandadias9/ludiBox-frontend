@@ -1,6 +1,6 @@
 <app-template-telas-iniciais>
   <div class="grid justify-items-center w-full">
-    <header class="grid justify-items-center gap-3 mb-6">
+    <header class="grid justify-items-center gap-3 mb-6 pt-10">
       <h1 class="text-3xl font-extrabold drop-shadow-lg">Bem-vindo!</h1>
 
       <p class="text-placeholder_color font-bold">Faça seu login</p>
@@ -25,7 +25,15 @@
           aria-placeholder="digite sua senha"
       ></app-input>
     </form>
-    <a href="#" class="font-bold text-primary text-sm underline justify-self-end pr-44 mb-8">Esqueceu sua senha?</a>
-    <button class="flex justify-items-center border-primary border-[3px] rounded-3xl text-xl text-primary font-medium px-8 py-2 drop-shadow-lg">Entrar</button>
+    <a href="#" class="font-bold text-primary text-sm underline justify-self-end pr-44 mb-8 hover:brightness-110">Esqueceu sua senha?</a>
+    <button
+      class="flex justify-items-center border-primary border-[3px] rounded-3xl text-xl text-primary font-medium px-8 py-2 drop-shadow-lg relative hover:text-white hover:bg-primary hover:border-white ease-in-out duration-700"
+    >
+      Entrar
+    </button>
+    <div class="flex flex-col items-center mt-10 gap-2">
+      <p class="text-placeholder_color font-bold text-sm">Não possui uma conta?</p>
+      <button class="font-extrabold text-primary text-xl underline hover:scale-105 ease-in duration-300">Cadastre-se</button>
+    </div>
   </div>
 </app-template-telas-iniciais>
