@@ -1,12 +1,11 @@
 <app-template-telas-iniciais>
   <div class="grid justify-items-center w-full">
-    <header class="grid justify-items-center gap-3 mb-6 pt-10">
-      <h1 class="text-3xl font-extrabold drop-shadow-lg">Bem-vindo!</h1>
-
-      <p class="text-placeholder_color font-bold">Faça seu login</p>
+    <header class="grid justify-items-center gap-1.5 mb-4 pt-5 lg:gap-3 lg:mb-6 lg:pt-10">
+      <h1 class="text-xl font-extrabold drop-shadow-lg lg:text-3xl">Bem-vindo!</h1>
+      <p class="text-placeholder_color font-bold text-xs lg:text-base">Faça seu login</p>
     </header>
 
-    <form action="" class="grid gap-3 w-full px-44 mb-2">
+    <form action="" class="grid gap-1.5 w-full px-4 sm:px-40 lg:px-16 xl:px-36 mb-2 lg:gap-3 ">
       <app-input
         for="email"
         label="E-mail"
@@ -16,24 +15,28 @@
         aria-placeholder="digite seu e-mail"
       ></app-input>
 
-        <app-input
-          for="password"
-          label="Senha"
-          id="password"
-          type="password"
-          placeholder="Senha"
-          aria-placeholder="digite sua senha"
+      <app-input
+        for="password"
+        label="Senha"
+        id="password"
+        type="password"
+        placeholder="Senha"
+        aria-placeholder="digite sua senha"
       ></app-input>
     </form>
-    <a href="#" class="font-bold text-primary text-sm underline justify-self-end pr-44 mb-8 hover:brightness-110">Esqueceu sua senha?</a>
+    <a href="#" class="font-bold text-primary text-xs lg:text-sm underline justify-self-end pr-7 sm:pr-44 lg:pr-16 xl:pr-36 mb-4 sm:mb-6 lg:mb-8 hover:brightness-110">
+      Esqueceu sua senha?
+    </a>
     <button
-      class="flex justify-items-center border-primary border-[3px] rounded-3xl text-xl text-primary font-medium px-8 py-2 drop-shadow-lg relative hover:text-white hover:bg-primary hover:border-white ease-in-out duration-700"
+      class="flex justify-items-center border-primary border-[1px] sm:border-2 lg:border-[3px] rounded-3xl text-base sm:text-lg lg:text-xl text-primary font-medium px-4 sm:px-6 lg:px-8 py-1 lg:py-2 drop-shadow-lg relative hover:text-white hover:bg-primary hover:border-white ease-in-out duration-700"
     >
       Entrar
     </button>
-    <div class="flex flex-col items-center mt-10 gap-2">
-      <p class="text-placeholder_color font-bold text-sm">Não possui uma conta?</p>
-      <button class="font-extrabold text-primary text-xl underline hover:scale-105 ease-in duration-300">Cadastre-se</button>
+    <div class="flex flex-col items-center mt-4 xl:mt-9 gap-1 lg:gap-2">
+      <p class="text-placeholder_color font-bold text-xs lg:text-sm">Não possui uma conta?</p>
+      <button class="font-extrabold text-primary text-sm sm:text-base lg:text-xl underline hover:scale-105 ease-in duration-300">
+        Cadastre-se
+      </button>
     </div>
   </div>
 </app-template-telas-iniciais>
