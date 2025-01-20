@@ -7,13 +7,19 @@ import { TemplateTelasIniciaisComponent } from './components/template-telas-inic
 import { InputComponent } from './components/input/input.component';
 import { FormsModule } from '@angular/forms';
 import { TelaDeLoginComponent } from './pages/tela-de-login/tela-de-login.component';
+import { CadastroUsuarioComponent } from './pages/cadastro-usuario/cadastro-usuario.component';
+import { ButtonPrimaryComponent } from './components/button-primary/button-primary.component';
+import { ButtonSecondaryComponent } from './components/button-secondary/button-secondary.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TemplateTelasIniciaisComponent,
     InputComponent,
-    TelaDeLoginComponent
+    TelaDeLoginComponent,
+    CadastroUsuarioComponent,
+    ButtonPrimaryComponent,
+    ButtonSecondaryComponent
   ],
   imports: [
     BrowserModule,
