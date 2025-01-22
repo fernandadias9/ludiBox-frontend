@@ -4,7 +4,7 @@
       <h1 class="text-xl font-extrabold drop-shadow-lg lg:text-3xl">Cadastre-se</h1>
     </header>
 
-    <div class="w-full md:px-16 lg:px-0 xl:px-12 mb-1">
+    <div class="w-full md:px-11 lg:px-0 xl:px-12 mb-1">
       <label class="inline-flex items-center cursor-pointer">
         <input type="checkbox" (change)="togglePessoaJuridica($event)" value="" class="sr-only peer">
         <div
@@ -14,39 +14,40 @@
       </label>
     </div>
 
-    <!-- parei aqui -->
-    <form class="grid gap-1.5 w-full sm:px-40 md:px-16 lg:px-0 xl:px-12 mb-2 lg:gap-3">
+    <form class="grid gap-1.5 w-full sm:px-40 md:px-11 lg:px-0 xl:px-12 mb-2 lg:gap-3">
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
         <app-input id="name" [label]="isPessoaJuridica ? 'Razão Social' : 'Nome Completo'"
-          placeholder="{{ isPessoaJuridica ? 'Razão Social' : 'Nome Completo' }}" class="w-full xl:w-3/5"></app-input>
+          placeholder="{{ isPessoaJuridica ? 'Razão Social' : 'Nome Completo' }}" class="w-full md:w-3/5"></app-input>
 
         <app-input id="document" [label]="isPessoaJuridica ? 'CNPJ' : 'CPF'"
-          placeholder="{{ isPessoaJuridica ? 'CNPJ' : 'CPF' }}" class="w-full xl:w-2/5"></app-input>
+          placeholder="{{ isPessoaJuridica ? 'CNPJ' : 'CPF' }}" class="w-full md:w-2/5"></app-input>
       </div>
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-        <app-input id="email" label="Email" placeholder="Email" class="w-full xl:w-3/5"></app-input>
+        <app-input id="email" label="Email" placeholder="Email" class="w-full md:w-3/5"></app-input>
 
-        <app-input id="phone" label="Telefone" placeholder="Telefone" class="w-full xl:w-2/5"></app-input>
+        <app-input id="phone" label="Telefone" placeholder="Telefone" class="w-full md:w-2/5"></app-input>
       </div>
 
       <ng-container *ngIf="isPessoaJuridica">
         <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-          <app-input id="cep" label="CEP" placeholder="CEP" class="w-full xl:w-1/4"></app-input>
-          <app-input id="address" label="Endereço" placeholder="Endereço" class="w-full xl:w-3/4"></app-input>
+          <app-input id="cep" label="CEP" placeholder="CEP" class="w-full md:w-1/4"></app-input>
+          <app-input id="address" label="Endereço" placeholder="Endereço" class="w-full md:w-3/4"></app-input>
         </div>
         <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-          <div class="flex gap-0 w-full xl:w-1/3">
+          <div class="flex gap-0 w-full md:w-2/5">
             <app-input id="number" label="Número" placeholder="Número" [disabled]="snChecked"></app-input>
-            <label class="flex items-center ml-4">
-              <input type="checkbox" class="h-5 w-5 cursor-pointer" (change)="toggleSN($event)" />
+            <label class="flex items-center ml-4 md:ml-3">
+              <input type="checkbox" class="h-5 w-5 md:w-2/4 cursor-pointer" (change)="toggleSN($event)" />
               <span class="ml-2">S/N</span>
             </label>
           </div>
-          <app-input id="complement" label="Complemento" placeholder="Complemento" class="w-full xl:w-2/3"></app-input>
+          <app-input id="complement" label="Complemento" placeholder="Complemento" class="w-full md:w-3/5 md:ml-1"></app-input>
         </div>
-        <app-input label="Estado" placeholder="Estado"></app-input>
-        <app-input label="Cidade" placeholder="Cidade"></app-input>
+        <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
+          <app-input label="Cidade" placeholder="Cidade" class="md:w-3/5"></app-input>
+          <app-input label="Estado" placeholder="Estado" class="md:w-2/5"></app-input>
+        </div>
       </ng-container>
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
