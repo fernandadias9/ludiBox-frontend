@@ -27,16 +27,16 @@
     <a href="#" class="font-bold text-primary text-xs lg:text-sm underline justify-self-end pr-7 sm:pr-44 lg:pr-16 xl:pr-36 mb-4 sm:mb-6 lg:mb-8 hover:brightness-110">
       Esqueceu sua senha?
     </a>
-    <button
-      class="flex justify-items-center border-primary border-[1px] sm:border-2 lg:border-[3px] rounded-3xl text-base sm:text-lg lg:text-xl text-primary font-medium px-4 sm:px-6 lg:px-8 py-1 lg:py-2 drop-shadow-lg relative hover:text-white hover:bg-primary hover:border-white ease-in-out duration-700"
-    >
-      Entrar
-    </button>
+    <app-button-primary
+      title="Entrar"
+    ></app-button-primary>
+    
     <div class="flex flex-col items-center mt-4 xl:mt-9 gap-1 lg:gap-2">
       <p class="text-placeholder_color font-bold text-xs lg:text-sm">Não possui uma conta?</p>
-      <button class="font-extrabold text-primary text-sm sm:text-base lg:text-xl underline hover:scale-105 ease-in duration-300">
-        Cadastre-se
-      </button>
+      <app-button-secondary
+        title="Cadastre-se"
+        routerLink="/cadastro"
+      ></app-button-secondary>
     </div>
   </div>
 </app-template-telas-iniciais>
