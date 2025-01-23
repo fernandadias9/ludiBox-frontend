@@ -1,0 +1,78 @@
+<app-template-telas-iniciais [withOverflow]="isPessoaJuridica || withOverflow">
+  <div class="{{ isPessoaJuridica ? 'grid justify-items-center w-full lg:pt-11' : 'grid justify-items-center w-full lg:pt-24'}}">
+    <header class="grid justify-items-center gap-1.5 mb-4 pt-5 lg:gap-3 lg:mb-6 lg:pt-10">
+      <h1 class="text-xl font-extrabold drop-shadow-lg lg:text-3xl">Cadastre-se</h1>
+    </header>
+
+    <div class="w-full md:px-11 lg:px-0 xl:px-12 mb-1">
+      <label class="inline-flex items-center cursor-pointer">
+        <input type="checkbox" (change)="togglePessoaJuridica($event)" value="" class="sr-only peer">
+        <div
+          class="relative w-12 h-7 bg-white border-primary border-2 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-primary peer-checked:after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+        </div>
+        <span class="ms-3 text-base lg:text-lg font-semibold text-[#C6C2C2]">Pessoa jurídica</span>
+      </label>
+    </div>
+
+    <form class="grid gap-1.5 w-full sm:px-40 md:px-11 lg:px-0 xl:px-12 mb-2 lg:gap-3">
+      <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
+        <app-input id="name" [label]="isPessoaJuridica ? 'Razão Social' : 'Nome Completo'"
+          placeholder="{{ isPessoaJuridica ? 'Razão Social' : 'Nome Completo' }}" class="w-full md:w-3/5"></app-input>
+
+        <app-input id="document" [label]="isPessoaJuridica ? 'CNPJ' : 'CPF'"
+          placeholder="{{ isPessoaJuridica ? 'CNPJ' : 'CPF' }}" class="w-full md:w-2/5"></app-input>
+      </div>
+
+      <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
+        <app-input id="email" label="Email" placeholder="Email" class="w-full md:w-3/5"></app-input>
+
+        <app-input id="phone" label="Telefone" placeholder="Telefone" class="w-full md:w-2/5"></app-input>
+      </div>
+
+      <ng-container *ngIf="isPessoaJuridica">
+        <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
+          <app-input id="cep" label="CEP" placeholder="CEP" class="w-full md:w-1/4"></app-input>
+          <app-input id="address" label="Endereço" placeholder="Endereço" class="w-full md:w-3/4"></app-input>
+        </div>
+        <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
+          <div class="flex gap-0 w-full md:w-2/5">
+            <app-input id="number" label="Número" placeholder="Número" [disabled]="snChecked"></app-input>
+            <label class="flex items-center ml-4 md:ml-3">
+              <input type="checkbox" class="h-5 w-5 md:w-2/4 cursor-pointer" (change)="toggleSN($event)" />
+              <span class="ml-2">S/N</span>
+            </label>
+          </div>
+          <app-input id="complement" label="Complemento" placeholder="Complemento" class="w-full md:w-3/5 md:ml-1"></app-input>
+        </div>
+        <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
+          <app-input label="Cidade" placeholder="Cidade" class="md:w-3/5"></app-input>
+          <app-input label="Estado" placeholder="Estado" class="md:w-2/5"></app-input>
+        </div>
+      </ng-container>
+
+      <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
+        <app-input *ngIf="!isPessoaJuridica" id="birthday" label="Data de Nascimento" type="date"></app-input>
+
+        <app-input id="password" label="Senha" type="password" placeholder="Senha"></app-input>
+
+        <app-input id="passwordConfirm" label="Confirmar Senha" type="password"
+          placeholder="Confirmar Senha"></app-input>
+      </div>
+
+      <div class="flex items-start mt-2 lg:mt-4 mb-5 px-2">
+        <input type="checkbox" class="h-5 w-5 cursor-pointer" [(ngModel)]="aceitaTermos" />
+        <label class="text-xs md:text-sm lg:text-base ml-2">
+          Eu concordo com os <a href="#" class="text-xs md:text-sm lg:text-base text-blue-600 underline">Termos de Serviço</a>,
+          <a href="#" class="text-xs md:text-sm lg:text-base text-blue-600 underline">Termos e Condições Gerais</a> e
+          <a href="#" class="text-xs md:text-sm lg:text-base text-blue-600 underline">Política de Privacidade</a>.
+        </label>
+      </div>
+
+      <div class="flex flex-col w-full items-center gap-3 pb-3">
+        <app-button-primary title="Registrar" routerLink=""></app-button-primary>
+
+        <app-button-secondary title="Voltar" routerLink=""></app-button-secondary>
+      </div>
+    </form>
+  </div>
+</app-template-telas-iniciais>
