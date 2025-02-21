@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-template-telas-iniciais',
@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './template-telas-iniciais.component.scss'
 })
 export class TemplateTelasIniciaisComponent {
-
+  @Input() withOverflow: boolean = false;
 }
