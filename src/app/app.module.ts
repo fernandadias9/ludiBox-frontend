@@ -10,6 +10,7 @@ import { TelaDeLoginComponent } from './pages/tela-de-login/tela-de-login.compon
 import { CadastroUsuarioComponent } from './pages/cadastro-usuario/cadastro-usuario.component';
 import { ButtonPrimaryComponent } from './components/button-primary/button-primary.component';
 import { ButtonSecondaryComponent } from './components/button-secondary/button-secondary.component';
+import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recuperacao-de-senha.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ButtonSecondaryComponent } from './components/button-secondary/button-s
     TelaDeLoginComponent,
     CadastroUsuarioComponent,
     ButtonPrimaryComponent,
-    ButtonSecondaryComponent
+    ButtonSecondaryComponent,
+    RecuperacaoDeSenhaComponent
   ],
   imports: [
     BrowserModule,
