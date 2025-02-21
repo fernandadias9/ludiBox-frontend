@@ -1,32 +1,28 @@
 <app-template-telas-iniciais>
-  <div class="grid justify-items-center w-full my-4 lg:my-32">
-    <header class="grid justify-items-center gap-1.5 mb-4 pt-5 lg:gap-3 lg:mb-6 lg:pt-10">
-      <h1 class="text-xl font-extrabold drop-shadow-lg lg:text-3xl">Informe seu e-mail</h1>
-      <p class="text-placeholder_color font-bold text-xs lg:text-base">Enviaremos um e-mail para que você possa trocar sua senha</p>
+  <div class="grid justify-items-center w-full my-11 lg:my-40 xl:my-52">
+    <header class="grid justify-items-center gap-2 mb-4 pt-5 lg:gap-3 lg:mb-6 lg:pt-10">
+      <h1 class="text-xl font-extrabold drop-shadow-lg md:text-3xl">Informe seu e-mail</h1>
+      <p class="text-placeholder_color text-center font-bold text-xs px-5 md:text-base">Enviaremos as instruções para que você possa trocar sua senha.</p>
     </header>
 
-    <form action="" class="grid gap-1.5 w-full px-4 sm:px-40 lg:px-16 xl:px-36 mb-2 lg:gap-3">
+    <form action="" class="grid gap-3 md:gap-5 w-full px-4 sm:px-40 md:px-32 lg:px-20 xl:px-36 mb-2">
       <app-input
         for="email"
         label="E-mail"
         id="email"
         type="email"
-        placeholder="E-mail"
+        placeholder="E-mail *"
         aria-placeholder="digite seu e-mail"
+        name="email"
+        [required]="true"
       ></app-input>
+
+      <div class="flex flex-col w-full items-center gap-2 lg:gap-3 pb-3">
+        <app-button-primary title="Enviar"></app-button-primary>
+
+        <app-button-secondary title="Voltar" routerLink=""></app-button-secondary>
+      </div>
     </form>
-
-    <app-button-primary
-      title="Entrar"
-    ></app-button-primary>
-
-    <div class="flex flex-col items-center mt-4 xl:mt-9 gap-1 lg:gap-2">
-      <p class="text-placeholder_color font-bold text-xs lg:text-sm">Não possui uma conta?</p>
-      <app-button-secondary
-        title="Cadastre-se"
-        routerLink="/cadastro"
-      ></app-button-secondary>
-    </div>
   </div>
 </app-template-telas-iniciais>
 
