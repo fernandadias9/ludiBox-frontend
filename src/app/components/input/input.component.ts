@@ -14,4 +14,5 @@ export class InputComponent {
   @Input() disabled: boolean = false;
   @Input() placeholder: string = '';
   @Input() showLabel: boolean = false;
+  @Input() name: string = '';
 }
