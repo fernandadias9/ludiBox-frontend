@@ -1,0 +1,33 @@
+<!-- <ng-container>
+  <div class="w-[230px] h-[266px] bg-white rounded-[20px] shadow-lg p-4 flex flex-col items-center">
+    <ngx-slick-carousel class="w-[204px] h-[142px] rounded-[14px] overflow-hidden" [config]="slideConfig">
+      <div *ngFor="let image of images">
+        <img [src]="image" class="w-[204px] h-[142px] object-cover rounded-[14px]" />
+      </div>
+    </ngx-slick-carousel>
+
+    <div class="text-lg font-semibold mt-3 text-center">{{ itemName }}</div>
+    <div class="text-md font-bold text-gray-700 mt-1">{{ itemPrice | currency:'BRL' }}</div>
+
+    <div class="flex items-center gap-2 mt-3">
+      <img [src]="userImage" class="w-8 h-8 rounded-full object-cover" />
+      <span class="text-sm font-medium">{{ userName }}</span>
+    </div>
+  </div>
+</ng-container> -->
+
+<ng-container>
+  <div class="w-[230px] h-[266px] bg-white rounded-[20px] shadow-lg p-4 flex flex-col items-center">
+      <div>
+        <img src="https://source.unsplash.com/random?cat/9" class="w-[204px] h-[142px] object-cover rounded-[14px]" />
+      </div>
+
+    <div class="text-lg font-semibold mt-3 text-center">Teste</div>
+    <div class="text-md font-bold text-gray-700 mt-1">R$ 130,00/dia</div>
+
+    <div class="flex items-center gap-2 mt-3">
+      <img src="https://source.unsplash.com/random?cat/9" class="w-8 h-8 rounded-full object-cover" />
+      <span class="text-sm font-medium">Festa Total</span>
+    </div>
+  </div>
+</ng-container>
