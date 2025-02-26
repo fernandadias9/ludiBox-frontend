@@ -1,6 +1,13 @@
 <main class="relative w-screen h-screen overflow-hidden">
   <div class="w-full h-24 bg-primary flex items-center justify-between px-5 lg:px-10 shadow-md fixed top-0 left-0 z-50">
     <img src="/images/logo.png" alt="Logomarca LudiBox" class="w-40 h-auto pt-2">
+
+    <div class="relative w-2/6 bg-[#FFEFE0] rounded-full">
+      <input type="text" placeholder="Pesquisar"
+        class="w-full pl-4 pr-10 py-2 rounded-full bg-[#FFEFE0] border-transparent focus:outline-none focus:border-primary border-2">
+      <i class="bi bi-search absolute right-5 top-1/2 transform -translate-y-1/2 text-primary"></i>
+    </div>
+
     <div class="flex items-center gap-5">
       <i class="bi bi-cart3 bi-cart-responsive"></i>
       <div class="relative">
@@ -20,7 +27,7 @@
           <ng-template #guestMenu>
             <div class="flex items-center gap-2 hover:bg-gray-100">
               <p class="cursor-pointer text-base md:text-lg" routerLink="login">Entrar</p>
-              <i class="bi bi-box-arrow-in-right "></i>
+              <i class="bi bi-box-arrow-in-right"></i>
             </div>
           </ng-template>
         </div>
@@ -32,24 +39,36 @@
     <ng-container *ngFor="let card of getPaginatedCards()">
       <app-card-anuncios [itemName]="card.title" [itemPrice]="card.price"></app-card-anuncios>
     </ng-container>
-    <div class="w-full flex justify-center mt-4">
+
+    <div class="w-full flex items-center justify-center mt-4 gap-2">
       <button
+        *ngIf="currentPage !== 1"
         (click)="changePage('prev')"
-        [disabled]="currentPage === 1"
-        class="px-4 py-2 bg-primary text-white rounded">
-        Anterior
+        class="px-2 focus:outline-none">
+        <i class="bi bi-chevron-left text-2xl"></i>
       </button>
-      <span class="mx-4">{{ currentPage }} / {{ totalPages }}</span>
+
+      <span *ngIf="pageNumbers[0] > 1" class="px-2">...</span>
+
+      <ng-container *ngFor="let page of pageNumbers">
+        <button
+          (click)="goToPage(page)"
+          [ngClass]="page === currentPage ? 'text-xl font-bold' : 'text-base font-normal'"
+          class="px-2 focus:outline-none">
+          {{ page }}
+        </button>
+      </ng-container>
+
+      <span *ngIf="pageNumbers[pageNumbers.length - 1] < totalPages" class="px-2">...</span>
+
       <button
+        *ngIf="currentPage !== totalPages"
         (click)="changePage('next')"
-        [disabled]="currentPage === totalPages"
-        class="px-4 py-2 bg-primary text-white rounded">
-        Próximo
+        class="px-2 focus:outline-none">
+        <i class="bi bi-chevron-right text-2xl"></i>
       </button>
     </div>
   </div>
-
-
 
   <footer class="w-full h-24 bg-primary fixed bottom-0 flex items-center justify-center">
     <p class="text-white text-center lg:text-lg">&copy; 2025 LudiBox - Todos os direitos reservados</p>
