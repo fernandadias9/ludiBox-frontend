@@ -19,7 +19,7 @@
           </ng-container>
           <ng-template #guestMenu>
             <div class="flex items-center gap-2 hover:bg-gray-100">
-              <p class="cursor-pointer text-base md:text-lg">Entrar</p>
+              <p class="cursor-pointer text-base md:text-lg" routerLink="login">Entrar</p>
               <i class="bi bi-box-arrow-in-right "></i>
             </div>
           </ng-template>
@@ -28,14 +28,28 @@
     </div>
   </div>
 
-  <div class="mt-24 bg-[#FFEFE0] flex flex-wrap justify-center gap-6 p-6 overflow-auto h-[calc(100vh-194px)]">
-    <ng-container *ngFor="let card of cards; let i = index">
-      <app-card-anuncios *ngIf="i < 18" [itemName]="card.title" [itemPrice]="card.price"></app-card-anuncios>
+  <div class="mt-24 bg-[#FFEFE0] flex flex-wrap justify-center gap-9 p-6 overflow-auto h-[calc(100vh-194px)]">
+    <ng-container *ngFor="let card of getPaginatedCards()">
+      <app-card-anuncios [itemName]="card.title" [itemPrice]="card.price"></app-card-anuncios>
     </ng-container>
     <div class="w-full flex justify-center mt-4">
-      <button class="px-4 py-2 bg-primary text-white rounded">Carregar Mais</button>
+      <button
+        (click)="changePage('prev')"
+        [disabled]="currentPage === 1"
+        class="px-4 py-2 bg-primary text-white rounded">
+        Anterior
+      </button>
+      <span class="mx-4">{{ currentPage }} / {{ totalPages }}</span>
+      <button
+        (click)="changePage('next')"
+        [disabled]="currentPage === totalPages"
+        class="px-4 py-2 bg-primary text-white rounded">
+        Próximo
+      </button>
     </div>
   </div>
+
+
 
   <footer class="w-full h-24 bg-primary fixed bottom-0 flex items-center justify-center">
     <p class="text-white text-center lg:text-lg">&copy; 2025 LudiBox - Todos os direitos reservados</p>
