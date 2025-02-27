@@ -35,9 +35,6 @@ export class TelaInicialComponent {
     } else if (direction === 'prev' && this.currentPage > 1) {
       this.currentPage--;
     }
-    console.log('entrou');
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   goToPage(page: number) {
