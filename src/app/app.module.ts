@@ -11,6 +11,8 @@ import { CadastroUsuarioComponent } from './pages/cadastro-usuario/cadastro-usua
 import { ButtonPrimaryComponent } from './components/button-primary/button-primary.component';
 import { ButtonSecondaryComponent } from './components/button-secondary/button-secondary.component';
 import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recuperacao-de-senha.component';
+import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.component';
+import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recupe
     CadastroUsuarioComponent,
     ButtonPrimaryComponent,
     ButtonSecondaryComponent,
-    RecuperacaoDeSenhaComponent
+    RecuperacaoDeSenhaComponent,
+    CardAnunciosComponent,
+    TelaInicialComponent
   ],
   imports: [
     BrowserModule,

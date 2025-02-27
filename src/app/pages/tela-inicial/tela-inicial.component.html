@@ -1,0 +1,82 @@
+<main class="relative w-screen h-screen overflow-hidden">
+  <div class="w-full h-24 bg-primary flex items-center justify-between px-5 lg:px-10 shadow-md fixed top-0 left-0 z-50">
+    <img src="/images/logo.png" alt="Logomarca LudiBox" class="w-40 h-auto pt-2">
+
+    <div class="relative w-2/6 bg-background_light rounded-full">
+      <input type="text" placeholder="Pesquisar"
+        class="w-full pl-4 pr-10 py-2 rounded-full bg-background_light border-transparent focus:outline-none focus:border-primary border-2">
+      <i class="bi bi-search absolute right-5 top-1/2 transform -translate-y-1/2 text-primary"></i>
+    </div>
+
+    <div class="flex items-center gap-5">
+      <i class="bi bi-cart3 bi-cart-responsive"></i>
+      <div class="relative">
+        <img [src]="userImage || '/images/person-circle.svg'" alt="Usuário" class="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full bg-gray-500 cursor-pointer" (click)="toggleMenu()">
+        <div *ngIf="menuOpen" class="absolute right-0 mt-1 min-w-max bg-white shadow-md rounded-md px-2 md:px-3 py-1 md:py-2">
+          <ng-container *ngIf="isLoggedIn; else guestMenu">
+            <p class="px-4 py-2">{{ userName }}</p>
+            <hr>
+            <ul>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Perfil</li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Endereços</li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Anúncios</li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Locações</li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500">Sair</li>
+            </ul>
+          </ng-container>
+
+          <ng-template #guestMenu>
+            <div class="flex items-center gap-2 mb-2 hover:bg-gray-100">
+              <p class="cursor-pointer text-base md:text-lg" routerLink="login">Entrar</p>
+              <i class="bi bi-box-arrow-in-right"></i>
+            </div>
+
+            <div class="flex items-center gap-2 hover:bg-gray-100">
+              <p class="cursor-pointer text-base md:text-lg" routerLink="cadastro">Cadastre-se</p>
+              <i class="bi bi-person-plus"></i>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-24 bg-background_light flex flex-wrap justify-center gap-9 p-6 overflow-auto h-[calc(100vh-160px)]">
+    <ng-container *ngFor="let card of getPaginatedCards()">
+      <app-card-anuncios [itemName]="card.title" [itemPrice]="card.price"></app-card-anuncios>
+    </ng-container>
+
+    <div class="w-full flex items-center justify-center mt-4 gap-2">
+      <button
+        *ngIf="currentPage !== 1"
+        (click)="changePage('prev')"
+        class="px-2 focus:outline-none">
+        <i class="bi bi-chevron-left text-2xl"></i>
+      </button>
+
+      <span *ngIf="pageNumbers[0] > 1" class="px-2">...</span>
+
+      <ng-container *ngFor="let page of pageNumbers">
+        <button
+          (click)="goToPage(page)"
+          [ngClass]="page === currentPage ? 'text-xl font-bold' : 'text-base font-normal'"
+          class="px-2 focus:outline-none">
+          {{ page }}
+        </button>
+      </ng-container>
+
+      <span *ngIf="pageNumbers[pageNumbers.length - 1] < totalPages" class="px-2">...</span>
+
+      <button
+        *ngIf="currentPage !== totalPages"
+        (click)="changePage('next')"
+        class="px-2 focus:outline-none">
+        <i class="bi bi-chevron-right text-2xl"></i>
+      </button>
+    </div>
+  </div>
+
+  <footer class="w-full h-16 bg-primary fixed bottom-0 flex items-center justify-center">
+    <p class="text-white text-center lg:text-lg">&copy; 2025 LudiBox - Todos os direitos reservados</p>
+  </footer>
+</main>
