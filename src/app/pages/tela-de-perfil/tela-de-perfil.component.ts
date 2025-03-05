@@ -8,6 +8,12 @@ import { Component } from '@angular/core';
 export class TelaDePerfilComponent {
 
   isOpen: boolean = false;
-
-
+  menu: { label: string; route: string }[] = [
+    { label: 'Perfil', route: '' },
+    { label: 'Endereços', route: '' },
+    { label: 'Anúncios', route: '' },
+    { label: 'Anúncios', route: '' },
+    { label: 'Locações', route: '' },
+    { label: 'Sair', route: '' }
+  ];
 }

@@ -12,6 +12,7 @@ import { ButtonPrimaryComponent } from './components/button-primary/button-prima
 import { ButtonSecondaryComponent } from './components/button-secondary/button-secondary.component';
 import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recuperacao-de-senha.component';
 import { TelaDePerfilComponent } from './pages/tela-de-perfil/tela-de-perfil.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { TelaDePerfilComponent } from './pages/tela-de-perfil/tela-de-perfil.com
     ButtonPrimaryComponent,
     ButtonSecondaryComponent,
     RecuperacaoDeSenhaComponent,
-    TelaDePerfilComponent
+    TelaDePerfilComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

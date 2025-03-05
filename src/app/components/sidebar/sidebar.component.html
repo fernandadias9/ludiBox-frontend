@@ -1,0 +1,18 @@
+<button 
+  (click)="toggleSidebar()" 
+  class="absolute top-24 left-2 z-50 p-2 rounded-md">
+  <i class="bi bi-layout-text-sidebar text-2xl" [ngClass]="{'bi-chevron-left': isOpen, 'bi-chevron-right': !isOpen}"></i>
+</button>
+
+<nav 
+  [ngClass]="{'translate-x-0': isOpen, '-translate-x-full': !isOpen}" 
+  class="w-40 h-screen bg-gray-300 text-black fixed top-0 left-0 shadow-lg transition-transform duration-300 flex flex-col">
+  
+  <div class="h-32"></div>
+  
+  <ul class="flex-1 mt-4 space-y-4">
+    <li *ngFor="let item of menuItems" class="px-4 py-3 hover:bg-primary cursor-pointer rounded-md">
+      <a [routerLink]="item.route">{{ item.label }}</a>
+    </li>
+  </ul>
+</nav>
