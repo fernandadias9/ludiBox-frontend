@@ -11,8 +11,8 @@
   <div class="h-32"></div>
   
   <ul class="flex-1 mt-4 space-y-4">
-    <li *ngFor="let item of menuItems" class="px-4 py-3 hover:bg-primary cursor-pointer rounded-md">
+    <strong><li *ngFor="let item of menuItems" class="px-4 py-3 hover:bg-primary cursor-pointer rounded-md">
       <a [routerLink]="item.route">{{ item.label }}</a>
-    </li>
+    </li></strong>
   </ul>
 </nav>

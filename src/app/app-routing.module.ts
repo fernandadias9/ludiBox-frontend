@@ -4,12 +4,14 @@ import { TelaDeLoginComponent } from './pages/tela-de-login/tela-de-login.compon
 import { CadastroUsuarioComponent } from './pages/cadastro-usuario/cadastro-usuario.component';
 import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recuperacao-de-senha.component';
 import { TelaDePerfilComponent } from './pages/tela-de-perfil/tela-de-perfil.component';
+import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
 
 const routes: Routes = [
-  { path: '', component: TelaDeLoginComponent },
+  { path: 'login', component: TelaDeLoginComponent },
   { path: 'cadastro', component: CadastroUsuarioComponent },
   { path: 'esqueci-minha_senha', component: RecuperacaoDeSenhaComponent },
-  { path: 'tela-perfil', component: TelaDePerfilComponent }
+  { path: 'tela-perfil', component: TelaDePerfilComponent },
+  { path: '', component: TelaInicialComponent }
 ];
 
 @NgModule({
