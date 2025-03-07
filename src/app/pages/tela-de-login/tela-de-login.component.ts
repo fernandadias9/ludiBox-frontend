@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 export class TelaDeLoginComponent {
 
   public pessoa: Pessoa = new Pessoa();
-  public : number;
+  public id : number;
 
   public dto: PessoaDTO = new PessoaDTO();
 
@@ -24,6 +24,7 @@ export class TelaDeLoginComponent {
   ) { }
 
   public realizarLogin() {
+    console.log(this.dto)
     this.service.autenticar(this.dto).subscribe({
       next: jwt => {
         Swal.fire('Sucesso', 'Usuário autenticado com sucesso', 'success');

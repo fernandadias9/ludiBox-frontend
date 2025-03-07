@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-input',
@@ -16,4 +16,14 @@ export class InputComponent {
   @Input() showLabel: boolean = false;
   @Input() name: string = '';
   @Input() required: boolean = false;
+
+  @Output() valueChange: EventEmitter<string> = new EventEmitter<string>();
+  $event: any;
+
+  onInput(event: any) {
+    this.value = event.target.value;
+    this.valueChange.emit(this.value); 
+  }
+
+
 }
