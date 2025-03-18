@@ -15,6 +15,8 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LoginService } from './shared/service/LoginService';
 import { RequestInterceptor } from './auth/reques.interceptor';
+import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.component';
+import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { RequestInterceptor } from './auth/reques.interceptor';
     CadastroUsuarioComponent,
     ButtonPrimaryComponent,
     ButtonSecondaryComponent,
-    RecuperacaoDeSenhaComponent
+    RecuperacaoDeSenhaComponent,
+    CardAnunciosComponent,
+    TelaInicialComponent
   ],
   imports: [
     BrowserModule,
