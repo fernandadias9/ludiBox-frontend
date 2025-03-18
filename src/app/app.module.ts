@@ -11,6 +11,10 @@ import { CadastroUsuarioComponent } from './pages/cadastro-usuario/cadastro-usua
 import { ButtonPrimaryComponent } from './components/button-primary/button-primary.component';
 import { ButtonSecondaryComponent } from './components/button-secondary/button-secondary.component';
 import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recuperacao-de-senha.component';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { LoginService } from './shared/service/LoginService';
+import { RequestInterceptor } from './auth/reques.interceptor';
 import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.component';
 import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
 
@@ -32,7 +36,16 @@ import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.componen
     AppRoutingModule,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync(),
+    provideHttpClient(withInterceptorsFromDi(), withFetch()),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestInterceptor,
+      multi: true
+    },
+    LoginService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
