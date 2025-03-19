@@ -6,6 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent {
+  @Input() withOverflow: boolean = false;
   @Input() menuItems: { label: string; route: string }[] = [];
   isOpen: boolean = false; 
 
