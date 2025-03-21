@@ -18,8 +18,8 @@
 
 <ng-container>
   <div class="w-auto h-auto bg-white rounded-[20px] shadow-lg p-4 flex flex-col items-center">
-    <div>
-      <img src="https://picsum.photos/204/142" alt="Imagem anúncio" class="w-[204px] h-[142px] object-cover rounded-[14px]" />
+    <div *ngIf="imagem">
+      <img [src]="'data:image/jpeg;base64,' + imagem" alt="Imagem anúncio" class="w-[204px] h-[142px] object-cover rounded-[14px]" />
     </div>
 
     <div class="w-full">

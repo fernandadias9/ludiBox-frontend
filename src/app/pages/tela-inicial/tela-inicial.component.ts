@@ -1,32 +1,51 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AnuncioLeituraDto } from '../../shared/model/dto/anuncioLeituraDto';
+import { AnuncioService } from '../../shared/service/anuncio.service';
 
 @Component({
   selector: 'app-tela-inicial',
   templateUrl: './tela-inicial.component.html',
   styleUrls: ['./tela-inicial.component.scss']
 })
-export class TelaInicialComponent {
+export class TelaInicialComponent implements OnInit {
   isLoggedIn = false;
   userName = 'Usuário Exemplo';
   userImage = '';
   menuOpen = false;
+  anuncios: AnuncioLeituraDto[] = [];
 
-  cards = new Array(150).fill({ title: 'Anúncio', price: 'R$ 100,00' });
+
   itemsPerPage = 20;
   currentPage = 1;
 
+  constructor(private anuncioService: AnuncioService) { }
+
+  ngOnInit(): void {
+    this.carregarAnuncios();
+  }
+
+  public carregarAnuncios(): void {
+    this.anuncioService.listar().subscribe(
+      resultado => {
+        this.anuncios = resultado;
+        console.log(this.anuncios.forEach(anuncio => console.log(anuncio)));
+
+      }
+    );
+  }
+
   get totalPages(): number {
-    return Math.ceil(this.cards.length / this.itemsPerPage);
+    return Math.ceil(this.anuncios.length / this.itemsPerPage);
   }
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
 
-  getPaginatedCards() {
+  exibirAnuncios() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    return this.cards.slice(startIndex, endIndex);
+    return this.anuncios.slice(startIndex, endIndex);
   }
 
   changePage(direction: string) {
