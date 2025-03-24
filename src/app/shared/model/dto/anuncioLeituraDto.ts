@@ -1,4 +1,4 @@
-import { StatusAnuncio } from "../enum/statusAnuncio.enum";
+import { StatusAnuncio } from "../enum/StatusAnuncio.enum";
 
 export class AnuncioLeituraDto {
   nome: string;
@@ -10,7 +10,8 @@ export class AnuncioLeituraDto {
   estoque: number;
   preco: number;
   datasIndisponiveis: number;
-  anunciante: string; // tem que mudar posteriormente para pessoa
+  idAnunciante: number;
+  nomeAnunciante: string;
   status: StatusAnuncio;
   imagem: string;
 }
