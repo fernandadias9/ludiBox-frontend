@@ -11,6 +11,8 @@ import { CadastroUsuarioComponent } from './pages/cadastro-usuario/cadastro-usua
 import { ButtonPrimaryComponent } from './components/button-primary/button-primary.component';
 import { ButtonSecondaryComponent } from './components/button-secondary/button-secondary.component';
 import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recuperacao-de-senha.component';
+import { TelaDePerfilComponent } from './pages/tela-de-perfil/tela-de-perfil.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LoginService } from './shared/service/LoginService';
@@ -28,6 +30,8 @@ import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.componen
     ButtonPrimaryComponent,
     ButtonSecondaryComponent,
     RecuperacaoDeSenhaComponent,
+    TelaDePerfilComponent,
+    SidebarComponent,
     CardAnunciosComponent,
     TelaInicialComponent
   ],
