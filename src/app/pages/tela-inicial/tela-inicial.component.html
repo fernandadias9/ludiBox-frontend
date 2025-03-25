@@ -11,7 +11,7 @@
     <div class="flex items-center gap-5">
       <i class="bi bi-cart3 bi-cart-responsive"></i>
       <div class="relative">
-        <img [src]="userImage || '/images/person-circle.svg'" alt="Usuário" class="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full bg-gray-500 cursor-pointer" (click)="toggleMenu()">
+        <img [src]="userImage || '/images/person-circle.svg'" alt="Usuário" class="w-[40px] h-auto md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full bg-gray-500 cursor-pointer" (click)="toggleMenu()">
         <div *ngIf="menuOpen" class="absolute right-0 mt-1 min-w-max bg-white shadow-md rounded-md px-2 md:px-3 py-1 md:py-2">
           <ng-container *ngIf="isLoggedIn; else guestMenu">
             <p class="px-4 py-2">{{ userName }}</p>

@@ -1,15 +1,23 @@
 <ng-container>
-  <div class="w-[236px] h-[282px] bg-white rounded-[20px] shadow-lg p-4 flex flex-col items-center">
+  <div class="w-[256px] h-[322px] bg-white rounded-[20px] shadow-lg p-4 flex flex-col items-center cursor-pointer">
     <div *ngIf="imagem">
       <img [src]="'data:image/jpeg;base64,' + imagem" alt="Imagem anúncio" class="w-[204px] h-[142px] object-cover rounded-[14px]" />
     </div>
 
     <div class="w-full">
-      <div class="text-lg font-semibold mt-3 text-start">{{itemName}}</div>
-      <div class="text-md font-bold text-gray-700">R$ {{itemPrice}}</div>
-      <div class="flex items-center gap-2 mt-3">
-        <img src="{{userImage}} || '/images/person-circle.svg'"  alt="Imagem de usuário" class="w-8 h-8 rounded-full object-cover" />
-        <span class="text-sm font-medium">{{userName}}</span>
+      <div class="grid mt-3">
+        <div class="text-xl font-semibold text-start">{{itemName}}</div>
+
+        <div class="text-lg font-bold text-gray-700">R$ {{itemPrice}}</div>
+
+        <div class="flex items-center gap-2 mt-3 mb-2">
+          <img [src]="userImage || '/images/person-circle.svg'" alt="Imagem de usuário" [class]="'rounded-full w-8 h-8 ' + (userImage ? 'object-cover' : 'bg-gray-500')" />
+          <span class="text-base font-medium">{{userName}}</span>
+        </div>
+
+        <div class="flex items-start"><i class="bi bi-geo-alt mr-2"></i>
+          <p class="break-normal text-sm">São João Batista do Rio Grande/SC</p>
+          </div>
       </div>
     </div>
   </div>

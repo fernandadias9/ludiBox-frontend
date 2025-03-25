@@ -14,7 +14,6 @@ export class TelaInicialComponent implements OnInit {
   menuOpen = false;
   anuncios: AnuncioLeituraDto[] = [];
 
-
   itemsPerPage = 20;
   currentPage = 1;
 
@@ -28,8 +27,6 @@ export class TelaInicialComponent implements OnInit {
     this.anuncioService.listar().subscribe(
       resultado => {
         this.anuncios = resultado;
-        console.log(this.anuncios.forEach(anuncio => console.log(anuncio)));
-
       }
     );
   }
