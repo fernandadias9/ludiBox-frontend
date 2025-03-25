@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './card-anuncios.component.scss'
 })
 export class CardAnunciosComponent {
-  @Input() images: string[] = [];
+  @Input() imagem: string;
   @Input() itemName: string = '';
   @Input() itemPrice: number = 0;
   @Input() userImage: string = '';
