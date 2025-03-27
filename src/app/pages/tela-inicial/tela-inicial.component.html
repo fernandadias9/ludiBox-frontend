@@ -42,11 +42,11 @@
   </div>
 
   <div class="mt-24 bg-background_light flex flex-wrap justify-center gap-9 p-6 overflow-auto h-[calc(100vh-160px)]">
-    <ng-container *ngFor="let card of getPaginatedCards()">
-      <app-card-anuncios [itemName]="card.title" [itemPrice]="card.price"></app-card-anuncios>
+    <ng-container *ngFor="let anuncio of anuncios">
+      <app-card-anuncios [imagem]="anuncio.imagem" [itemName]="anuncio.nome" [itemPrice]="anuncio.preco" [userName]="anuncio.nomeAnunciante"></app-card-anuncios>
     </ng-container>
 
-    <div class="w-full flex items-center justify-center mt-4 gap-2">
+    <div *ngIf="pageNumbers.length > 1" class="w-full flex items-center justify-center mt-4 gap-2">
       <button
         *ngIf="currentPage !== 1"
         (click)="changePage('prev')"
