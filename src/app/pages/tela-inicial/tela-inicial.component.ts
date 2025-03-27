@@ -1,19 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { LoginService } from '../../shared/service/LoginService';
+import { Pessoa } from '../../shared/model/entity/pessoa';
+import { PessoaService } from '../../shared/service/PessoaService';
+import { Router } from '@angular/router';
+import { PerfilDTO } from '../../shared/model/dto/PerfilDTO';
 
 @Component({
   selector: 'app-tela-inicial',
   templateUrl: './tela-inicial.component.html',
   styleUrls: ['./tela-inicial.component.scss']
 })
-export class TelaInicialComponent {
+export class TelaInicialComponent implements OnInit{
+
+  constructor(
+    private loginService: LoginService,
+    private pessoaService: PessoaService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.usuarioLogado();
+  }
+
   isLoggedIn = false;
-  userName = 'Usuário Exemplo';
-  userImage = '';
   menuOpen = false;
 
   cards = new Array(150).fill({ title: 'Anúncio', price: 'R$ 100,00' });
   itemsPerPage = 20;
   currentPage = 1;
+
+  public perfil: PerfilDTO = new PerfilDTO();
+  public idUsuario: number;
+
+
 
   get totalPages(): number {
     return Math.ceil(this.cards.length / this.itemsPerPage);
@@ -68,4 +87,39 @@ export class TelaInicialComponent {
     }
     return pages;
   }
+
+
+  usuarioLogado(){
+
+    this.idUsuario = this.loginService.buscarIdUsuarioComToken();
+
+    if (!this.idUsuario) {
+      this.isLoggedIn = false;
+      return;
+    }
+  
+
+    this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(
+      resultado => {
+        this.perfil = resultado;
+        console.log(resultado);
+      }
+  );
+    
+    if(this.perfil){
+      this.isLoggedIn = true
+    }else{
+      this.isLoggedIn = false
+    }
+  }
+
+  LogoutUser(){
+    this.loginService.logout();
+    this.router.navigate(['/login']);
+    this.perfil = null;
+  }
+
+
+
+
 }
