@@ -95,23 +95,14 @@ export class TelaInicialComponent implements OnInit{
 
     this.idUsuario = this.loginService.buscarIdUsuarioComToken();
 
-    if (!this.idUsuario) {
-      this.isLoggedIn = false;
-      return;
-    }
-  
-
     this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(
       resultado => {
         this.perfil = resultado;
-        console.log(resultado);
       }
   );
     
     if(this.perfil){
       this.isLoggedIn = true
-    }else{
-      this.isLoggedIn = false
     }
   }
 
