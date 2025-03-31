@@ -16,46 +16,31 @@
 
     <form class="grid gap-1.5 w-full sm:px-40 md:px-11 lg:px-0 xl:px-12 mb-2 lg:gap-3">
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-        <app-input id="name" name="name" [label]="isPessoaJuridica ? 'Razão Social' : 'Nome Completo'"
+        <app-input [(value)]="pessoa.nome"
+          id="name" name="name" [label]="isPessoaJuridica ? 'Razão Social' : 'Nome Completo'"
           placeholder="{{ isPessoaJuridica ? 'Razão Social' : 'Nome Completo' }}" class="w-full md:w-3/5"></app-input>
 
-        <app-input id="document" name="document" [label]="isPessoaJuridica ? 'CNPJ' : 'CPF'"
+        <app-input [(value)]="pessoa.valorDocumento"
+          id="document" name="document" [label]="isPessoaJuridica ? 'CNPJ' : 'CPF'"
           placeholder="{{ isPessoaJuridica ? 'CNPJ' : 'CPF' }}" class="w-full md:w-2/5"></app-input>
       </div>
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-        <app-input id="email" name="email" label="Email" placeholder="Email" class="w-full md:w-3/5"></app-input>
+        <app-input [(value)]="pessoa.email"
+          id="email" name="email" label="Email" placeholder="Email" class="w-full md:w-3/5"></app-input>
 
-        <app-input id="phone" name="phone" label="Telefone" placeholder="Telefone" class="w-full md:w-2/5"></app-input>
+        <app-input [(value)]="pessoa.telefone" 
+          id="phone" name="phone" label="Telefone" placeholder="Telefone" class="w-full md:w-2/5"></app-input>
       </div>
 
-      <ng-container *ngIf="isPessoaJuridica">
-        <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-          <app-input id="cep" name="cep" label="CEP" placeholder="CEP" class="w-full md:w-1/4"></app-input>
-          <app-input id="address" name="address" label="Endereço" placeholder="Endereço" class="w-full md:w-3/4"></app-input>
-        </div>
-        <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-          <div class="flex gap-0 w-full md:w-2/5">
-            <app-input id="number" name="number" label="Número" placeholder="Número" [disabled]="snChecked"></app-input>
-            <label class="flex items-center ml-4 md:ml-3">
-              <input type="checkbox" name="noNumber" class="h-5 w-5 md:w-2/4 cursor-pointer" (change)="toggleSN($event)" />
-              <span class="ml-2">S/N</span>
-            </label>
-          </div>
-          <app-input id="complement" name="complement" label="Complemento" placeholder="Complemento" class="w-full md:w-3/5 md:ml-1"></app-input>
-        </div>
-        <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-          <app-input label="Cidade" name="city" placeholder="Cidade" class="md:w-3/5"></app-input>
-          <app-input label="Estado" name="state" placeholder="Estado" class="md:w-2/5"></app-input>
-        </div>
-      </ng-container>
+
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-        <app-input *ngIf="!isPessoaJuridica" id="birthday" name="birthday" label="Data de Nascimento" type="date"></app-input>
+        <app-input [(value)]="pessoa.senha"
+          id="password" name="password" label="Senha" type="password" placeholder="Senha"></app-input>
 
-        <app-input id="password" name="password" label="Senha" type="password" placeholder="Senha"></app-input>
-
-        <app-input id="passwordConfirm" name="passwordConfirm" label="Confirmar Senha" type="password"
+        <app-input [(value)]="pessoa.senha"
+          id="passwordConfirm" name="passwordConfirm" label="Confirmar Senha" type="password"
           placeholder="Confirmar Senha"></app-input>
       </div>
 
@@ -69,7 +54,7 @@
       </div>
 
       <div class="flex flex-col w-full items-center gap-3 pb-3">
-        <app-button-primary title="Registrar" routerLink=""></app-button-primary>
+        <app-button-primary title="Registrar" (click)="cadastrarUsuario()"></app-button-primary>
 
         <app-button-secondary title="Voltar" routerLink="/login"></app-button-secondary>
       </div>

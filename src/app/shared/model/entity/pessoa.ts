@@ -9,10 +9,6 @@ export class Pessoa{
   email: string;
   telefone: string;
   senha: string;
-  imagemUsuarioEmBase64: string;
-  ativo: boolean;
-  documento: EnumDocumento;
-  situacao: EnumStatus;
-  perfil: EnumPerfil;
-  enderecos: Array<Endereco>;
+  tipoDocumento: EnumDocumento;
+  valorDocumento: string;
 }
