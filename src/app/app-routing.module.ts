@@ -5,13 +5,15 @@ import { CadastroUsuarioComponent } from './pages/cadastro-usuario/cadastro-usua
 import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recuperacao-de-senha.component';
 import { TelaDePerfilComponent } from './pages/tela-de-perfil/tela-de-perfil.component';
 import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
+import { DetalheProdutoComponent } from './pages/detalhe-produto/detalhe-produto.component';
 
 const routes: Routes = [
   { path: 'login', component: TelaDeLoginComponent },
   { path: 'cadastro', component: CadastroUsuarioComponent },
   { path: 'esqueci-minha_senha', component: RecuperacaoDeSenhaComponent },
   { path: 'tela-perfil', component: TelaDePerfilComponent },
-  { path: '', component: TelaInicialComponent }
+  { path: '', component: TelaInicialComponent },
+  { path: 'produto/:id', component: DetalheProdutoComponent }
 ];
 
 @NgModule({

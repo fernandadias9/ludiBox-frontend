@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { GALLERY_CONFIG, GalleryConfig, GalleryModule } from 'ng-gallery';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,11 +15,14 @@ import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recupe
 import { TelaDePerfilComponent } from './pages/tela-de-perfil/tela-de-perfil.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { LightboxModule } from 'ng-gallery/lightbox';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LoginService } from './shared/service/LoginService';
 import { RequestInterceptor } from './auth/reques.interceptor';
 import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.component';
 import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
+import { TemplateAnunciosComponent } from './components/template-anuncios/template-anuncios.component';
+import { DetalheProdutoComponent } from './pages/detalhe-produto/detalhe-produto.component';
 
 @NgModule({
   declarations: [
@@ -33,12 +37,16 @@ import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.componen
     TelaDePerfilComponent,
     SidebarComponent,
     CardAnunciosComponent,
-    TelaInicialComponent
+    TelaInicialComponent,
+    TemplateAnunciosComponent,
+    DetalheProdutoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    GalleryModule,
+    LightboxModule,
   ],
   providers: [
     provideAnimationsAsync(),
@@ -47,6 +55,13 @@ import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.componen
       provide: HTTP_INTERCEPTORS,
       useClass: RequestInterceptor,
       multi: true
+    },
+    {
+      provide: GALLERY_CONFIG,
+      useValue: {
+        autoHeight: true,
+        imageSize: 'cover'
+      } as GalleryConfig
     },
     LoginService
   ],

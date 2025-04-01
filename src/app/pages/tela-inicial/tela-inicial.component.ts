@@ -27,6 +27,10 @@ export class TelaInicialComponent implements OnInit {
     this.anuncioService.listar().subscribe(
       resultado => {
         this.anuncios = resultado;
+        console.log(this.anuncios);
+      },
+      error => {
+        console.error('Error fetching anuncios:', error);
       }
     );
   }
