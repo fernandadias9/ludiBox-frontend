@@ -24,24 +24,32 @@ export class TelaDeLoginComponent {
   ) { }
 
   public realizarLogin() {
-    this.service.autenticar(this.dto).subscribe({
-      next: jwt => {
-        Swal.fire('Sucesso', 'Usuário autenticado com sucesso', 'success');
-        let token: string = jwt.body + "";
-        localStorage.setItem('tokenUsuarioAutenticado', token);
-        this.router.navigate(['adicionar tela']);
-      },
-      error: erro => {
-        var mensagem: string;
-        if (erro.status == 401) {
-          mensagem = 'Usuário ou senha inválidos, tente novamente';
-        } else {
-          mensagem = erro.error;
+    console.log(this.dto)
+    if(this.dto.senha != "" || this.dto.login != ""){
+        this.service.autenticar(this.dto).subscribe({
+        next: jwt => {
+          Swal.fire('Sucesso', 'Usuário autenticado com sucesso', 'success');
+          let token: string = jwt.body + "";
+          localStorage.setItem('tokenUsuarioAutenticado', token);
+          this.router.navigate(['/']);
+        },
+        error: erro => {
+          var mensagem: string;
+          if (erro.status != 200) {
+            mensagem = 'Usuário ou senha inválidos, tente novamente';
+          } else {
+            mensagem = erro.error;
+          }
+  
+          Swal.fire('Erro', mensagem, 'error');
         }
+      });
 
-        Swal.fire('Erro', mensagem, 'error');
-      }
-    });
+    } else{
+      Swal.fire('Erro', 'Nenhum campo preenchido!', 'error');
+
+    }
+  
   }
   voltar() {
     this.router.navigate(['']);
