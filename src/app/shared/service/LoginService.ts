@@ -9,9 +9,7 @@ import { Pessoa } from "../model/entity/pessoa";
   providedIn: 'root'
 })
 export class LoginService {
-  
 
-  //URL BackEnd Local
   private readonly API = 'http://localhost:8080/auth';
 
   constructor(private httpCliente: HttpClient) { }
@@ -31,10 +29,7 @@ export class LoginService {
 
   cadastrar(pessoa: Pessoa): Observable<any>{
     return this.httpCliente.post<any>(this.API+"/nova-pessoa", pessoa);
-
   }
-
-
 
   sair() {
     localStorage.removeItem('tokenUsuarioAutenticado');

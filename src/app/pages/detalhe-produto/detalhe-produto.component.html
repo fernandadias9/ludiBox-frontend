@@ -64,16 +64,22 @@
     </div>
 
     <div class="mx-4">
-      <h2 class="text-lg font-semibold mb-3">Selecione os dias da locação:</h2>
-      <div>
-
-      </div>
-    </div>
-
-    <div class="mt-8 border-t pt-4">
-      <p class="text-sm italic text-gray-700">
-        Anunciado em {{ anuncio?.dataCadastro | date : "dd/MM/yyyy" }}
-      </p>
+      <h2 class="text-base font-semibold mb-3">Selecione os dias da locação:</h2>
+      <form [formGroup]="form">
+        <mat-form-field class="w-full">
+          <mat-date-range-input
+            [rangePicker]="selecionarPeriodo"
+            formGroupName="periodoLocacao"
+            [separator]="''"
+            (click)="selecionarPeriodo.open()"
+          >
+            <input matStartDate placeholder="Selecione" formControlName="inicio" />
+            <input matEndDate placeholder="o período" formControlName="final" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="selecionarPeriodo"></mat-datepicker-toggle>
+          <mat-date-range-picker #selecionarPeriodo></mat-date-range-picker>
+        </mat-form-field>
+      </form>
 
       <div class="flex justify-between items-center">
         <button
@@ -83,6 +89,12 @@
           Alugar
         </button>
       </div>
+    </div>
+
+    <div class="mt-8 border-t pt-4">
+      <p class="text-sm italic text-gray-700">
+        Anunciado em {{ anuncio?.dataCadastro | date : "dd/MM/yyyy" }}
+      </p>
     </div>
   </div>
 </app-template-anuncios>

@@ -5,6 +5,7 @@ import { AnuncioService } from '../../shared/service/anuncio.service';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 import { startOfDay, isBefore, isToday } from 'date-fns';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-detalhe-produto',
@@ -18,11 +19,13 @@ export class DetalheProdutoComponent implements OnInit {
   viewDate: Date = new Date();
   events: CalendarEvent[] = [];
   galleryItems: GalleryItem[] = [];
+  form: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private anuncioService: AnuncioService,
-    private gallery: Gallery
+    private gallery: Gallery,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -30,6 +33,13 @@ export class DetalheProdutoComponent implements OnInit {
     if (id) {
       this.carregarAnuncio(id);
     }
+
+    this.form = this.fb.group({
+      periodoLocacao: new FormGroup({
+        inicio: new FormControl(),
+        final: new FormControl()
+      })
+    });
   }
 
   carregarAnuncio(id: number) {
@@ -57,6 +67,6 @@ export class DetalheProdutoComponent implements OnInit {
   }
 
   alugar() {
-    console.log('Produto alugado!');
+    console.log(this.form.value);
   }
 }

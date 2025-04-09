@@ -1,0 +1,18 @@
+::ng-deep {
+  .mat-datepicker-toggle {
+    color: #4B5563 !important;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
+    border-bottom-color: #4B5563 !important;
+    border-bottom-width: 1px !important;
+  }
+
+  .mat-mdc-form-field-flex {
+    align-items: center !important;
+  }
+
+  .cdk-visually-hidden {
+    display: none !important;
+  }
+}
