@@ -19,6 +19,7 @@ export class DetalheProdutoComponent implements OnInit {
   viewDate: Date = new Date();
   events: CalendarEvent[] = [];
   galleryItems: GalleryItem[] = [];
+  dateFilter: (date: Date | null) => boolean
   form: FormGroup;
 
   constructor(
@@ -40,6 +41,8 @@ export class DetalheProdutoComponent implements OnInit {
         final: new FormControl()
       })
     });
+
+    this.dateFilter = this.criarFiltroData()
   }
 
   carregarAnuncio(id: number) {
@@ -64,6 +67,33 @@ export class DetalheProdutoComponent implements OnInit {
 
     const galleryRef = this.gallery.ref('produtoGallery');
     galleryRef.load(this.galleryItems);
+  }
+
+  criarFiltroData(): (date: Date | null) => boolean {
+    return (date: Date | null): boolean => {
+      if (!date) {
+        return false
+      }
+
+      // Obtém a data atual sem o horário
+      const hoje = new Date()
+      hoje.setHours(0, 0, 0, 0)
+
+      // Verifica se a data é anterior ou igual a hoje
+      if (date <= hoje) {
+        return false
+      }
+
+      // Verifica se a data está no array de datas indisponíveis
+      return !this.anuncio.datasIndisponiveis.some((dataIndisponivel: Date) => {
+        // Compara apenas ano, mês e dia
+        return (
+          date.getFullYear() === dataIndisponivel.getFullYear() &&
+          date.getMonth() === dataIndisponivel.getMonth() &&
+          date.getDate() === dataIndisponivel.getDate()
+        )
+      })
+    }
   }
 
   alugar() {

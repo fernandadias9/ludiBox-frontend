@@ -1,4 +1,5 @@
 import { MatCalendar, MatCalendarBody, MatCalendarHeader, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatIconModule } from '@angular/material/icon';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { GALLERY_CONFIG, GalleryConfig, GalleryModule } from 'ng-gallery';
@@ -24,10 +25,23 @@ import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.
 import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
 import { TemplateAnunciosComponent } from './components/template-anuncios/template-anuncios.component';
 import { DetalheProdutoComponent } from './pages/detalhe-produto/detalhe-produto.component';
-import { MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, MatNativeDateModule, NativeDateAdapter } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MAT_NATIVE_DATE_FORMATS, MatNativeDateModule, NativeDateAdapter } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DateAdapter } from 'angular-calendar';
 import { MatInputModule } from '@angular/material/input';
+import { CustomDateAdapter } from './utils/adaptador-calendario';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "DD/MM/YYYY",
+  },
+  display: {
+    dateInput: "DD/MM/YYYY",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "DD/MM/YYYY",
+    monthYearA11yLabel: "MMMM YYYY",
+  },
+}
 
 @NgModule({
   declarations: [
@@ -59,7 +73,8 @@ import { MatInputModule } from '@angular/material/input';
     MatCalendarBody,
     MatCalendarHeader,
     MatCalendar,
-    MatInputModule
+    MatInputModule,
+    MatIconModule
   ],
   providers: [
     provideAnimationsAsync(),
@@ -76,7 +91,9 @@ import { MatInputModule } from '@angular/material/input';
         imageSize: 'cover'
       } as GalleryConfig
     },
-    {provide: DateAdapter, useClass: NativeDateAdapter}, {provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS},
+    { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     LoginService
   ],
   bootstrap: [AppComponent]

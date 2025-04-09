@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-template-anuncios',
@@ -10,6 +10,7 @@ export class TemplateAnunciosComponent {
   userName = '';
   userImage = '';
   menuOpen = false;
+  @Input() eTelaInicial: boolean = true;
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
