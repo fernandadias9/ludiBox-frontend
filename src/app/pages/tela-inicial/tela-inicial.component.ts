@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from '../../shared/service/LoginService';
+import { Pessoa } from '../../shared/model/entity/pessoa';
+import { PessoaService } from '../../shared/service/PessoaService';
+import { Router } from '@angular/router';
+import { PerfilDTO } from '../../shared/model/dto/PerfilDTO';
 import { AnuncioLeituraDto } from '../../shared/model/dto/anuncioLeituraDto';
 import { AnuncioService } from '../../shared/service/anuncio.service';
 
@@ -7,21 +12,28 @@ import { AnuncioService } from '../../shared/service/anuncio.service';
   templateUrl: './tela-inicial.component.html',
   styleUrls: ['./tela-inicial.component.scss']
 })
-export class TelaInicialComponent implements OnInit {
+
+export class TelaInicialComponent implements OnInit{
+
+  constructor(
+    private loginService: LoginService,
+    private pessoaService: PessoaService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.usuarioLogado();
+  }
+
   isLoggedIn = false;
-  userName = 'Usuário Exemplo';
-  userImage = '';
   menuOpen = false;
   anuncios: AnuncioLeituraDto[] = [];
 
   itemsPerPage = 20;
   currentPage = 1;
 
-  constructor(private anuncioService: AnuncioService) { }
-
-  ngOnInit(): void {
-    this.carregarAnuncios();
-  }
+  public perfil: PerfilDTO = new PerfilDTO();
+  public idUsuario: number;
 
   public carregarAnuncios(): void {
     this.anuncioService.listar().subscribe(
@@ -88,4 +100,30 @@ export class TelaInicialComponent implements OnInit {
     }
     return pages;
   }
+
+
+  usuarioLogado(){
+
+    this.idUsuario = this.loginService.buscarIdUsuarioComToken();
+
+    this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(
+      resultado => {
+        this.perfil = resultado;
+      }
+  );
+    
+    if(this.perfil){
+      this.isLoggedIn = true
+    }
+  }
+
+  LogoutUser(){
+    this.loginService.logout();
+    this.router.navigate(['/login']);
+    this.perfil = null;
+  }
+
+
+
+
 }

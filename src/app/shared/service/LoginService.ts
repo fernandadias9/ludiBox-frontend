@@ -4,6 +4,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { PessoaDTO } from "../model/dto/PessoaDTO";
 import { Pessoa } from "../model/entity/pessoa";
+import { jwtDecode } from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +32,22 @@ export class LoginService {
     return this.httpCliente.post<any>(this.API+"/nova-pessoa", pessoa);
   }
 
-  sair() {
+  buscarIdUsuarioComToken(): number | null {
+  try {
+    const token = localStorage.getItem('tokenUsuarioAutenticado');
+    if (token) {
+      const tokenDecodificado: any = jwtDecode(token);
+      return tokenDecodificado.id;
+    }
+  } catch (error) {
+    console.error('Erro ao decodificar o token:', error);
+  }
+  return null;
+  }
+
+  logout() {
     localStorage.removeItem('tokenUsuarioAutenticado');
+    localStorage.clear();
   }
 }
 
