@@ -1,0 +1,31 @@
+<main class="overflow-hidden relative bg-background_light">
+  <div class="w-full h-24 bg-primary flex items-center px-5 lg:px-10 shadow-md fixed top-0 left-0 z-50">
+    <button 
+      (click)="toggleSidebar()" 
+      class="p-2 rounded-md text-black">
+      <i class="bi bi-layout-text-sidebar text-4xl"></i>
+    </button>
+
+    <div class="flex-grow"></div>
+
+    <img src="/images/logo.png" alt="Logomarca LudiBox" class="w-40 h-auto pt-2" routerLink="/">
+  </div>
+
+  <nav 
+    [ngClass]="{'translate-x-0': isOpen, '-translate-x-full': !isOpen}" 
+    class="w-40 h-screen bg-gray-300 text-black fixed top-0 left-0 shadow-lg transition-transform duration-300 flex flex-col z-40">
+    <div class="h-32"></div>
+    
+    <ul class="flex-1 mt-4 space-y-4">
+      <strong>
+        <li *ngFor="let item of menuItems" class="px-4 py-3 hover:bg-primary cursor-pointer rounded-md">
+          <a [routerLink]="item.route">{{ item.label }}</a>
+        </li>
+      </strong>
+    </ul>
+  </nav>
+
+  <div class="pt-28 px-4 z-0 relative">
+    <ng-content></ng-content>
+  </div>
+</main>

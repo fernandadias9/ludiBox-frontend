@@ -5,33 +5,45 @@
       <p class="text-placeholder_color font-bold text-xs lg:text-base">Faça seu login</p>
     </header>
 
-    <form action="" class="grid gap-1.5 w-full px-4 sm:px-40 lg:px-16 xl:px-36 mb-2 lg:gap-3">
+    <form #ngForm="ngForm" (ngSubmit)="realizarLogin()" for="email" action="" class="grid gap-1.5 w-full px-4 sm:px-40 lg:px-16 xl:px-36 mb-2 lg:gap-3">
       <app-input
+        [ngClass]="(!dto.login && ngForm.dirty) ? 'form-control is-invalid' : 'form-control'"
+        [(value)]="dto.login"
         for="email"
         label="E-mail"
         id="email"
         type="email"
-        placeholder="E-mail"
+        placeholder="E-mail *"
         aria-placeholder="digite seu e-mail"
+        name="email"
       ></app-input>
 
+
       <app-input
+        [ngClass]="(!dto.senha && ngForm.dirty) ? 'form-control is-invalid' : 'form-control'"
+        [(value)]="dto.senha"
         for="password"
         label="Senha"
         id="password"
         type="password"
-        placeholder="Senha"
+        placeholder="Senha *"
         aria-placeholder="digite sua senha"
+        name="password"
       ></app-input>
     </form>
-    <a href="#" class="font-bold text-primary text-xs lg:text-sm underline justify-self-end pr-7 sm:pr-44 lg:pr-16 xl:pr-36 mb-4 sm:mb-6 lg:mb-8 hover:brightness-110">
+    <a
+      href="#"
+      class="font-bold text-primary text-xs lg:text-sm underline justify-self-end pr-7 sm:pr-44 lg:pr-16 xl:pr-36 mb-4 sm:mb-6 lg:mb-8 hover:brightness-110"
+      routerLink="/esqueci-minha_senha"
+    >
       Esqueceu sua senha?
     </a>
     <app-button-primary
       title="Entrar"
+      (click)="realizarLogin()"
     ></app-button-primary>
-    
-    <div class="flex flex-col items-center mt-4 xl:mt-9 gap-1 lg:gap-2">
+
+    <div class="flex flex-col items-center mt-4 xl:mt-7 gap-1 lg:gap-2">
       <p class="text-placeholder_color font-bold text-xs lg:text-sm">Não possui uma conta?</p>
       <app-button-secondary
         title="Cadastre-se"
