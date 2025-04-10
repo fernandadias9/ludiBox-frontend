@@ -1,11 +1,14 @@
+import { MatCalendar, MatCalendarBody, MatCalendarHeader, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatIconModule } from '@angular/material/icon';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { GALLERY_CONFIG, GalleryConfig, GalleryModule } from 'ng-gallery';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TemplateTelasIniciaisComponent } from './components/template-telas-iniciais/template-telas-iniciais.component';
 import { InputComponent } from './components/input/input.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TelaDeLoginComponent } from './pages/tela-de-login/tela-de-login.component';
 import { CadastroUsuarioComponent } from './pages/cadastro-usuario/cadastro-usuario.component';
 import { ButtonPrimaryComponent } from './components/button-primary/button-primary.component';
@@ -14,11 +17,31 @@ import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recupe
 import { TelaDePerfilComponent } from './pages/tela-de-perfil/tela-de-perfil.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { LightboxModule } from 'ng-gallery/lightbox';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LoginService } from './shared/service/LoginService';
 import { RequestInterceptor } from './auth/reques.interceptor';
 import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.component';
 import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
+import { TemplateAnunciosComponent } from './components/template-anuncios/template-anuncios.component';
+import { DetalheProdutoComponent } from './pages/detalhe-produto/detalhe-produto.component';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MAT_NATIVE_DATE_FORMATS, MatNativeDateModule, NativeDateAdapter } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { DateAdapter } from 'angular-calendar';
+import { MatInputModule } from '@angular/material/input';
+import { CustomDateAdapter } from './utils/adaptador-calendario';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "DD/MM/YYYY",
+  },
+  display: {
+    dateInput: "DD/MM/YYYY",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "DD/MM/YYYY",
+    monthYearA11yLabel: "MMMM YYYY",
+  },
+}
 
 @NgModule({
   declarations: [
@@ -33,12 +56,25 @@ import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.componen
     TelaDePerfilComponent,
     SidebarComponent,
     CardAnunciosComponent,
-    TelaInicialComponent
+    TelaInicialComponent,
+    TemplateAnunciosComponent,
+    DetalheProdutoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    GalleryModule,
+    LightboxModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatCalendarBody,
+    MatCalendarHeader,
+    MatCalendar,
+    MatInputModule,
+    MatIconModule
   ],
   providers: [
     provideAnimationsAsync(),
@@ -48,6 +84,16 @@ import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.componen
       useClass: RequestInterceptor,
       multi: true
     },
+    {
+      provide: GALLERY_CONFIG,
+      useValue: {
+        autoHeight: true,
+        imageSize: 'cover'
+      } as GalleryConfig
+    },
+    { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     LoginService
   ],
   bootstrap: [AppComponent]

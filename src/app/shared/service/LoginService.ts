@@ -10,7 +10,6 @@ import { jwtDecode } from "jwt-decode";
   providedIn: 'root'
 })
 export class LoginService {
-  
 
   private readonly API = 'http://localhost:8080/auth';
 
@@ -31,7 +30,6 @@ export class LoginService {
 
   cadastrar(pessoa: Pessoa): Observable<any>{
     return this.httpCliente.post<any>(this.API+"/nova-pessoa", pessoa);
-
   }
 
   buscarIdUsuarioComToken(): number | null {

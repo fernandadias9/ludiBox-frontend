@@ -1,0 +1,102 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { DetalheAnuncioDto } from '../../shared/model/dto/detalheAnuncioDto';
+import { AnuncioService } from '../../shared/service/anuncio.service';
+import { CalendarEvent, CalendarView } from 'angular-calendar';
+import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
+import { startOfDay, isBefore, isToday } from 'date-fns';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+
+@Component({
+  selector: 'app-detalhe-produto',
+  templateUrl: './detalhe-produto.component.html',
+  styleUrl: './detalhe-produto.component.scss'
+})
+export class DetalheProdutoComponent implements OnInit {
+  anuncio: DetalheAnuncioDto | null = null;
+  view: CalendarView = CalendarView.Month;
+  CalendarView = CalendarView;
+  viewDate: Date = new Date();
+  events: CalendarEvent[] = [];
+  galleryItems: GalleryItem[] = [];
+  dateFilter: (date: Date | null) => boolean
+  form: FormGroup;
+
+  constructor(
+    private route: ActivatedRoute,
+    private anuncioService: AnuncioService,
+    private gallery: Gallery,
+    private fb: FormBuilder
+  ) {}
+
+  ngOnInit() {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (id) {
+      this.carregarAnuncio(id);
+    }
+
+    this.form = this.fb.group({
+      periodoLocacao: new FormGroup({
+        inicio: new FormControl(),
+        final: new FormControl()
+      })
+    });
+
+    this.dateFilter = this.criarFiltroData()
+  }
+
+  carregarAnuncio(id: number) {
+    this.anuncioService.buscar(id).subscribe(
+      (data) => {
+        this.anuncio = data;
+        this.setupGallery();
+      },
+      (error) => {
+        console.error('Erro ao buscar anúncio:', error);
+      }
+    );
+  }
+
+  setupGallery() {
+    if (!this.anuncio) return;
+
+    this.galleryItems = this.anuncio.imagens.map(img => {
+      const imageSrc = `data:image/jpeg;base64,${img}`;
+      return new ImageItem({ src: imageSrc, thumb: imageSrc });
+    });
+
+    const galleryRef = this.gallery.ref('produtoGallery');
+    galleryRef.load(this.galleryItems);
+  }
+
+  criarFiltroData(): (date: Date | null) => boolean {
+    return (date: Date | null): boolean => {
+      if (!date) {
+        return false
+      }
+
+      // Obtém a data atual sem o horário
+      const hoje = new Date()
+      hoje.setHours(0, 0, 0, 0)
+
+      // Verifica se a data é anterior ou igual a hoje
+      if (date <= hoje) {
+        return false
+      }
+
+      // Verifica se a data está no array de datas indisponíveis
+      return !this.anuncio.datasIndisponiveis.some((dataIndisponivel: Date) => {
+        // Compara apenas ano, mês e dia
+        return (
+          date.getFullYear() === dataIndisponivel.getFullYear() &&
+          date.getMonth() === dataIndisponivel.getMonth() &&
+          date.getDate() === dataIndisponivel.getDate()
+        )
+      })
+    }
+  }
+
+  alugar() {
+    console.log(this.form.value);
+  }
+}

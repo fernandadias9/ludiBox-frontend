@@ -1,17 +1,12 @@
 import { StatusAnuncio } from "../enum/StatusAnuncio.enum";
 
 export class AnuncioLeituraDto {
+  id: number;
   nome: string;
-  dataCadastro: Date;
-  altura?: number;
-  largura?: number;
-  comprimento?: number;
-  descricao: string;
-  estoque: number;
   preco: number;
-  datasIndisponiveis: number;
   idAnunciante: number;
   nomeAnunciante: string;
+  imagemanunciante: string;
   status: StatusAnuncio;
   imagem: string;
 }
