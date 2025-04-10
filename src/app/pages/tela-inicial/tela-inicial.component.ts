@@ -18,6 +18,7 @@ export class TelaInicialComponent implements OnInit{
   constructor(
     private loginService: LoginService,
     private pessoaService: PessoaService,
+    private anuncioService: AnuncioService,
     private router: Router
   ) {}
 
@@ -105,13 +106,16 @@ export class TelaInicialComponent implements OnInit{
   usuarioLogado(){
 
     this.idUsuario = this.loginService.buscarIdUsuarioComToken();
+    console.log('idusuario', this.idUsuario);
+
+    
 
     this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(
       resultado => {
         this.perfil = resultado;
       }
   );
-    
+
     if(this.perfil){
       this.isLoggedIn = true
     }
