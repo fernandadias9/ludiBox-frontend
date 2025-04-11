@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../shared/service/LoginService';
-import { Pessoa } from '../../shared/model/entity/pessoa';
 import { PessoaService } from '../../shared/service/PessoaService';
 import { Router } from '@angular/router';
 import { PerfilDTO } from '../../shared/model/dto/PerfilDTO';
@@ -14,6 +13,16 @@ import { AnuncioService } from '../../shared/service/anuncio.service';
 })
 
 export class TelaInicialComponent implements OnInit{
+  isLoggedIn = false;
+  userName = 'Usuário Exemplo';
+  userImage = '';
+  menuOpen = false;
+  anuncios: AnuncioLeituraDto[] = [];
+  public perfil: PerfilDTO = new PerfilDTO();
+  public idUsuario: number;
+
+  itemsPerPage = 20;
+  currentPage = 1;
 
   constructor(
     private loginService: LoginService,
@@ -24,23 +33,13 @@ export class TelaInicialComponent implements OnInit{
 
   ngOnInit() {
     this.usuarioLogado();
+    this.carregarAnuncios();
   }
-
-  isLoggedIn = false;
-  menuOpen = false;
-  anuncios: AnuncioLeituraDto[] = [];
-
-  itemsPerPage = 20;
-  currentPage = 1;
-
-  public perfil: PerfilDTO = new PerfilDTO();
-  public idUsuario: number;
 
   public carregarAnuncios(): void {
     this.anuncioService.listar().subscribe(
       resultado => {
         this.anuncios = resultado;
-        console.log(this.anuncios);
       },
       error => {
         console.error('Error fetching anuncios:', error);
@@ -104,26 +103,27 @@ export class TelaInicialComponent implements OnInit{
 
 
   usuarioLogado(){
-
     this.idUsuario = this.loginService.buscarIdUsuarioComToken();
-    console.log('idusuario', this.idUsuario);
 
-    
+    if(this.idUsuario == null){
+      return;
+    }
 
     this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(
       resultado => {
         this.perfil = resultado;
       }
-  );
+    );
 
     if(this.perfil){
       this.isLoggedIn = true
     }
   }
 
-  LogoutUser(){
+  // fazer reload da pagina
+  logoutUser(){
     this.loginService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
     this.perfil = null;
   }
 

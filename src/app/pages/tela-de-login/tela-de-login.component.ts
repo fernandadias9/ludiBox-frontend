@@ -24,7 +24,6 @@ export class TelaDeLoginComponent {
   ) { }
 
   public realizarLogin() {
-    console.log(this.dto)
     if(this.dto.senha != "" || this.dto.login != ""){
         this.service.autenticar(this.dto).subscribe({
         next: jwt => {
@@ -40,7 +39,6 @@ export class TelaDeLoginComponent {
           } else {
             mensagem = erro.error;
           }
-  
           Swal.fire('Erro', mensagem, 'error');
         }
       });
@@ -49,7 +47,6 @@ export class TelaDeLoginComponent {
       Swal.fire('Erro', 'Nenhum campo preenchido!', 'error');
 
     }
-  
   }
   voltar() {
     this.router.navigate(['']);

@@ -22,8 +22,6 @@ export class InputComponent {
 
   onInput(event: any) {
     this.value = event.target.value;
-    this.valueChange.emit(this.value); 
+    this.valueChange.emit(this.value);
   }
-
-
 }

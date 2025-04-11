@@ -15,19 +15,25 @@ export class CadastroUsuarioComponent {
   aceitaTermos: boolean = false;
   snChecked: boolean = false;
   withOverflow: boolean = false;
+  confirmarSenha: string = '';
 
+  public pessoa: Pessoa = {
+    id: 0,
+    nome: '',
+    email: '',
+    telefone: '',
+    senha: '',
+    tipoDocumento: EnumDocumento.CPF,
+    valorDocumento: '',
+  };
 
   constructor(
     private loginService: LoginService,
     private router:Router,
   ) {
-    this.updateWithOverflow(window.innerWidth); 
-    
+    this.updateWithOverflow(window.innerWidth);
+
   }
-
-  public pessoa: Pessoa = new Pessoa();
-
-
 
   togglePessoaJuridica(event: any): void {
     this.isPessoaJuridica = event.target.checked;
@@ -48,13 +54,24 @@ export class CadastroUsuarioComponent {
   }
 
   cadastrarUsuario() {
+    if (this.pessoa.senha !== this.confirmarSenha) {
+      Swal.fire({
+        title: 'Erro!',
+        text: 'As senhas não coincidem.',
+        icon: 'error',
+        timer: 2500,
+        timerProgressBar: true,
+        showConfirmButton: false
+      });
+      return;
+    }
     try {
       if (this.isPessoaJuridica) {
         this.pessoa.tipoDocumento = EnumDocumento.CNPJ;
       } else {
         this.pessoa.tipoDocumento = EnumDocumento.CPF;
       }
-  
+
       this.loginService.cadastrar(this.pessoa).subscribe({
         next: (response) => {
           this.router.navigate(["login"]);
@@ -74,7 +91,7 @@ export class CadastroUsuarioComponent {
           });
         }
       });
-  
+
     } catch (error) {
       Swal.fire({
         title: 'Erro!',
