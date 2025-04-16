@@ -120,14 +120,11 @@ export class TelaInicialComponent implements OnInit{
     }
   }
 
-  // fazer reload da pagina
   logoutUser(){
+    this.isLoggedIn = false;
+    this.menuOpen = false;
     this.loginService.logout();
     this.router.navigate(['/']);
     this.perfil = null;
   }
-
-
-
-
 }
