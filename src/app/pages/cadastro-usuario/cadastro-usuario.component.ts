@@ -1,87 +1,197 @@
-import { Component, HostListener } from '@angular/core';
-import { LoginService } from '../../shared/service/LoginService';
-import { Pessoa } from '../../shared/model/entity/pessoa';
-import { EnumDocumento } from '../../shared/model/enum/EnumDocumento';
-import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { Component, HostListener } from "@angular/core"
+import { FormBuilder, type FormGroup, Validators } from "@angular/forms"
+import { LoginService } from "../../shared/service/LoginService"
+import type { Pessoa } from "../../shared/model/entity/pessoa"
+import { EnumDocumento } from "../../shared/model/enum/EnumDocumento"
+import Swal from "sweetalert2"
+import { Router } from "@angular/router"
 
 @Component({
-  selector: 'app-cadastro-usuario',
-  templateUrl: './cadastro-usuario.component.html',
-  styleUrl: './cadastro-usuario.component.scss'
+  selector: "app-cadastro-usuario",
+  templateUrl: "./cadastro-usuario.component.html",
+  styleUrl: "./cadastro-usuario.component.scss",
 })
 export class CadastroUsuarioComponent {
-  isPessoaJuridica: boolean = false;
-  aceitaTermos: boolean = false;
-  snChecked: boolean = false;
-  withOverflow: boolean = false;
+  isPessoaJuridica = false
+  aceitaTermos = false
+  snChecked = false
+  withOverflow = false
+  confirmarSenha = ""
+  cadastroForm: FormGroup
+  formSubmitted = false
 
+  public pessoa: Pessoa = {
+    id: 0,
+    nome: "",
+    email: "",
+    telefone: "",
+    senha: "",
+    tipoDocumento: EnumDocumento.CPF,
+    valorDocumento: "",
+  }
 
   constructor(
     private loginService: LoginService,
-    private router:Router,
+    private router: Router,
+    private formBuilder: FormBuilder,
   ) {
-    this.updateWithOverflow(window.innerWidth); 
-    
+    this.updateWithOverflow(window.innerWidth)
+    this.initForm()
   }
 
-  public pessoa: Pessoa = new Pessoa();
+  initForm(): void {
+    this.cadastroForm = this.formBuilder.group({
+      nome: [this.pessoa.nome, Validators.required],
+      valorDocumento: [this.pessoa.valorDocumento, Validators.required],
+      email: [this.pessoa.email, [Validators.required, Validators.email]],
+      telefone: [this.pessoa.telefone, Validators.required],
+      senha: [this.pessoa.senha, Validators.required],
+      confirmarSenha: [this.confirmarSenha, Validators.required],
+      aceitaTermos: [this.aceitaTermos, Validators.requiredTrue],
+    })
 
+    // Inscreva-se nas mudanças do formulário para manter o modelo atualizado
+    this.cadastroForm.valueChanges.subscribe((values) => {
+      this.pessoa.nome = values.nome
+      this.pessoa.valorDocumento = values.valorDocumento
+      this.pessoa.email = values.email
+      this.pessoa.telefone = values.telefone
+      this.pessoa.senha = values.senha
+      this.confirmarSenha = values.confirmarSenha
+      // aceitaTermos já é atualizado pelo método onTermsChange
+    })
+  }
 
+  // Getters para facilitar o acesso aos campos do formulário
+  get f() {
+    return this.cadastroForm.controls
+  }
+
+  // Método para verificar se um campo específico está inválido
+  isFieldInvalid(fieldName: string): boolean {
+    return this.formSubmitted && this.f[fieldName].invalid
+  }
 
   togglePessoaJuridica(event: any): void {
-    this.isPessoaJuridica = event.target.checked;
+    this.isPessoaJuridica = event.target.checked
   }
 
   toggleSN(event: any): void {
-    this.snChecked = event.target.checked;
+    this.snChecked = event.target.checked
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   onResize(event: Event) {
-    const width = (event.target as Window).innerWidth;
-    this.updateWithOverflow(width);
+    const width = (event.target as Window).innerWidth
+    this.updateWithOverflow(width)
   }
 
   private updateWithOverflow(width: number) {
-    this.withOverflow = width < 768;
+    this.withOverflow = width < 768
   }
 
   cadastrarUsuario() {
+    this.formSubmitted = true
+
+    // Verifica se o formulário é válido
+    if (this.cadastroForm.invalid) {
+      this.mostrarMensagemErroValidacao()
+      return
+    }
+
+    // Verifica se as senhas coincidem
+    if (this.pessoa.senha !== this.confirmarSenha) {
+      Swal.fire({
+        title: "Erro!",
+        text: "As senhas não coincidem.",
+        icon: "error",
+        timer: 2500,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      })
+      return
+    }
+
     try {
       if (this.isPessoaJuridica) {
-        this.pessoa.tipoDocumento = EnumDocumento.CNPJ;
+        this.pessoa.tipoDocumento = EnumDocumento.CNPJ
       } else {
-        this.pessoa.tipoDocumento = EnumDocumento.CPF;
+        this.pessoa.tipoDocumento = EnumDocumento.CPF
       }
-  
+
       this.loginService.cadastrar(this.pessoa).subscribe({
         next: (response) => {
-          this.router.navigate(["login"]);
+          this.router.navigate(["login"])
           Swal.fire({
-            title: 'Sucesso!',
-            text: 'Usuário cadastrado com sucesso!',
-            icon: 'success',
-            confirmButtonText: 'OK'
-          });
+            title: "Sucesso!",
+            text: "Usuário cadastrado com sucesso!",
+            icon: "success",
+            confirmButtonText: "OK",
+          })
         },
         error: (error) => {
           Swal.fire({
-            title: 'Erro!',
-            text: 'Ocorreu um erro ao cadastrar o usuário. Tente novamente.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-          });
-        }
-      });
-  
+            title: "Erro!",
+            text: "Ocorreu um erro ao cadastrar o usuário. Tente novamente.",
+            icon: "error",
+            confirmButtonText: "OK",
+          })
+        },
+      })
     } catch (error) {
       Swal.fire({
-        title: 'Erro!',
-        text: 'Erro inesperado. Tente novamente.',
-        icon: 'error',
-        confirmButtonText: 'OK'
-      });
+        title: "Erro!",
+        text: "Erro inesperado. Tente novamente.",
+        icon: "error",
+        confirmButtonText: "OK",
+      })
     }
+  }
+
+  mostrarMensagemErroValidacao() {
+    // Verifica se o usuário não aceitou os termos
+    if (!this.aceitaTermos) {
+      Swal.fire({
+        title: "Erro!",
+        text: "Aceite os termos de uso e a política de privacidade para se registrar",
+        icon: "error",
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      })
+      return
+    }
+
+    // Coleta os nomes dos campos inválidos
+    const camposInvalidos = []
+    if (this.f["nome"].invalid) camposInvalidos.push(this.isPessoaJuridica ? "Razão Social" : "Nome Completo")
+    if (this.f["valorDocumento"].invalid) camposInvalidos.push(this.isPessoaJuridica ? "CNPJ" : "CPF")
+    if (this.f["email"].invalid) camposInvalidos.push("Email")
+    if (this.f["telefone"].invalid) camposInvalidos.push("Telefone")
+    if (this.f["senha"].invalid) camposInvalidos.push("Senha")
+    if (this.f["confirmarSenha"].invalid) camposInvalidos.push("Confirmar Senha")
+
+    // Constrói a mensagem de erro
+    let mensagem = ""
+    if (camposInvalidos.length === 1) {
+      mensagem = `O campo ${camposInvalidos[0]} é obrigatório`
+    } else if (camposInvalidos.length > 1) {
+      const ultimoCampo = camposInvalidos.pop()
+      mensagem = `Os campos ${camposInvalidos.join(", ")} e ${ultimoCampo} são obrigatórios`
+    }
+
+    Swal.fire({
+      title: "Erro!",
+      text: mensagem,
+      icon: "error",
+      timer: 3000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+    })
+  }
+
+  onTermsChange(event: any): void {
+    this.aceitaTermos = event.target.checked
+    this.f["aceitaTermos"].setValue(this.aceitaTermos)
   }
 }
