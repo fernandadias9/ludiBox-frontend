@@ -5,9 +5,9 @@
       <p class="text-placeholder_color font-bold text-xs lg:text-base">Faça seu login</p>
     </header>
 
-    <form #ngForm="ngForm" (ngSubmit)="realizarLogin()" for="email" action="" class="grid gap-1.5 w-full px-4 sm:px-40 lg:px-16 xl:px-36 mb-2 lg:gap-3">
+    <form [formGroup]="loginForm" (ngSubmit)="realizarLogin()" class="grid gap-1.5 w-full px-4 sm:px-40 lg:px-16 xl:px-36 mb-2 lg:gap-3">
       <app-input
-        [ngClass]="(!dto.login && ngForm.dirty) ? 'form-control is-invalid' : 'form-control'"
+        formControlName="login"
         [(value)]="dto.login"
         for="email"
         label="E-mail"
@@ -16,11 +16,11 @@
         placeholder="E-mail *"
         aria-placeholder="digite seu e-mail"
         name="email"
+        [invalid]="isFieldInvalid('login')"
       ></app-input>
 
-
       <app-input
-        [ngClass]="(!dto.senha && ngForm.dirty) ? 'form-control is-invalid' : 'form-control'"
+        formControlName="senha"
         [(value)]="dto.senha"
         for="password"
         label="Senha"
@@ -29,6 +29,7 @@
         placeholder="Senha *"
         aria-placeholder="digite sua senha"
         name="password"
+        [invalid]="isFieldInvalid('senha')"
       ></app-input>
     </form>
     <a

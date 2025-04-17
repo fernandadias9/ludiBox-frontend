@@ -1,3 +1,7 @@
-<button class="font-bold text-primary text-sm sm:text-base lg:text-xl underline hover:scale-105 ease-in duration-300">
+<button
+  [type]="type"
+  [disabled]="disabled"
+  (click)="onClick()"
+  class="font-bold text-primary text-sm sm:text-base lg:text-xl underline hover:scale-105 ease-in duration-300">
   {{ title }}
 </button>

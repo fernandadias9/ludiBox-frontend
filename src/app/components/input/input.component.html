@@ -7,11 +7,17 @@
   <input
     [id]="id"
     [type]="type"
-    [(value)]="value"
+    [value]="value"
     (input)="onInput($event)"
+    (blur)="markAsTouched()"
     [disabled]="disabled"
     [placeholder]="placeholder"
     [name]="name"
     [required]="required"
-    class="h-11 w-full border-[2px] rounded-lg border-[#E7E3E3] placeholder-[#C6C2C2] placeholder:text-sm lg:placeholder:text-base placeholder:font-primary placeholder:font-semibold text-black focus:outline-none focus:ring-1 focus:ring-[#D98027] focus:border-[#D98027] px-3 bg" />
+    [class]="'h-11 w-full border-[2px] rounded-lg ' +
+             (invalid ? 'border-red-500 focus:ring-red-300 focus:border-red-500' : 'border-[#E7E3E3] focus:ring-1 focus:ring-[#D98027] focus:border-[#D98027]') +
+             ' placeholder-[#C6C2C2] placeholder:text-sm lg:placeholder:text-base placeholder:font-primary placeholder:font-semibold text-black focus:outline-none px-3 bg'" />
+  <div *ngIf="invalid && required" class="text-red-500 text-xs mt-1">
+    Este campo é obrigatório
+  </div>
 </div>

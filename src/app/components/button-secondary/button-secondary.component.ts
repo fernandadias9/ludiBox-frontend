@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-button-secondary',
@@ -7,4 +7,14 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonSecondaryComponent {
   @Input() title: string = '';
+  @Input() disabled = false
+  @Input() type = "button"
+
+  @Output() click: EventEmitter<void> = new EventEmitter<void>()
+
+  onClick() {
+    if (!this.disabled) {
+      this.click.emit()
+    }
+  }
 }

@@ -24,9 +24,10 @@
       </label>
     </div>
 
-    <form class="grid gap-1.5 w-full sm:px-40 md:px-11 lg:px-0 xl:px-12 mb-2 lg:gap-3">
+    <form [formGroup]="cadastroForm" (ngSubmit)="cadastrarUsuario()" class="grid gap-1.5 w-full sm:px-40 md:px-11 lg:px-0 xl:px-12 mb-2 lg:gap-3">
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
         <app-input
+          formControlName="nome"
           [(value)]="pessoa.nome"
           id="name"
           name="name"
@@ -34,9 +35,11 @@
           placeholder="{{ isPessoaJuridica ? 'Razão Social *' : 'Nome Completo *' }}"
           [required]="true"
           class="w-full md:w-3/5"
+          [invalid]="isFieldInvalid('nome')"
         />
 
         <app-input
+          formControlName="valorDocumento"
           [(value)]="pessoa.valorDocumento"
           id="document"
           name="document"
@@ -44,11 +47,13 @@
           placeholder="{{ isPessoaJuridica ? 'CNPJ *' : 'CPF *' }}"
           [required]="true"
           class="w-full md:w-2/5"
+          [invalid]="isFieldInvalid('valorDocumento')"
         />
       </div>
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
         <app-input
+          formControlName="email"
           [(value)]="pessoa.email"
           id="email"
           name="email"
@@ -56,9 +61,11 @@
           placeholder="Email *"
           [required]="true"
           class="w-full md:w-3/5"
+          [invalid]="isFieldInvalid('email')"
         />
 
         <app-input
+          formControlName="telefone"
           [(value)]="pessoa.telefone"
           id="phone"
           name="phone"
@@ -66,11 +73,13 @@
           placeholder="Telefone *"
           [required]="true"
           class="w-full md:w-2/5"
+          [invalid]="isFieldInvalid('telefone')"
         />
       </div>
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
         <app-input
+          formControlName="senha"
           [(value)]="pessoa.senha"
           id="password"
           name="password"
@@ -78,28 +87,34 @@
           type="password"
           [required]="true"
           placeholder="Senha *"
+          [invalid]="isFieldInvalid('senha')"
         />
 
         <app-input
+          formControlName="confirmarSenha"
           [(value)]="confirmarSenha"
           id="passwordConfirm"
           name="passwordConfirm"
           label="Confirmar Senha *"
-          [required]="true" type="password"
+          [required]="true"
+          type="password"
           placeholder="Confirmar Senha"
+          [invalid]="isFieldInvalid('confirmarSenha')"
         />
       </div>
 
       <div class="flex items-start mt-2 lg:mt-4 mb-5 px-2">
         <input
           type="checkbox"
+          formControlName="aceitaTermos"
           name="agreeTerms"
           class="h-5 w-5 cursor-pointer"
-          [(ngModel)]="aceitaTermos"
+          (change)="onTermsChange($event)"
+          [class.border-red-500]="isFieldInvalid('aceitaTermos')"
           required
         />
 
-        <label class="text-xs md:text-sm lg:text-base ml-2">
+        <label class="text-xs md:text-sm lg:text-base ml-2" [class.text-red-500]="isFieldInvalid('aceitaTermos')">
           Eu concordo com os <a href="#" class="text-xs md:text-sm lg:text-base text-blue-600 underline">Termos de Serviço</a>,
           <a href="#" class="text-xs md:text-sm lg:text-base text-blue-600 underline">Termos e Condições Gerais</a> e
           <a href="#" class="text-xs md:text-sm lg:text-base text-blue-600 underline">Política de Privacidade</a>.
@@ -109,7 +124,6 @@
       <div class="flex flex-col w-full items-center gap-3 pb-3">
         <app-button-primary
           title="Registrar"
-          (click)="cadastrarUsuario()"
         />
 
         <app-button-secondary
