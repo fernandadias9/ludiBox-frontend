@@ -6,6 +6,7 @@ import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recupe
 import { TelaDePerfilComponent } from './pages/tela-de-perfil/tela-de-perfil.component';
 import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
 import { DetalheProdutoComponent } from './pages/detalhe-produto/detalhe-produto.component';
+import { EnderecosComponent } from './pages/enderecos/enderecos.component';
 
 const routes: Routes = [
   { path: 'login', component: TelaDeLoginComponent },
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'esqueci-minha_senha', component: RecuperacaoDeSenhaComponent },
   { path: 'tela-perfil', component: TelaDePerfilComponent },
   { path: '', component: TelaInicialComponent },
-  { path: 'produto/:id', component: DetalheProdutoComponent }
+  { path: 'produto/:id', component: DetalheProdutoComponent },
+  { path: "enderecos", component:EnderecosComponent}
 ];
 
 @NgModule({

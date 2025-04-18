@@ -5,6 +5,7 @@ import { LoginService } from "../../shared/service/LoginService"
 import { Component } from "@angular/core"
 import { FormBuilder, type FormGroup, Validators } from "@angular/forms"
 import Swal from "sweetalert2"
+import { jwtDecode } from "jwt-decode"
 
 @Component({
   selector: "app-tela-de-login",
@@ -46,7 +47,6 @@ export class TelaDeLoginComponent {
   public realizarLogin() {
     this.formSubmitted = true
 
-    // Verifica se o formulário é válido
     if (this.loginForm.invalid) {
       this.mostrarMensagemErroValidacao()
       return
@@ -54,20 +54,30 @@ export class TelaDeLoginComponent {
 
     this.service.autenticar(this.dto).subscribe({
       next: (jwt) => {
-        Swal.fire("Sucesso", "Usuário autenticado com sucesso", "success")
-        const token: string = jwt.body + ""
-        localStorage.setItem("tokenUsuarioAutenticado", token)
-        this.router.navigate(["/"])
+        Swal.fire("Sucesso", "Usuário autenticado com sucesso", "success");
+        const token: string = jwt.body + "";
+        localStorage.setItem("tokenUsuarioAutenticado", token);
+
+        // Decodifica o token para obter o ID do usuário
+        try {
+          const tokenDecodificado: any = jwtDecode(token);
+          const idUsuario = tokenDecodificado.id;
+          localStorage.setItem("idUsuarioAutenticado", idUsuario.toString());
+        } catch (error) {
+          console.error("Erro ao decodificar o token:", error);
+        }
+
+        this.router.navigate(["/"]);
       },
       error: (erro) => {
-        var mensagem: string
+        var mensagem: string;
         if (erro.status != 200) {
-          mensagem = "Usuário ou senha inválidos, tente novamente"
+          mensagem = "Usuário ou senha inválidos, tente novamente";
         } else {
-          mensagem = erro.error
+          mensagem = erro.error;
         }
-        Swal.fire("Erro", mensagem, "error")
-      },
+        Swal.fire("Erro", mensagem, "error");
+      }
     })
   }
 

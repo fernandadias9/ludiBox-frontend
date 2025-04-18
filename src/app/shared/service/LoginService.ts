@@ -47,6 +47,7 @@ export class LoginService {
 
   logout() {
     localStorage.removeItem('tokenUsuarioAutenticado');
+    localStorage.removeItem('idUsuarioAutenticado');
     localStorage.clear();
   }
 }

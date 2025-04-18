@@ -1,0 +1,22 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+    <h2 class="text-xl font-semibold mb-4">Novo Endereço</h2>
+    <form [formGroup]="enderecoForm" (ngSubmit)="salvar()" class="grid gap-3">
+      <app-input id="nome" formControlName="nome" label="Nome" [showLabel]="true"/>
+
+      <!-- <app-input formControlName="nome" label="Nome" [showLabel]="true"></app-input>
+      <app-input formControlName="cep" label="CEP" [showLabel]="true"></app-input>
+      <app-input formControlName="rua" label="Rua" [showLabel]="true"></app-input>
+      <app-input formControlName="numero" label="Número" [showLabel]="true"></app-input>
+      <app-input formControlName="complemento" label="Complemento" [showLabel]="true"></app-input>
+      <app-input formControlName="bairro" label="Bairro" [showLabel]="true"></app-input>
+      <app-input formControlName="cidade" label="Cidade" [showLabel]="true"></app-input>
+      <app-input formControlName="estado" label="Estado" [showLabel]="true"></app-input> -->
+
+      <div class="flex justify-end gap-3 pt-4">
+        <app-button-secondary title="Voltar" (click)="fechar()"></app-button-secondary>
+        <app-button-primary title="Registrar"></app-button-primary>
+      </div>
+    </form>
+  </div>
+</div>
