@@ -12,6 +12,12 @@ export class ModalEnderecoComponent {
   @Output() onEnderecoAdicionado = new EventEmitter<void>();
 
   enderecoForm: FormGroup;
+  estados: string[] = [
+    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES',
+    'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR',
+    'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC',
+    'SP', 'SE', 'TO'
+  ];
 
   constructor(private fb: FormBuilder, private enderecoService: EnderecoService) {
     this.enderecoForm = this.fb.group({
@@ -23,6 +29,27 @@ export class ModalEnderecoComponent {
       bairro: ['', [Validators.required, Validators.minLength(3)]],
       cidade: ['', [Validators.required, Validators.minLength(3)]],
       estado: ['', [Validators.required, Validators.minLength(2)]],
+      semNumero: [false]
+    });
+
+    this.handleSemNumeroChanges();
+  }
+
+  handleSemNumeroChanges() {
+    this.enderecoForm.get('semNumero')?.valueChanges.subscribe((semNumero: boolean) => {
+      const numeroControl = this.enderecoForm.get('numero');
+      const complementoControl = this.enderecoForm.get('complemento');
+
+      if (semNumero) {
+        numeroControl?.clearValidators();
+        complementoControl?.setValidators([Validators.required]);
+      } else {
+        numeroControl?.setValidators([Validators.required]);
+        complementoControl?.clearValidators();
+      }
+
+      numeroControl?.updateValueAndValidity();
+      complementoControl?.updateValueAndValidity();
     });
   }
 
@@ -32,6 +59,8 @@ export class ModalEnderecoComponent {
         this.onEnderecoAdicionado.emit();
         this.onClose.emit();
       });
+    } else {
+      this.enderecoForm.markAllAsTouched();
     }
   }
 
