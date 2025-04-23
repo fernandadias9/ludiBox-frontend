@@ -1,10 +1,10 @@
+import { jwtDecode } from 'jwt-decode';
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-
 import { Observable } from "rxjs";
 import { PessoaDTO } from "../model/dto/PessoaDTO";
 import { Pessoa } from "../model/entity/pessoa";
-import { jwtDecode } from "jwt-decode";
+
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +47,7 @@ export class LoginService {
 
   logout() {
     localStorage.removeItem('tokenUsuarioAutenticado');
+    localStorage.removeItem('idUsuarioAutenticado');
     localStorage.clear();
   }
 }

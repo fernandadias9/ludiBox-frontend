@@ -30,6 +30,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { DateAdapter } from 'angular-calendar';
 import { MatInputModule } from '@angular/material/input';
 import { CustomDateAdapter } from './utils/adaptador-calendario';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { EnderecosComponent } from './pages/enderecos/enderecos.component';
+import { TemplateTelasPerfilComponent } from './components/template-telas-perfil/template-telas-perfil.component';
+import { ModalEnderecoComponent } from './components/modal-endereco/modal-endereco.component';
+import { CardEnderecoComponent } from './components/card-endereco/card-endereco.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -58,7 +63,11 @@ export const MY_FORMATS = {
     CardAnunciosComponent,
     TelaInicialComponent,
     TemplateAnunciosComponent,
-    DetalheProdutoComponent
+    DetalheProdutoComponent,
+    EnderecosComponent,
+    TemplateTelasPerfilComponent,
+    ModalEnderecoComponent,
+    CardEnderecoComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +83,8 @@ export const MY_FORMATS = {
     MatCalendarHeader,
     MatCalendar,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    NgxMaskDirective  
   ],
   providers: [
     provideAnimationsAsync(),
@@ -94,6 +104,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },
     { provide: DateAdapter, useClass: CustomDateAdapter },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    provideNgxMask(),
     LoginService
   ],
   bootstrap: [AppComponent]
