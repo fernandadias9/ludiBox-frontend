@@ -18,4 +18,12 @@ export class EnderecoService {
   salvarEndereco(endereco: Endereco): Observable<Endereco> {
     return this.http.post<Endereco>(`${this.API}/novo-endereco`, endereco);
   }
+
+  atualizarEndereco(id: number, endereco: any) {
+    return this.http.patch(`${this.API}/atualizar-endereco/${id}`, endereco);
+  }
+
+  deletarEndereco(id: number) {
+    return this.http.delete(`${this.API}/deletar-endereco/${id}`);
+  }
 }

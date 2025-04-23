@@ -54,7 +54,7 @@
 
       <div class="flex items-center justify-end gap-3 pt-4">
         <app-button-secondary title="Voltar" (click)="fechar()"></app-button-secondary>
-        <app-button-primary title="Registrar"></app-button-primary>
+        <app-button-primary title="{{ enderecoEditando ? 'Salvar' : 'Registrar' }}"></app-button-primary>
       </div>
     </form>
   </div>

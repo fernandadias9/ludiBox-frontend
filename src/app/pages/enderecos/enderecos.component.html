@@ -1,6 +1,5 @@
 <app-template-telas-perfil>
   <div class="p-6">
-    <!-- Header com título e botão -->
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-2xl font-semibold text-gray-800">Meus endereços</h2>
       <div class="flex items-center gap-x-1" (click)="abrirModal()">
@@ -10,13 +9,13 @@
     </div>
 
     <app-modal-endereco
-      *ngIf="isOpen"
+      [hidden]="!isOpen"
+      [enderecoEditando]="enderecoSendoEditado"
       (onClose)="fecharModal()"
       (onEnderecoAdicionado)="onEnderecoAdicionado()"
     >
     </app-modal-endereco>
 
-    <!-- Mensagem de vazio -->
     <ng-container *ngIf="enderecos.length === 0; else listaEnderecos">
       <p class="text-gray-600 text-lg w-2/3 text-left">
         Nenhum endereço cadastrado, clique em
@@ -26,11 +25,14 @@
     </ng-container>
 
     <ng-template #listaEnderecos>
-      <!-- aqui você renderiza os cards de endereço depois -->
-      <div *ngFor="let endereco of enderecos" class="bg-white rounded-md shadow-md p-4 mb-4">
-        <p class="font-bold">{{ endereco.nome }}</p>
-        <p>{{ endereco.rua }}, {{ endereco.numero }} - {{ endereco.bairro }}</p>
-        <p>{{ endereco.cidade }} - {{ endereco.estado }} | CEP: {{ endereco.cep }}</p>
+      <div class="flex flex-wrap gap-4">
+        <app-card-endereco
+          *ngFor="let endereco of enderecos"
+          [endereco]="endereco"
+          (editar)="abrirModalEdicao($event)"
+          (deletar)="deletarEndereco($event)">
+        >
+        </app-card-endereco>
       </div>
     </ng-template>
   </div>

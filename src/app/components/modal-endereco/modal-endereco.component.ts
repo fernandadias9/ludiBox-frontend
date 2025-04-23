@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EnderecoService } from '../../shared/service/endereco.service';
 
@@ -10,6 +10,18 @@ import { EnderecoService } from '../../shared/service/endereco.service';
 export class ModalEnderecoComponent {
   @Output() onClose = new EventEmitter<void>();
   @Output() onEnderecoAdicionado = new EventEmitter<void>();
+
+  @Input() set enderecoEditando(value: any) {
+    this._enderecoEditando = value;
+
+    if (value) {
+      this.enderecoForm.patchValue(value);
+    }
+  }
+  get enderecoEditando() {
+    return this._enderecoEditando;
+  }
+  private _enderecoEditando: any = null;
 
   enderecoForm: FormGroup;
   estados: string[] = [
@@ -55,16 +67,29 @@ export class ModalEnderecoComponent {
 
   salvar() {
     if (this.enderecoForm.valid) {
-      this.enderecoService.salvarEndereco(this.enderecoForm.value).subscribe(() => {
-        this.onEnderecoAdicionado.emit();
-        this.onClose.emit();
-      });
+      const dados = this.enderecoForm.value;
+      dados.cep = Number(dados.cep);
+
+      if (this.enderecoEditando) {
+        this.enderecoService.atualizarEndereco(this.enderecoEditando.id, dados).subscribe(() => {
+          this.onEnderecoAdicionado.emit();
+          this.fechar();
+        });
+      } else {
+        this.enderecoService.salvarEndereco(dados).subscribe(() => {
+          this.onEnderecoAdicionado.emit();
+          this.fechar();
+        });
+      }
     } else {
       this.enderecoForm.markAllAsTouched();
     }
   }
 
+
   fechar() {
+    this.enderecoEditando = null;
+    this.enderecoForm.reset({ semNumero: false });
     this.onClose.emit();
   }
 }

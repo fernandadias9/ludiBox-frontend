@@ -34,6 +34,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { EnderecosComponent } from './pages/enderecos/enderecos.component';
 import { TemplateTelasPerfilComponent } from './components/template-telas-perfil/template-telas-perfil.component';
 import { ModalEnderecoComponent } from './components/modal-endereco/modal-endereco.component';
+import { CardEnderecoComponent } from './components/card-endereco/card-endereco.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -65,7 +66,8 @@ export const MY_FORMATS = {
     DetalheProdutoComponent,
     EnderecosComponent,
     TemplateTelasPerfilComponent,
-    ModalEnderecoComponent
+    ModalEnderecoComponent,
+    CardEnderecoComponent
   ],
   imports: [
     BrowserModule,
