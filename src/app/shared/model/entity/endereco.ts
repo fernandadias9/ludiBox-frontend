@@ -1,3 +1,5 @@
+import { Pessoa } from "./pessoa";
+
 export class Endereco{
     id: number;
     nome: string;
@@ -8,5 +10,5 @@ export class Endereco{
     bairro: string;
     cidade: string;
     estado: string;
-    //pessoa: pessoa??
+    pessoa: Pessoa;
 }

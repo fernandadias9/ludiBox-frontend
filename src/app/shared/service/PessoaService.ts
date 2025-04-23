@@ -17,7 +17,5 @@ export class PessoaService {
     buscarPerfilPorId(id: number): Observable<PerfilDTO>{
         return this.httpCliente.get<PerfilDTO>(`${this.API}/buscar_perfil/${id}`);
     }
-
 }
 
-  

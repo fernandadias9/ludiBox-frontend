@@ -50,7 +50,6 @@ export class CadastroUsuarioComponent {
       aceitaTermos: [this.aceitaTermos, Validators.requiredTrue],
     })
 
-    // Inscreva-se nas mudanças do formulário para manter o modelo atualizado
     this.cadastroForm.valueChanges.subscribe((values) => {
       this.pessoa.nome = values.nome
       this.pessoa.valorDocumento = values.valorDocumento
@@ -58,16 +57,13 @@ export class CadastroUsuarioComponent {
       this.pessoa.telefone = values.telefone
       this.pessoa.senha = values.senha
       this.confirmarSenha = values.confirmarSenha
-      // aceitaTermos já é atualizado pelo método onTermsChange
     })
   }
 
-  // Getters para facilitar o acesso aos campos do formulário
   get f() {
     return this.cadastroForm.controls
   }
 
-  // Método para verificar se um campo específico está inválido
   isFieldInvalid(fieldName: string): boolean {
     return this.formSubmitted && this.f[fieldName].invalid
   }
@@ -93,13 +89,11 @@ export class CadastroUsuarioComponent {
   cadastrarUsuario() {
     this.formSubmitted = true
 
-    // Verifica se o formulário é válido
     if (this.cadastroForm.invalid) {
       this.mostrarMensagemErroValidacao()
       return
     }
 
-    // Verifica se as senhas coincidem
     if (this.pessoa.senha !== this.confirmarSenha) {
       Swal.fire({
         title: "Erro!",
@@ -149,7 +143,6 @@ export class CadastroUsuarioComponent {
   }
 
   mostrarMensagemErroValidacao() {
-    // Verifica se o usuário não aceitou os termos
     if (!this.aceitaTermos) {
       Swal.fire({
         title: "Erro!",
@@ -162,7 +155,6 @@ export class CadastroUsuarioComponent {
       return
     }
 
-    // Coleta os nomes dos campos inválidos
     const camposInvalidos = []
     if (this.f["nome"].invalid) camposInvalidos.push(this.isPessoaJuridica ? "Razão Social" : "Nome Completo")
     if (this.f["valorDocumento"].invalid) camposInvalidos.push(this.isPessoaJuridica ? "CNPJ" : "CPF")
@@ -171,7 +163,6 @@ export class CadastroUsuarioComponent {
     if (this.f["senha"].invalid) camposInvalidos.push("Senha")
     if (this.f["confirmarSenha"].invalid) camposInvalidos.push("Confirmar Senha")
 
-    // Constrói a mensagem de erro
     let mensagem = ""
     if (camposInvalidos.length === 1) {
       mensagem = `O campo ${camposInvalidos[0]} é obrigatório`
