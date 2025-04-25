@@ -1,0 +1,10 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800">{{ titulo }}</h2>
+    <div class="flex items-center gap-x-1 cursor-pointer" (click)="onClick()">
+      <app-button-secondary [title]="botaoTitulo"></app-button-secondary>
+      <i class="bi bi-plus text-primary text-4xl font-bold"></i>
+    </div>
+  </div>
+  <ng-content></ng-content>
+</div>

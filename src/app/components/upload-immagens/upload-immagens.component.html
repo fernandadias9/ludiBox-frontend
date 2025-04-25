@@ -1,0 +1,38 @@
+<div class="grid gap-2">
+  <label class="font-semibold text-sm">Imagens (máx. 5) *</label>
+
+  <div class="flex gap-2 flex-wrap">
+    <div
+      *ngFor="let preview of previews; let i = index"
+      class="relative w-24 h-24 rounded-lg border overflow-hidden"
+    >
+      <img [src]="preview" class="object-cover w-full h-full" />
+      <button
+        type="button"
+        (click)="removerImagem(i)"
+        class="absolute top-1 right-1 bg-black bg-opacity-50 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+        title="Remover"
+      >
+        ×
+      </button>
+    </div>
+
+    <label
+      *ngIf="arquivos.length < 5"
+      class="w-24 h-24 flex items-center justify-center border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition"
+    >
+      <span class="text-sm text-gray-400">+</span>
+      <input
+        type="file"
+        accept="image/*"
+        class="hidden"
+        (change)="adicionarImagem($event)"
+        [disabled]="arquivos.length >= 5"
+      />
+    </label>
+  </div>
+
+  <div *ngIf="erro" class="text-red-500 text-sm mt-1">
+    {{ erro }}
+  </div>
+</div>

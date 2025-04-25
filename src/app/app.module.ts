@@ -1,4 +1,9 @@
-import { MatCalendar, MatCalendarBody, MatCalendarHeader, MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatCalendar,
+  MatCalendarBody,
+  MatCalendarHeader,
+  MatDatepickerModule,
+} from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,16 +21,26 @@ import { ButtonSecondaryComponent } from './components/button-secondary/button-s
 import { RecuperacaoDeSenhaComponent } from './pages/recuperacao-de-senha/recuperacao-de-senha.component';
 import { TelaDePerfilComponent } from './pages/tela-de-perfil/tela-de-perfil.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withFetch,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { LightboxModule } from 'ng-gallery/lightbox';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LoginService } from './shared/service/LoginService';
 import { RequestInterceptor } from './auth/reques.interceptor';
-import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.component';
 import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
 import { TemplateAnunciosComponent } from './components/template-anuncios/template-anuncios.component';
 import { DetalheProdutoComponent } from './pages/detalhe-produto/detalhe-produto.component';
-import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MAT_NATIVE_DATE_FORMATS, MatNativeDateModule, NativeDateAdapter } from '@angular/material/core';
+import {
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MAT_NATIVE_DATE_FORMATS,
+  MatNativeDateModule,
+  NativeDateAdapter,
+} from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DateAdapter } from 'angular-calendar';
 import { MatInputModule } from '@angular/material/input';
@@ -35,18 +50,24 @@ import { EnderecosComponent } from './pages/enderecos/enderecos.component';
 import { TemplateTelasPerfilComponent } from './components/template-telas-perfil/template-telas-perfil.component';
 import { ModalEnderecoComponent } from './components/modal-endereco/modal-endereco.component';
 import { CardEnderecoComponent } from './components/card-endereco/card-endereco.component';
+import { AnunciosCrudComponent } from './pages/anuncios-crud/anuncios-crud.component';
+import { HeaderTelasPerfilComAddComponent } from './components/header-telas-perfil-com-add/header-telas-perfil-com-add.component';
+import { ModalAnunciosComponent } from './components/modal-anuncios/modal-anuncios.component';
+import { UploadImmagensComponent } from './components/upload-immagens/upload-immagens.component';
+import { CardAnunciosCrudComponent } from './components/card-anuncios-crud/card-anuncios-crud.component';
+import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.component';
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: "DD/MM/YYYY",
+    dateInput: 'DD/MM/YYYY',
   },
   display: {
-    dateInput: "DD/MM/YYYY",
-    monthYearLabel: "MMM YYYY",
-    dateA11yLabel: "DD/MM/YYYY",
-    monthYearA11yLabel: "MMMM YYYY",
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
   },
-}
+};
 
 @NgModule({
   declarations: [
@@ -67,7 +88,12 @@ export const MY_FORMATS = {
     EnderecosComponent,
     TemplateTelasPerfilComponent,
     ModalEnderecoComponent,
-    CardEnderecoComponent
+    CardEnderecoComponent,
+    AnunciosCrudComponent,
+    HeaderTelasPerfilComAddComponent,
+    ModalAnunciosComponent,
+    UploadImmagensComponent,
+    CardAnunciosCrudComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,7 +110,7 @@ export const MY_FORMATS = {
     MatCalendar,
     MatInputModule,
     MatIconModule,
-    NgxMaskDirective  
+    NgxMaskDirective,
   ],
   providers: [
     provideAnimationsAsync(),
@@ -92,21 +118,21 @@ export const MY_FORMATS = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RequestInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: GALLERY_CONFIG,
       useValue: {
         autoHeight: true,
-        imageSize: 'cover'
-      } as GalleryConfig
+        imageSize: 'cover',
+      } as GalleryConfig,
     },
-    { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: DateAdapter, useClass: CustomDateAdapter },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     provideNgxMask(),
-    LoginService
+    LoginService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

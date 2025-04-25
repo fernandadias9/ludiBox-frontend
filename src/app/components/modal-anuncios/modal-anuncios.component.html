@@ -1,0 +1,36 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end pb-10 z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+    <h2 class="text-xl font-semibold mb-4">{{ produtoEditando ? 'Editar Produto' : 'Novo Produto' }}</h2>
+
+    <form [formGroup]="produtoForm" (ngSubmit)="salvar()" class="grid gap-4">
+      <app-input formControlName="nome" label="Nome" placeholder="Nome do produto *" [required]="true" />
+
+      <app-input formControlName="descricao" label="Descrição" placeholder="Descrição *" [required]="true" />
+
+      <div class="flex gap-2">
+        <app-input type="number" formControlName="altura" label="Altura" placeholder="Altura (cm)" class="w-1/2" />
+        <app-input type="number" formControlName="largura" label="Largura" placeholder="Largura (cm)" class="w-1/2" />
+      </div>
+
+      <div class="flex gap-2">
+        <app-input type="number" formControlName="comprimento" label="Comprimento" placeholder="Comprimento (cm)" class="w-1/2" />
+        <app-input type="number" formControlName="pesoSuportado" label="Peso Suportado (kg)" placeholder="Peso Suportado (kg)" class="w-1/2"/>
+      </div>
+
+      <div class="flex gap-2">
+        <app-input type="number" formControlName="estoque" label="Estoque *" [required]="true" class="w-1/2" />
+        <app-input type="number" formControlName="preco" label="Preço *" [required]="true" class="w-1/2" />
+      </div>
+
+      <app-upload-immagens
+        [arquivos]="arquivosImagens"
+        (onArquivosAlterados)="arquivosImagens = $event"
+      ></app-upload-immagens>
+
+      <div class="flex items-center justify-end gap-3 pt-4">
+        <app-button-secondary title="Voltar" (click)="fechar()"></app-button-secondary>
+        <app-button-primary title="{{ produtoEditando ? 'Salvar' : 'Registrar' }}"></app-button-primary>
+      </div>
+    </form>
+  </div>
+</div>
