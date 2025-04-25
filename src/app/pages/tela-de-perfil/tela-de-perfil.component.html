@@ -12,7 +12,7 @@
         <div class="relative">
           <i (click)="isOpen = !isOpen" class="text-3xl bi bi-list cursor-pointer text-xl hover:text-gray-600"></i>
           <div *ngIf="isOpen" class="absolute right-0 mt-2 w-auto bg-white border rounded-lg shadow-lg z-10">
-            <div class="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer" routerLink="login">
+            <div class="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer" (click)="toggleEdit()" >
               <p class="text-base md:text-lg">Editar</p>
             </div>
             <div class="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer" routerLink="cadastro">
@@ -22,33 +22,64 @@
         </div>
       </div>
 
-      <form class="grid gap-4 w-full">
+      <form class="grid gap-4 w-full" *ngIf="perfil?.id">
         <div class="grid w-full text-left">
           <label class="text-lg font-semibold">Nome</label>
-          <app-input id="name" name="name" label="Nome Completo"
-            placeholder="{{ 'Shrek Colombiano' }}" class="input-field w-full"></app-input>
+          <app-input 
+          id="name" name="name" label="Nome Completo" 
+          [(ngModel)]="perfil.nome"
+          [disabled]="!isEditing"
+          class="input-field w-full"></app-input>
         </div>
         <div class="grid w-full text-left">
           <label class="text-lg font-semibold">Email</label>
-          <app-input id="email" name="email" label="Email"
-            placeholder="{{ 'ShrekColombiano@gmail.com' }}" class="input-field w-full"></app-input>
+          <app-input id="email" name="email" label="Email" 
+          [(ngModel)]="perfil.email"
+          [disabled]="!isEditing"
+          class="input-field w-full"></app-input>
         </div>
         <div class="grid w-full text-left">
           <label class="text-lg font-semibold">Documento</label>
-          <app-input id="cpf" name="cpf" label="CPF"
-            placeholder="{{ '000.000.000-00' }}" class="input-field w-full"></app-input>
+          <app-input id="cpf" name="cpf" label="CPF"  [value]="perfil?.valorDocumento" [disabled]="true"
+            placeholder="{{ perfil?.valorDocumento }}" class="input-field w-full"></app-input>
         </div>
         <div class="grid w-full text-left">
           <label class="text-lg font-semibold">Telefone</label>
-          <app-input id="phone" name="phone" label="Telefone"
-            placeholder="{{ '+55 (48) 99176-2810' }}" class="input-field w-full"></app-input>
+          <app-input id="phone" name="phone" label="Telefone"  
+          [(ngModel)]="perfil.telefone"
+          [disabled]="!isEditing"
+          class="input-field w-full"></app-input>
         </div>
         <div class="grid w-full text-left">
           <label class="text-lg font-semibold">Senha</label>
-          <app-input id="password" name="password" label="Senha"
-            placeholder="{{ 'senha' }}" class="input-field w-full"></app-input>
+          <app-input id="password" name="password" label="Senha"  [value]="perfil?.senha" [disabled]="true"
+            placeholder="{{ perfil?.senha }}" class="input-field w-full"></app-input>
         </div>
       </form>
+      <div class="mt-4 flex justify-between items-center w-full">
+        
+        <button 
+          class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed">
+          Editar senha
+        </button>
+      
+        <div class="flex gap-2">
+          <button 
+            class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="!isEditing">
+            Cancelar
+          </button>
+          <button 
+            class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="!isEditing"
+            (click)="salvarPerfil()">
+            Salvar
+          </button>
+        </div>
+      </div>
+      
+
+
     </div>
   </div>
 </app-sidebar>
