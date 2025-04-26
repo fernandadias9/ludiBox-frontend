@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EnderecoService } from '../../shared/service/endereco.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-endereco',
@@ -69,22 +70,59 @@ export class ModalEnderecoComponent {
     if (this.enderecoForm.valid) {
       const dados = this.enderecoForm.value;
       dados.cep = Number(dados.cep);
-
+  
       if (this.enderecoEditando) {
-        this.enderecoService.atualizarEndereco(this.enderecoEditando.id, dados).subscribe(() => {
-          this.onEnderecoAdicionado.emit();
-          this.fechar();
+        this.enderecoService.atualizarEndereco(this.enderecoEditando.id, dados).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Endereço atualizado com sucesso!',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.onEnderecoAdicionado.emit();
+            this.fechar();
+          },
+          error: (erro) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro ao atualizar endereço',
+              text: erro?.error?.mensagem || 'Ocorreu um erro ao tentar atualizar o endereço.',
+            });
+          }
         });
       } else {
-        this.enderecoService.salvarEndereco(dados).subscribe(() => {
-          this.onEnderecoAdicionado.emit();
-          this.fechar();
+        this.enderecoService.salvarEndereco(dados).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Endereço salvo com sucesso!',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.onEnderecoAdicionado.emit();
+            this.fechar();
+          },
+          error: (erro) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro ao salvar endereço',
+              text: erro?.error?.mensagem || 'Ocorreu um erro ao tentar salvar o endereço.',
+            });
+          }
         });
       }
     } else {
       this.enderecoForm.markAllAsTouched();
+      Swal.fire({
+        icon: 'warning',
+        title: 'Formulário inválido',
+        text: 'Por favor, preencha todos os campos obrigatórios corretamente.',
+      });
     }
   }
+  
+  
 
 
   fechar() {
