@@ -27,8 +27,11 @@ export class CardAnunciosCrudComponent {
     this.deletar.emit(this.produto.id);
   }
 
-  get imagemPrincipal(): string | undefined {
-    return this.produto.imagens?.[0] || 'assets/imagem-nao-disponivel.png';
+  get imagemPrincipal(): string {
+    if (this.produto.imagens?.length > 0) {
+      return `data:image/jpeg;base64,${this.produto.imagens[0]}`;
+    } else {
+      return 'assets/imagem-nao-disponivel.png';
+    }
   }
-
 }

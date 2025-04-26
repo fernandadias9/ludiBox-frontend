@@ -17,8 +17,8 @@ export class ModalAnunciosComponent {
 
     if (value) {
       this.produtoForm.patchValue(value);
-      // Aqui você poderia carregar prévias das imagens caso deseje
-    }
+      this.imagensExistentes = value.imagens || [];
+    } 
   }
 
   get produtoEditando(): Produto | null {
@@ -29,6 +29,7 @@ export class ModalAnunciosComponent {
 
   produtoForm: FormGroup;
   arquivosImagens: File[] = [];
+  imagensExistentes: string[] = [];
 
   constructor(private fb: FormBuilder, private produtoService: ProdutoService) {
     this.produtoForm = this.fb.group({
@@ -39,32 +40,51 @@ export class ModalAnunciosComponent {
       comprimento: [null],
       pesoSuportado: [null],
       estoque: [null, [Validators.required]],
-      preco: [null, [Validators.required]]
+      preco: [null, [Validators.required]],
     });
   }
 
   salvar() {
-    if (this.produtoForm.valid && this.arquivosImagens.length > 0) {
+    if (this.produtoForm.valid) {
       const produto: Produto = this.produtoForm.value;
+      produto.imagens = [...this.imagensExistentes];
 
       if (this.produtoEditando) {
-        // Atualização ainda não implementada no backend com imagens
-        return;
+        this.produtoService
+          .atualizar(this.produtoEditando.id, produto, this.arquivosImagens)
+          .subscribe(() => {
+            this.onProdutoAdicionado.emit();
+            this.fechar();
+          });
+      } else {
+        if (this.arquivosImagens.length > 0) {
+          this.produtoService
+            .salvar(produto, this.arquivosImagens)
+            .subscribe(() => {
+              this.onProdutoAdicionado.emit();
+              this.fechar();
+            });
+        } else {
+          this.produtoForm.markAllAsTouched();
+          this.fechar();
+          return;
+        }
       }
-
-      this.produtoService.salvar(produto, this.arquivosImagens).subscribe(() => {
-        this.onProdutoAdicionado.emit();
-        this.fechar();
-      });
     } else {
       this.produtoForm.markAllAsTouched();
+      this.fechar();
     }
+  }
+
+  removerImagemExistente(index: number) {
+    this.imagensExistentes.splice(index, 1);
   }
 
   fechar() {
     this.produtoEditando = null;
-    this.produtoForm.reset();
+    this.imagensExistentes = [];
     this.arquivosImagens = [];
+    this.produtoForm.reset();
     this.onClose.emit();
   }
 }

@@ -23,7 +23,9 @@ export class ProdutoService {
     const formData = new FormData();
     formData.append('produto', new Blob([JSON.stringify(produto)], { type: 'application/json' }));
     imagens.forEach(img => formData.append('imagens', img));
-    return this.http.post<Produto>(`${this.baseUrl}`, formData);
+    return this.http.post<Produto>(`${this.baseUrl}`, formData, {
+      responseType: 'text' as 'json'
+    });
   }
 
   atualizar(id: number, produto: Produto, imagens?: File[]) {
@@ -32,11 +34,15 @@ export class ProdutoService {
     if (imagens) {
       imagens.forEach(img => formData.append('imagens', img));
     }
-    return this.http.put(`${this.baseUrl}/${id}`, formData);
+    return this.http.put(`${this.baseUrl}/${id}`, formData, {
+      responseType: 'text' as 'json'
+    });
   }
 
   deletar(id: number) {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}/${id}`, {
+      responseType: 'text' as 'json'
+    });
   }
 
   atualizarStatus(id: number, status: string) {

@@ -52,6 +52,7 @@ export class AnunciosCrudComponent {
 
   onProdutoAdicionado() {
     this.listarPorPessoa();
+    this.fecharModal();
   }
 
   deletarProduto(id: number) {
