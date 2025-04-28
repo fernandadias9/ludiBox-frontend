@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, forwardRef } from "@angular/core"
+import { Component, EventEmitter, HostListener, Input, Output, forwardRef } from "@angular/core"
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms"
 
 @Component({
@@ -27,6 +27,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() invalid = false // Nova propriedade para indicar estado de erro
 
   @Output() valueChange: EventEmitter<string> = new EventEmitter<string>()
+  @Output() blur = new EventEmitter<FocusEvent>();
 
   // Implementação do ControlValueAccessor
   private onChange: any = () => {}
@@ -58,5 +59,11 @@ export class InputComponent implements ControlValueAccessor {
   // Método para marcar o campo como tocado
   markAsTouched() {
     this.onTouched()
+  }
+
+  @HostListener("focusout", ["$event"])
+  _onBlur(event: FocusEvent) {
+    this.onTouched();
+    this.blur.emit(event);  
   }
 }

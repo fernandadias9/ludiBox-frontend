@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EnderecoService } from '../../shared/service/endereco.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-endereco',
@@ -15,7 +16,8 @@ export class ModalEnderecoComponent {
     this._enderecoEditando = value;
 
     if (value) {
-      this.enderecoForm.patchValue(value);
+      const sigla = this.estadosPorExtenso[value.estado] || value.estado;
+      this.enderecoForm.patchValue({ ...value, estado: sigla });
     }
   }
   get enderecoEditando() {
@@ -30,6 +32,17 @@ export class ModalEnderecoComponent {
     'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC',
     'SP', 'SE', 'TO'
   ];
+
+  estadosPorExtenso: { [key: string]: string } = {
+    'Acre': 'AC', 'Alagoas': 'AL', 'Amapá': 'AP', 'Amazonas': 'AM',
+    'Bahia': 'BA', 'Ceará': 'CE', 'Distrito Federal': 'DF', 'Espírito Santo': 'ES',
+    'Goiás': 'GO', 'Maranhão': 'MA', 'Mato Grosso': 'MT', 'Mato Grosso do Sul': 'MS',
+    'Minas Gerais': 'MG', 'Pará': 'PA', 'Paraíba': 'PB', 'Paraná': 'PR',
+    'Pernambuco': 'PE', 'Piauí': 'PI', 'Rio de Janeiro': 'RJ', 'Rio Grande do Norte': 'RN',
+    'Rio Grande do Sul': 'RS', 'Rondônia': 'RO', 'Roraima': 'RR', 'Santa Catarina': 'SC',
+    'São Paulo': 'SP', 'Sergipe': 'SE', 'Tocantins': 'TO'
+  };
+
 
   constructor(private fb: FormBuilder, private enderecoService: EnderecoService) {
     this.enderecoForm = this.fb.group({
@@ -46,6 +59,38 @@ export class ModalEnderecoComponent {
 
     this.handleSemNumeroChanges();
   }
+
+  buscarEnderecoPorCep() {
+    const cep = this.enderecoForm.get('cep')?.value;
+    if (!cep || cep.length < 8) return;
+
+    this.enderecoService.buscarPorCep(cep).subscribe({
+      next: (data: any) => {
+        if (!data.uf || !data.localidade) {
+          Swal.fire('Erro', 'CEP não encontrado, favor informar um CEP válido', 'error');
+          this.enderecoForm.patchValue({
+            rua: '',
+            bairro: '',
+            cidade: '',
+            estado: ''
+          });
+          return;
+        }
+
+        this.enderecoForm.patchValue({
+          rua: data.logradouro || '',
+          bairro: data.bairro || '',
+          cidade: data.localidade,
+          estado: data.uf
+        });
+      },
+      error: (err) => {
+        Swal.fire('Erro', 'Algo deu errado ao consultar o CEP', 'error');
+      }
+    });
+  }
+
+
 
   handleSemNumeroChanges() {
     this.enderecoForm.get('semNumero')?.valueChanges.subscribe((semNumero: boolean) => {

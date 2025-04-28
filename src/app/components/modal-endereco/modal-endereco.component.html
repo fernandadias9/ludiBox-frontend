@@ -6,7 +6,7 @@
         <app-input formControlName="nome" id="nome" name="nome" label="nome" placeholder="Nome - Ex: Casa... *"
           [required]="true" for="nome" class="w-2/3" />
 
-        <app-input formControlName="cep" id="cep" name="cep" label="cep" placeholder="CEP" for="cep" class="w-1/3" />
+        <app-input formControlName="cep" id="cep" name="cep" label="cep" placeholder="CEP" for="cep" class="w-1/3" (blur)="buscarEnderecoPorCep()" />
       </div>
 
       <app-input formControlName="rua" id="rua" name="rua" label="rua" placeholder="Rua *" for="rua"
