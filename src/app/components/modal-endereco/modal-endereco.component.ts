@@ -46,9 +46,9 @@ export class ModalEnderecoComponent {
 
   constructor(private fb: FormBuilder, private enderecoService: EnderecoService) {
     this.enderecoForm = this.fb.group({
-      nome: ['', [Validators.required, Validators.minLength(3)]],
-      cep: ['', [Validators.required]],
-      rua: ['', [Validators.required, Validators.minLength(3)]],
+      nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      cep: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
+      rua: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
       numero: [''],
       complemento: [''],
       bairro: ['', [Validators.required, Validators.minLength(3)]],
@@ -58,13 +58,33 @@ export class ModalEnderecoComponent {
     });
 
     this.handleSemNumeroChanges();
+
+    this.enderecoForm.get('cep')!.valueChanges.subscribe(raw => {
+      if (raw == null) return;
+
+      const digits = raw.replace(/\D/g, '').slice(0, 8);
+
+      const masked = digits.length > 5
+        ? digits.slice(0, 5) + '-' + digits.slice(5)
+        : digits;
+
+
+      if (raw !== masked) {
+        this.enderecoForm.get('cep')!.setValue(masked, { emitEvent: false });
+      }
+    });
   }
 
   buscarEnderecoPorCep() {
-    const cep = this.enderecoForm.get('cep')?.value;
-    if (!cep || cep.length < 8) return;
+    const cepMasked = this.enderecoForm.get('cep')?.value || '';
+    const cepDigits = cepMasked.replace(/\D/g, '');
 
-    this.enderecoService.buscarPorCep(cep).subscribe({
+    if (cepDigits.length !== 8) {
+      Swal.fire('Erro', 'Informe um CEP válido de 8 dígitos.', 'error');
+      return;
+    }
+
+    this.enderecoService.buscarPorCep(cepDigits).subscribe({
       next: (data: any) => {
         if (!data.uf || !data.localidade) {
           Swal.fire('Erro', 'CEP não encontrado, favor informar um CEP válido', 'error');
@@ -84,12 +104,11 @@ export class ModalEnderecoComponent {
           estado: data.uf
         });
       },
-      error: (err) => {
+      error: () => {
         Swal.fire('Erro', 'Algo deu errado ao consultar o CEP', 'error');
       }
     });
   }
-
 
 
   handleSemNumeroChanges() {
@@ -113,7 +132,7 @@ export class ModalEnderecoComponent {
   salvar() {
     if (this.enderecoForm.valid) {
       const dados = this.enderecoForm.value;
-      dados.cep = Number(dados.cep);
+      dados.cep = Number(String(dados.cep).replace(/\D/g, ''));
 
       if (this.enderecoEditando) {
         this.enderecoService.atualizarEndereco(this.enderecoEditando.id, dados).subscribe(() => {
@@ -131,6 +150,19 @@ export class ModalEnderecoComponent {
     }
   }
 
+  onCepInput(event: any) {
+    let value = event.target.value.replace(/\D/g, '');
+
+    if (value.length > 5) {
+      value = value.substring(0, 5) + '-' + value.substring(5, 7);
+    }
+
+    if (value.length > 8) {
+      value = value.substring(0, 8);
+    }
+
+    this.enderecoForm.get('cep')?.setValue(value, { emitEvent: false });
+  }
 
   fechar() {
     this.enderecoEditando = null;

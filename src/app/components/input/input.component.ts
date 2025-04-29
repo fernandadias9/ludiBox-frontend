@@ -21,15 +21,15 @@ export class InputComponent implements ControlValueAccessor {
   @Input() value: any
   @Input() disabled = false
   @Input() placeholder = ""
-  @Input() showLabel = false
   @Input() name = ""
   @Input() required = false
-  @Input() invalid = false // Nova propriedade para indicar estado de erro
+  @Input() invalid = false
+  @Input() maxlength?: number;
+  @Input() numericOnly = false;
 
   @Output() valueChange: EventEmitter<string> = new EventEmitter<string>()
   @Output() blur = new EventEmitter<FocusEvent>();
 
-  // Implementação do ControlValueAccessor
   private onChange: any = () => {}
   private onTouched: any = () => {}
 
@@ -39,7 +39,6 @@ export class InputComponent implements ControlValueAccessor {
     this.onChange(this.value)
   }
 
-  // Métodos do ControlValueAccessor
   writeValue(value: any): void {
     this.value = value
   }
@@ -56,7 +55,6 @@ export class InputComponent implements ControlValueAccessor {
     this.disabled = isDisabled
   }
 
-  // Método para marcar o campo como tocado
   markAsTouched() {
     this.onTouched()
   }
@@ -64,6 +62,13 @@ export class InputComponent implements ControlValueAccessor {
   @HostListener("focusout", ["$event"])
   _onBlur(event: FocusEvent) {
     this.onTouched();
-    this.blur.emit(event);  
+    this.blur.emit(event);
+  }
+
+  @HostListener("keypress", ["$event"])
+  _onKeyPress(event: KeyboardEvent) {
+    if (this.numericOnly && !/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
   }
 }
