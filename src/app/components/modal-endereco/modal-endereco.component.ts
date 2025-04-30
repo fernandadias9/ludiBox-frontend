@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EnderecoService } from '../../shared/service/endereco.service';
 import Swal from 'sweetalert2';
@@ -9,7 +9,7 @@ import { skip } from 'rxjs';
   templateUrl: './modal-endereco.component.html',
   styleUrl: './modal-endereco.component.scss'
 })
-export class ModalEnderecoComponent {
+export class ModalEnderecoComponent implements OnInit {
   @Output() onClose = new EventEmitter<void>();
   @Output() onEnderecoAdicionado = new EventEmitter<void>();
 
@@ -27,12 +27,6 @@ export class ModalEnderecoComponent {
   private _enderecoEditando: any = null;
 
   enderecoForm: FormGroup;
-  estados: string[] = [
-    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES',
-    'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR',
-    'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC',
-    'SP', 'SE', 'TO'
-  ];
 
   estadosPorExtenso: { [key: string]: string } = {
     'Acre': 'AC', 'Alagoas': 'AL', 'Amapá': 'AP', 'Amazonas': 'AM',
@@ -58,28 +52,8 @@ export class ModalEnderecoComponent {
       semNumero: [false]
     });
 
-    this.enderecoForm.get('semNumero')?.valueChanges.pipe(skip(1)).subscribe((semNumero: boolean) => {
-      const numeroControl = this.enderecoForm.get('numero');
-      const complementoControl = this.enderecoForm.get('complemento');
-
-      if (semNumero) {
-        Swal.fire({ icon: 'info', title: 'Aviso', text: 'Para endereços sem número o complemento é obrigatório' });
-        numeroControl?.setValue('');
-        numeroControl?.disable();
-        numeroControl?.clearValidators();
-        complementoControl?.enable();
-        complementoControl?.setValidators([Validators.required]);
-      } else {
-        Swal.fire({ icon: 'info', title: 'Aviso', text: 'Favor informar o número do endereço' });
-        numeroControl?.enable();
-        numeroControl?.setValidators([Validators.required]);
-        complementoControl?.clearValidators();
-      }
-
-      numeroControl?.updateValueAndValidity();
-      complementoControl?.updateValueAndValidity();
-    });
-
+    this.enderecoForm.get('cidade')?.disable({ emitEvent: false });
+    this.enderecoForm.get('estado')?.disable({ emitEvent: false });
 
     this.enderecoForm.get('cep')!.valueChanges.subscribe(raw => {
       if (raw == null) return;
@@ -94,6 +68,42 @@ export class ModalEnderecoComponent {
       if (raw !== masked) {
         this.enderecoForm.get('cep')!.setValue(masked, { emitEvent: false });
       }
+    });
+  }
+
+  ngOnInit(): void {
+    this.setupSemNumeroListener();
+  }
+
+  setupSemNumeroListener() {
+    this.enderecoForm.get('semNumero')?.valueChanges.subscribe((semNumero: boolean) => {
+      const numeroControl = this.enderecoForm.get('numero');
+      const complementoControl = this.enderecoForm.get('complemento');
+
+      const foiInteracaoUsuario = this.enderecoForm.get('semNumero')?.dirty;
+
+      if (semNumero && foiInteracaoUsuario) {
+        Swal.fire({
+          icon: 'info',
+          title: 'Aviso',
+          text: 'Para endereços sem número o complemento é obrigatório',
+        });
+      }
+
+      if (semNumero) {
+        numeroControl?.setValue('');
+        numeroControl?.disable();
+        numeroControl?.clearValidators();
+        complementoControl?.enable();
+        complementoControl?.setValidators([Validators.required]);
+      } else {
+        numeroControl?.enable();
+        numeroControl?.setValidators([Validators.required]);
+        complementoControl?.clearValidators();
+      }
+
+      numeroControl?.updateValueAndValidity();
+      complementoControl?.updateValueAndValidity();
     });
   }
 
@@ -206,7 +216,6 @@ export class ModalEnderecoComponent {
     this.enderecoForm.reset({ semNumero: false }, { emitEvent: false });
 
     this.enderecoForm.get('numero')?.enable({ emitEvent: false });
-    this.enderecoForm.get('complemento')?.disable({ emitEvent: false });
 
     this._enderecoEditando = null;
     this.onClose.emit();

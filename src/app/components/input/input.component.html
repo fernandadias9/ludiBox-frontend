@@ -15,9 +15,14 @@
     [required]="required"
     [attr.maxlength]="maxlength ?? null"
     [attr.inputmode]="numericOnly ? 'numeric' : null"
-    [class]="'h-11 w-full border-[2px] rounded-lg ' +
-             (invalid ? 'border-red-500 focus:ring-red-300 focus:border-red-500' : 'border-[#E7E3E3] focus:ring-1 focus:ring-[#D98027] focus:border-[#D98027]') +
-             ' placeholder-[#C6C2C2] placeholder:text-sm placeholder:font-primary placeholder:font-semibold text-black focus:outline-none px-3 bg'" />
+    [ngClass]="{
+      'h-11 w-full border-[2px] rounded-lg placeholder-[#C6C2C2] placeholder:text-sm placeholder:font-primary placeholder:font-semibold text-black focus:outline-none px-3':
+        true,
+      'border-red-500 focus:ring-red-300 focus:border-red-500': invalid,
+      'border-[#E7E3E3] focus:ring-1 focus:ring-[#D98027] focus:border-[#D98027]': !invalid,
+      'bg-[#e6e6e6]': disabled,
+      'bg-white': !disabled
+    }" />
   <div *ngIf="invalid && required" class="flex text-red-500 text-xs mt-1 items-start ml-2">
     Este campo é obrigatório
   </div>
