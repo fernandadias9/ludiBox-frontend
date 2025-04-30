@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EmailService } from '../../shared/service/EmailService';
+import { EmailService } from '../../shared/service/emailService';
 import Swal from 'sweetalert2'; 
 
 @Component({
