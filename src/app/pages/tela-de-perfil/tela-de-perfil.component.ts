@@ -12,6 +12,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrl: './tela-de-perfil.component.scss'
 })
 export class TelaDePerfilComponent implements OnInit {
+onSenhaAlterada() {
+throw new Error('Method not implemented.');
+}
 
   public idUsuario: number;
   public perfil: PerfilDTO = new PerfilDTO();
@@ -19,6 +22,7 @@ export class TelaDePerfilComponent implements OnInit {
   private perfilOriginal: PerfilDTO;
   perfilForm: FormGroup;
   formSubmitted = false
+  isOpen: boolean = false;
 
 
   constructor(
@@ -52,8 +56,15 @@ export class TelaDePerfilComponent implements OnInit {
     return this.formSubmitted && this.f[fieldName].invalid
   }
 
+  abrirModal(){
+    this.isOpen = true;
+  }
+
+  fecharModal(){
+    this.isOpen = false;
+  }
+
   
-  isOpen: boolean = false;
   menuList: { label: string; route: string }[] = [
     { label: 'Perfil', route: '' },
     { label: 'Endereços', route: '' },
@@ -65,15 +76,19 @@ export class TelaDePerfilComponent implements OnInit {
 
   usuarioLogado() {
     this.idUsuario = this.loginService.buscarIdUsuarioComToken();
-    if (!this.idUsuario) return;
-
+  
+    if (!this.idUsuario) {
+      this.router.navigate(['/']); 
+      return;
+    }
+  
     this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(resultado => {
       this.perfil = resultado;
       this.perfilOriginal = { ...resultado };
-      this.initForm()
+      this.initForm();
     });
   }
-
+  
   toggleEdit() {
     if (this.isEditing) {
       this.isEditing = false;
@@ -109,7 +124,7 @@ export class TelaDePerfilComponent implements OnInit {
     this.pessoaService.atualizarPerfil(this.idUsuario, camposAlterados).subscribe({
       next: () => {
         this.isEditing = false;
-        this.perfilForm.patchValue(this.perfil);
+        this.perfilForm.reset(this.perfilOriginal);
   
         Swal.fire({
           title: 'Sucesso!',

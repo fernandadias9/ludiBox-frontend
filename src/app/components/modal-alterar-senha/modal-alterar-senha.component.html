@@ -1,0 +1,47 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+      <h2 class="text-xl font-semibold mb-4 text-center">Alterar Senha</h2>
+      
+      <form [formGroup]="senhaForm" (ngSubmit)="salvarSenha()" class="grid gap-4">
+        
+        <app-input
+          formControlName="senhaAtual"
+          id="senhaAtual"
+          name="senhaAtual"
+          label="Senha atual"
+          placeholder="Digite sua senha atual"
+          [required]="true"
+          for="senhaAtual"
+          [type]="'password'"
+        ></app-input>
+  
+        <app-input
+          formControlName="novaSenha"
+          id="novaSenha"
+          name="novaSenha"
+          label="Nova senha"
+          placeholder="Digite sua nova senha"
+          [required]="true"
+          for="novaSenha"
+          [type]="'password'"
+        ></app-input>
+  
+        <app-input
+          formControlName="confirmarSenha"
+          id="confirmarSenha"
+          name="confirmarSenha"
+          label="Confirmar senha"
+          placeholder="Confirme a nova senha"
+          [required]="true"
+          for="confirmarSenha"
+          [type]="'password'"
+        ></app-input>
+  
+        <div class="flex justify-end gap-4 pt-4">
+          <app-button-secondary title="Cancelar" (click)="fecharModal()"></app-button-secondary>
+          <app-button-primary title="Salvar" [disabled]="senhaForm.invalid"></app-button-primary>
+        </div>
+      </form>
+    </div>
+  </div>
+  

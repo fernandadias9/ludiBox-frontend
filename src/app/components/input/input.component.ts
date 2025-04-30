@@ -25,6 +25,8 @@ export class InputComponent implements ControlValueAccessor {
   @Input() name = ""
   @Input() required = false
   @Input() invalid = false // Nova propriedade para indicar estado de erro
+  @Input() mask?: string
+
 
   @Output() valueChange: EventEmitter<string> = new EventEmitter<string>()
 
