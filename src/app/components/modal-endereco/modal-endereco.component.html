@@ -1,22 +1,22 @@
-<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end pb-20 z-50">
   <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
     <h2 class="text-xl font-semibold mb-4">Novo Endereço</h2>
     <form [formGroup]="enderecoForm" (ngSubmit)="salvar()" class="grid gap-3">
       <div class="flex gap-2 w-full">
         <app-input formControlName="nome" id="nome" name="nome" label="Nome do endereço *" placeholder="Casa, festa da Nina... *"
-          [required]="true" [maxlength]="100" for="nome" class="w-2/3"/>
+          [required]="true" [maxlength]="100" for="nome" class="w-2/3" [invalid]="enderecoForm.get('nome')?.invalid && enderecoForm.get('nome')?.touched"/>
 
-        <app-input formControlName="cep" id="cep" name="cep" label="CEP *" for="cep" class="w-1/3" [required]="true" [maxlength]="9" [numericOnly]="true" (blur)="buscarEnderecoPorCep()"/>
+        <app-input formControlName="cep" id="cep" name="cep" label="CEP *" for="cep" class="w-1/3" [required]="true" [maxlength]="9" [numericOnly]="true" [invalid]="enderecoForm.get('cep')?.invalid && enderecoForm.get('cep')?.touched" (blur)="buscarEnderecoPorCep()"/>
       </div>
 
       <app-input formControlName="rua" id="rua" name="rua" label="Logradouro *" placeholder="Rua Alegria, Travessa dos Amigos..." for="rua"
-        [required]="true" [maxlength]="200" />
+        [required]="true" [maxlength]="200" [invalid]="enderecoForm.get('rua')?.invalid && enderecoForm.get('rua')?.touched"/>
 
-      <div class="flex gap-2 w-full">
+      <div class="flex gap-2 w-full items-end">
         <app-input formControlName="numero" id="numero" name="numero" [maxlength]="10" [label]="enderecoForm.get('semNumero')?.value ? 'n°' : 'n° *'" for="numero"
-         class="w-1/3" />
+        [invalid]="enderecoForm.get('numero')?.invalid && enderecoForm.get('numero')?.touched" [required]="!enderecoForm.get('semNumero')?.value" class="w-1/3" />
 
-        <div class="flex items-center">
+        <div class="flex items-center mb-3">
           <input type="checkbox" formControlName="semNumero" name="semNumero" class="h-5 w-5 cursor-pointer" />
 
           <label class="text-xs md:text-sm lg:text-base ml-2">
@@ -31,12 +31,12 @@
           class="w-1/2" />
 
         <app-input formControlName="bairro" id="bairro" name="bairro" label="Bairro *" for="bairro"
-          [required]="true" [maxlength]="50" class="w-1/2" />
+          [required]="true" [maxlength]="50" [invalid]="enderecoForm.get('bairro')?.invalid && enderecoForm.get('bairro')?.touched" class="w-1/2" />
       </div>
 
       <div class="flex gap-2 w-full">
         <app-input formControlName="cidade" id="cidade" name="cidade" label="Cidade *" for="cidade"
-          [required]="true" [maxlength]="50" class="w-3/4" />
+          [required]="true" [maxlength]="50" class="w-3/4" [invalid]="enderecoForm.get('cidade')?.invalid && enderecoForm.get('cidade')?.touched"/>
 
           <div class="w-1/4">
             <label for="estado" class="flex text-base justify-start ml-2">Estado *</label>

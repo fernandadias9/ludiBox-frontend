@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EnderecoService } from '../../shared/service/endereco.service';
 import Swal from 'sweetalert2';
+import { skip } from 'rxjs';
 
 @Component({
   selector: 'app-modal-endereco',
@@ -47,9 +48,9 @@ export class ModalEnderecoComponent {
   constructor(private fb: FormBuilder, private enderecoService: EnderecoService) {
     this.enderecoForm = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      cep: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
+      cep: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
       rua: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
-      numero: [''],
+      numero: ['', [Validators.required]],
       complemento: [''],
       bairro: ['', [Validators.required, Validators.minLength(3)]],
       cidade: ['', [Validators.required, Validators.minLength(3)]],
@@ -57,7 +58,28 @@ export class ModalEnderecoComponent {
       semNumero: [false]
     });
 
-    this.handleSemNumeroChanges();
+    this.enderecoForm.get('semNumero')?.valueChanges.pipe(skip(1)).subscribe((semNumero: boolean) => {
+      const numeroControl = this.enderecoForm.get('numero');
+      const complementoControl = this.enderecoForm.get('complemento');
+
+      if (semNumero) {
+        Swal.fire({ icon: 'info', title: 'Aviso', text: 'Para endereços sem número o complemento é obrigatório' });
+        numeroControl?.setValue('');
+        numeroControl?.disable();
+        numeroControl?.clearValidators();
+        complementoControl?.enable();
+        complementoControl?.setValidators([Validators.required]);
+      } else {
+        Swal.fire({ icon: 'info', title: 'Aviso', text: 'Favor informar o número do endereço' });
+        numeroControl?.enable();
+        numeroControl?.setValidators([Validators.required]);
+        complementoControl?.clearValidators();
+      }
+
+      numeroControl?.updateValueAndValidity();
+      complementoControl?.updateValueAndValidity();
+    });
+
 
     this.enderecoForm.get('cep')!.valueChanges.subscribe(raw => {
       if (raw == null) return;
@@ -110,39 +132,54 @@ export class ModalEnderecoComponent {
     });
   }
 
-
-  handleSemNumeroChanges() {
-    this.enderecoForm.get('semNumero')?.valueChanges.subscribe((semNumero: boolean) => {
-      const numeroControl = this.enderecoForm.get('numero');
-      const complementoControl = this.enderecoForm.get('complemento');
-
-      if (semNumero) {
-        numeroControl?.clearValidators();
-        complementoControl?.setValidators([Validators.required]);
-      } else {
-        numeroControl?.setValidators([Validators.required]);
-        complementoControl?.clearValidators();
-      }
-
-      numeroControl?.updateValueAndValidity();
-      complementoControl?.updateValueAndValidity();
-    });
-  }
-
   salvar() {
     if (this.enderecoForm.valid) {
       const dados = this.enderecoForm.value;
       dados.cep = Number(String(dados.cep).replace(/\D/g, ''));
 
       if (this.enderecoEditando) {
-        this.enderecoService.atualizarEndereco(this.enderecoEditando.id, dados).subscribe(() => {
-          this.onEnderecoAdicionado.emit();
-          this.fechar();
+        this.enderecoService.atualizarEndereco(this.enderecoEditando.id, dados).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Endereço editado com sucesso',
+              showConfirmButton: false,
+              timer: 2000
+            });
+            this.onEnderecoAdicionado.emit();
+            this.fechar();
+          },
+          error: err => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Não foi possível editar endereço',
+              text: err.error?.message || err.message,
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
         });
       } else {
-        this.enderecoService.salvarEndereco(dados).subscribe(() => {
-          this.onEnderecoAdicionado.emit();
-          this.fechar();
+        this.enderecoService.salvarEndereco(dados).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Endereço salvo com sucesso',
+              showConfirmButton: false,
+              timer: 2000
+            });
+            this.onEnderecoAdicionado.emit();
+            this.fechar();
+          },
+          error: err => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Não foi possível salvar endereço',
+              text: err.error?.message || err.message,
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
         });
       }
     } else {
@@ -165,8 +202,13 @@ export class ModalEnderecoComponent {
   }
 
   fechar() {
-    this.enderecoEditando = null;
-    this.enderecoForm.reset({ semNumero: false });
+    this.enderecoForm.get('semNumero')?.setValue(false, { emitEvent: false });
+    this.enderecoForm.reset({ semNumero: false }, { emitEvent: false });
+
+    this.enderecoForm.get('numero')?.enable({ emitEvent: false });
+    this.enderecoForm.get('complemento')?.disable({ emitEvent: false });
+
+    this._enderecoEditando = null;
     this.onClose.emit();
   }
 }
