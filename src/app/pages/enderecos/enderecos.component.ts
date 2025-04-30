@@ -42,7 +42,7 @@ export class EnderecosComponent implements OnInit {
   }
 
   abrirModalEdicao(endereco: Endereco) {
-    this.enderecoSendoEditado = endereco;
+    this.enderecoSendoEditado = { ...endereco };
     this.isOpen = true;
   }
 
