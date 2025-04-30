@@ -1,77 +1,162 @@
-  import { Component, OnInit } from '@angular/core';
-  import { PerfilDTO } from '../../shared/model/dto/PerfilDTO';
-  import { Router } from '@angular/router';
-  import { PessoaService } from '../../shared/service/PessoaService';
-  import { LoginService } from '../../shared/service/LoginService';
+import { Component, OnInit } from '@angular/core';
+import { PerfilDTO } from '../../shared/model/dto/PerfilDTO';
+import { Router } from '@angular/router';
+import { PessoaService } from '../../shared/service/PessoaService';
+import { LoginService } from '../../shared/service/LoginService';
+import Swal from 'sweetalert2';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-  @Component({
-    selector: 'app-tela-de-perfil',
-    templateUrl: './tela-de-perfil.component.html',
-    styleUrl: './tela-de-perfil.component.scss'
-  })
-  export class TelaDePerfilComponent implements OnInit {
+@Component({
+  selector: 'app-tela-de-perfil',
+  templateUrl: './tela-de-perfil.component.html',
+  styleUrl: './tela-de-perfil.component.scss'
+})
+export class TelaDePerfilComponent implements OnInit {
 
-    public idUsuario: number;
-    public perfil: PerfilDTO = new PerfilDTO();
-    isEditing: boolean = false;
-    private perfilOriginal: PerfilDTO;
+  public idUsuario: number;
+  public perfil: PerfilDTO = new PerfilDTO();
+  isEditing: boolean = false;
+  private perfilOriginal: PerfilDTO;
+  perfilForm: FormGroup;
+  formSubmitted = false
 
 
-    constructor(
-        private router: Router,
-        private pessoaService: PessoaService,
-        private loginService: LoginService,
-      ) {}
-
-    
-    ngOnInit() {
-      this.usuarioLogado();
+  constructor(
+      private router: Router,
+      private pessoaService: PessoaService,
+      private loginService: LoginService,
+      private formBuilder: FormBuilder,
+    ) {
     }
 
-    
-    isOpen: boolean = false;
-    menuList: { label: string; route: string }[] = [
-      { label: 'Perfil', route: '' },
-      { label: 'Endereços', route: '' },
-      { label: 'Anúncios', route: '' },
-      { label: 'Anúncios', route: '' },
-      { label: 'Locações', route: '' },
-      { label: 'Sair', route: '' }
-    ];
+  
+  ngOnInit() {
+    this.usuarioLogado();
+  }
 
-    usuarioLogado() {
-      this.idUsuario = this.loginService.buscarIdUsuarioComToken();
-      if (!this.idUsuario) return;
+  initForm(): void {
+    this.perfilForm = this.formBuilder.group({
+      nome: [this.perfil.nome, Validators.required],
+      email: [this.perfil.email, [Validators.required, Validators.email]],
+      telefone: [this.perfil.telefone, Validators.required],
+    })
+
   
-      this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(resultado => {
-        this.perfil = resultado;
-        this.perfilOriginal = { ...resultado };
-      });
-    }
+  }
+
+  get f() {
+    return this.perfilForm.controls
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    return this.formSubmitted && this.f[fieldName].invalid
+  }
+
   
-    toggleEdit() {
-      this.isEditing = !this.isEditing;
-    }
-  
-    salvarPerfil() {
-      const camposAlterados: any = {};
-  
-      for (const chave in this.perfil) {
-        if (this.perfil[chave] !== this.perfilOriginal[chave]) {
-          camposAlterados[chave] = this.perfil[chave];
-        }
-      }
-  
-      this.pessoaService.atualizarPerfil(this.idUsuario, camposAlterados).subscribe({
-        next: () => {
-          this.isEditing = false;
-          alert('Perfil atualizado com sucesso!');
-        },
-        error: err => {
-          console.error(err);
-          alert('Erro ao atualizar perfil');
-        }
-      });
+  isOpen: boolean = false;
+  menuList: { label: string; route: string }[] = [
+    { label: 'Perfil', route: '' },
+    { label: 'Endereços', route: '' },
+    { label: 'Anúncios', route: '' },
+    { label: 'Anúncios', route: '' },
+    { label: 'Locações', route: '' },
+    { label: 'Sair', route: '' }
+  ];
+
+  usuarioLogado() {
+    this.idUsuario = this.loginService.buscarIdUsuarioComToken();
+    if (!this.idUsuario) return;
+
+    this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(resultado => {
+      this.perfil = resultado;
+      this.perfilOriginal = { ...resultado };
+      this.initForm()
+    });
+  }
+
+  toggleEdit() {
+    if (this.isEditing) {
+      this.isEditing = false;
+      this.perfilForm.reset(this.perfilOriginal);
+    } else {
+      this.isEditing = true;
+      this.perfilForm.patchValue(this.perfil);
     }
   }
+
+
+  salvarPerfil() {
+    this.formSubmitted = true;
   
+    if (this.perfilForm.invalid) {
+      this.mostrarMensagemErroValidacao();
+      this.perfilForm.reset(this.perfilOriginal);
+      return;
+    }
+  
+    this.perfil = {
+      ...this.perfil,
+      ...this.perfilForm.value
+    };
+  
+    const camposAlterados: any = {};
+    for (const chave in this.perfil) {
+      if (this.perfil[chave] !== this.perfilOriginal[chave]) {
+        camposAlterados[chave] = this.perfil[chave];
+      }
+    }
+  
+    this.pessoaService.atualizarPerfil(this.idUsuario, camposAlterados).subscribe({
+      next: () => {
+        this.isEditing = false;
+        this.perfilForm.patchValue(this.perfil);
+  
+        Swal.fire({
+          title: 'Sucesso!',
+          text: 'Perfil atualizado com sucesso!',
+          icon: 'success',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+      },
+      error: err => {
+        console.error(err);
+        this.perfilForm.reset(this.perfilOriginal);
+  
+        Swal.fire({
+          title: 'Erro!',
+          text: err?.error?.message || 'Erro ao atualizar o perfil. Tente novamente mais tarde.',
+          icon: 'error',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+      }
+    });
+  }
+  
+  mostrarMensagemErroValidacao() {
+      const camposInvalidos = []
+      if (this.f["nome"].invalid) camposInvalidos.push("Nome")
+      if (this.f["email"].invalid) camposInvalidos.push("Email")
+      if (this.f["telefone"].invalid) camposInvalidos.push("Telefone")
+  
+      let mensagem = ""
+      if (camposInvalidos.length === 1) {
+        mensagem = `O campo ${camposInvalidos[0]} é obrigatório`
+      } else if (camposInvalidos.length > 1) {
+        const ultimoCampo = camposInvalidos.pop()
+        mensagem = `Os campos ${camposInvalidos.join(", ")} e ${ultimoCampo} são obrigatórios`
+      }
+  
+      Swal.fire({
+        title: "Erro!",
+        text: mensagem,
+        icon: "error",
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      })
+    }   
+}

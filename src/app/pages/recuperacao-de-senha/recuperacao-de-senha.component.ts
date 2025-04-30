@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { EmailService } from '../../shared/service/EmailService';
 import Swal from 'sweetalert2'; 
+import { EmailService } from '../../shared/service/emailService';
 
 @Component({
   selector: 'app-recuperacao-de-senha',

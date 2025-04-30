@@ -22,55 +22,75 @@
         </div>
       </div>
 
-      <form class="grid gap-4 w-full" *ngIf="perfil?.id">
+      <form [formGroup]="perfilForm" (ngSubmit)="salvarPerfil()" class="grid gap-4 w-full" *ngIf="perfil?.id">
         <div class="grid w-full text-left">
-          <label class="text-lg font-semibold">Nome</label>
+          <label class="text-lg font-semibold">
+            {{ isEditing ? 'Nome*' : 'Nome' }}
+          </label>
           <app-input 
-          id="name" name="name" label="Nome Completo" 
-          [(ngModel)]="perfil.nome"
-          [disabled]="!isEditing"
-          class="input-field w-full"></app-input>
+            formControlName="nome" 
+            [(value)]="perfil.nome"
+            id="name" name="name" label="Nome Completo" 
+            [(ngModel)]="perfil.nome"
+            [disabled]="!isEditing"
+            placeholder="Nome Sobrenome"
+            [required]="true"
+            [invalid]="isFieldInvalid('nome')"
+            class="input-field w-full">
+          </app-input>
         </div>
         <div class="grid w-full text-left">
-          <label class="text-lg font-semibold">Email</label>
-          <app-input id="email" name="email" label="Email" 
+          <label class="text-lg font-semibold">
+            {{ isEditing ? 'Email*' : 'Email' }}
+          </label>
+          <app-input
+          formControlName="email" 
+          id="email" name="email" label="Email" 
           [(ngModel)]="perfil.email"
+          [(value)]="perfil.email"
           [disabled]="!isEditing"
+          placeholder="@exemplo.com"
+          [required]="true"
+          [invalid]="isFieldInvalid('email')"
           class="input-field w-full"></app-input>
         </div>
         <div class="grid w-full text-left">
-          <label class="text-lg font-semibold">Documento</label>
+          <label class="text-lg font-semibold">CPF/CNPJ</label>
           <app-input id="cpf" name="cpf" label="CPF"  [value]="perfil?.valorDocumento" [disabled]="true"
             placeholder="{{ perfil?.valorDocumento }}" class="input-field w-full"></app-input>
         </div>
         <div class="grid w-full text-left">
-          <label class="text-lg font-semibold">Telefone</label>
-          <app-input id="phone" name="phone" label="Telefone"  
+          <label class="text-lg font-semibold">
+            {{ isEditing ? 'Telefone*' : 'Telefone' }}
+          </label>
+          <app-input 
+          formControlName="telefone"
+          id="phone" name="phone" label="Telefone"  
           [(ngModel)]="perfil.telefone"
+          [(value)]="perfil.telefone"
           [disabled]="!isEditing"
+          placeholder="(00) 00000-0000"
+          [required]="true"
+          [invalid]="isFieldInvalid('telefone')"
           class="input-field w-full"></app-input>
         </div>
-        <div class="grid w-full text-left">
-          <label class="text-lg font-semibold">Senha</label>
-          <app-input id="password" name="password" label="Senha"  [value]="perfil?.senha" [disabled]="true"
-            placeholder="{{ perfil?.senha }}" class="input-field w-full"></app-input>
-        </div>
       </form>
-      <div class="mt-4 flex justify-between items-center w-full">
+      <div class="mt-9 flex justify-between items-center w-full">
         
         <button 
-          class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed">
+        class="px-4 py-2 bg-primary text-white rounded-lg enabled:hover:bg-orangeHover enabled:active:bg-orangeActive transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
           Editar senha
         </button>
       
-        <div class="flex gap-2">
+        <div class="flex gap-4">
           <button 
-            class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
-            [disabled]="!isEditing">
+          class="px-4 py-2 bg-primary text-white rounded-lg enabled:hover:bg-orangeHover enabled:active:bg-orangeActive transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="!isEditing"
+            (click)="toggleEdit()">
             Cancelar
           </button>
           <button 
-            class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+          class="px-4 py-2 bg-primary text-white rounded-lg enabled:hover:bg-orangeHover enabled:active:bg-orangeActive transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             [disabled]="!isEditing"
             (click)="salvarPerfil()">
             Salvar
