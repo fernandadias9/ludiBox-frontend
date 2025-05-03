@@ -11,4 +11,5 @@ export class Endereco{
     cidade: string;
     estado: string;
     pessoa: Pessoa;
+    semNumero: boolean;
 }
