@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { EmailService } from '../../shared/service/emailService';
+import { SenhasDTO } from '../../shared/model/dto/SenhasDTO';
 
 @Component({
   selector: 'app-modal-alterar-senha',
@@ -12,8 +14,12 @@ export class ModalAlterarSenhaComponent {
   @Output() onSenhaAlterada = new EventEmitter<void>();  
 
   senhaForm: FormGroup;
+  public senhasDTO: SenhasDTO;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private emailService: EmailService
+  ) {
     this.senhaForm = this.fb.group({
       senhaAtual: ['', [Validators.required]],
       novaSenha: ['', [Validators.required, Validators.minLength(6)]],
@@ -34,36 +40,26 @@ export class ModalAlterarSenhaComponent {
   salvarSenha() {
     if (this.senhaForm.valid) {
       const dados = this.senhaForm.value;
-      // Aqui você pode chamar um serviço para salvar a nova senha, por exemplo:
-      // this.senhaService.alterarSenha(dados.senhaAtual, dados.novaSenha).subscribe({
-      //   next: () => {
-      //     Swal.fire({
-      //       icon: 'success',
-      //       title: 'Senha alterada com sucesso!',
-      //       showConfirmButton: false,
-      //       timer: 1500
-      //     });
-      //     this.onSenhaAlterada.emit();
-      //     this.fecharModal();
-      //   },
-      //   error: (erro) => {
-      //     Swal.fire({
-      //       icon: 'error',
-      //       title: 'Erro ao alterar a senha',
-      //       text: erro?.error?.mensagem || 'Ocorreu um erro ao tentar alterar a senha.',
-      //     });
-      //   }
-      // });
-
-      // Para fins de exemplo:
-      Swal.fire({
-        icon: 'success',
-        title: 'Senha alterada com sucesso!',
-        showConfirmButton: false,
-        timer: 1500
-      });
-      this.onSenhaAlterada.emit();
-      this.fecharModal();
+      console.log(this.senhasDTO)
+      this.emailService.alterarSenha(this.senhasDTO).subscribe({
+         next: () => {
+           Swal.fire({
+             icon: 'success',
+             title: 'Senha alterada com sucesso!',
+             showConfirmButton: false,
+             timer: 1500
+           });
+           this.onSenhaAlterada.emit();
+           this.fecharModal();
+         },
+         error: (erro) => {
+           Swal.fire({
+             icon: 'error',
+             title: 'Erro ao alterar a senha',
+            text: erro?.error?.mensagem || 'Ocorreu um erro ao tentar alterar a senha.',
+           });
+         }
+       });
     } else {
       this.senhaForm.markAllAsTouched();
       Swal.fire({

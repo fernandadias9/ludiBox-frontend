@@ -4,42 +4,51 @@
       
       <form [formGroup]="senhaForm" (ngSubmit)="salvarSenha()" class="grid gap-4">
         
-        <app-input
-          formControlName="senhaAtual"
-          id="senhaAtual"
-          name="senhaAtual"
-          label="Senha atual"
-          placeholder="Digite sua senha atual"
-          [required]="true"
-          for="senhaAtual"
-          [type]="'password'"
-        ></app-input>
+        <div class="grid w-full text-left">
+          <label class="text-lg font-semibold">Senha atual*</label>
+          <app-input
+            formControlName="senhaAtual"
+            id="senhaAtual"
+            name="senhaAtual"
+            label="Senha atual"
+            placeholder="Digite sua senha atual"
+            [required]="true"
+            for="senhaAtual"
+            [type]="'password'"
+          ></app-input>
+        </div>
   
-        <app-input
-          formControlName="novaSenha"
-          id="novaSenha"
-          name="novaSenha"
-          label="Nova senha"
-          placeholder="Digite sua nova senha"
-          [required]="true"
-          for="novaSenha"
-          [type]="'password'"
-        ></app-input>
+        <div class="grid w-full text-left">
+          <label class="text-lg font-semibold">Nova senha*</label>
+          <app-input
+            formControlName="novaSenha"
+            id="novaSenha"
+            name="novaSenha"
+            label="Nova senha"
+            placeholder="Digite sua nova senha"
+            [required]="true"
+            for="novaSenha"
+            [type]="'password'"
+          ></app-input>
+        </div>
   
-        <app-input
-          formControlName="confirmarSenha"
-          id="confirmarSenha"
-          name="confirmarSenha"
-          label="Confirmar senha"
-          placeholder="Confirme a nova senha"
-          [required]="true"
-          for="confirmarSenha"
-          [type]="'password'"
-        ></app-input>
-  
+        <div class="grid w-full text-left">
+          <label class="text-lg font-semibold">Confirmar senha*</label>
+          <app-input
+            formControlName="confirmarSenha"
+            id="confirmarSenha"
+            name="confirmarSenha"
+            label="Confirmar senha"
+            placeholder="Confirme a nova senha"
+            [required]="true"
+            for="confirmarSenha"
+            [type]="'password'"
+          ></app-input>
+        </div>
+          
         <div class="flex justify-end gap-4 pt-4">
           <app-button-secondary title="Cancelar" (click)="fecharModal()"></app-button-secondary>
-          <app-button-primary title="Salvar" [disabled]="senhaForm.invalid"></app-button-primary>
+          <app-button-primary title="Salvar" [disabled]="senhaForm.invalid" (click)="salvarSenha()"></app-button-primary>
         </div>
       </form>
     </div>

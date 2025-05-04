@@ -23,6 +23,8 @@ throw new Error('Method not implemented.');
   perfilForm: FormGroup;
   formSubmitted = false
   isOpen: boolean = false;
+  isModalOpen: boolean = false;
+  
 
 
   constructor(
@@ -57,11 +59,11 @@ throw new Error('Method not implemented.');
   }
 
   abrirModal(){
-    this.isOpen = true;
+    this.isModalOpen = true;
   }
 
   fecharModal(){
-    this.isOpen = false;
+    this.isModalOpen = false;
   }
 
   
