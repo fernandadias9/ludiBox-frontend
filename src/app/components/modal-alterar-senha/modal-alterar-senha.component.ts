@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { EmailService } from '../../shared/service/emailService';
@@ -11,10 +11,13 @@ import { SenhasDTO } from '../../shared/model/dto/SenhasDTO';
 })
 export class ModalAlterarSenhaComponent {
   @Output() onClose = new EventEmitter<void>();  
-  @Output() onSenhaAlterada = new EventEmitter<void>();  
-
+  @Output() onSenhaAlterada = new EventEmitter<void>(); 
+  
   senhaForm: FormGroup;
-  public senhasDTO: SenhasDTO;
+
+  dto: SenhasDTO;
+
+  
 
   constructor(
     private fb: FormBuilder,
@@ -25,7 +28,7 @@ export class ModalAlterarSenhaComponent {
       novaSenha: ['', [Validators.required, Validators.minLength(6)]],
       confirmarSenha: ['', [Validators.required]],
     }, {
-      validators: this.matchPasswords 
+      validators: this.matchPasswords
     });
   }
 
@@ -40,8 +43,13 @@ export class ModalAlterarSenhaComponent {
   salvarSenha() {
     if (this.senhaForm.valid) {
       const dados = this.senhaForm.value;
-      console.log(this.senhasDTO)
-      this.emailService.alterarSenha(this.senhasDTO).subscribe({
+      this.dto = {
+        senhaAtual: dados.senhaAtual,
+        novaSenha: dados.novaSenha,
+        confirmarSenha: dados.confirmarSenha
+      };
+      console.log(this.dto);
+      this.emailService.alterarSenha(this.dto).subscribe({
          next: () => {
            Swal.fire({
              icon: 'success',
