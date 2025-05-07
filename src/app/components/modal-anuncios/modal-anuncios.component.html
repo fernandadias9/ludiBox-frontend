@@ -1,20 +1,20 @@
-<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end pb-10 z-50">
+<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-28 z-50 overflow-auto">
   <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
     <h2 class="text-xl font-semibold mb-4">{{ produtoEditando ? 'Editar Produto' : 'Novo Produto' }}</h2>
 
     <form [formGroup]="produtoForm" (ngSubmit)="salvar()" class="grid gap-4">
-      <app-input formControlName="nome" label="Nome" placeholder="Nome do produto *" [required]="true" />
+      <app-input formControlName="nome" label="Nome *" [required]="true" [invalid]="produtoForm.get('nome')?.invalid && produtoForm.get('nome')?.touched"/>
 
-      <app-input formControlName="descricao" label="Descrição" placeholder="Descrição *" [required]="true" />
+      <app-input formControlName="descricao" label="Descrição *" [required]="true" />
 
       <div class="flex gap-2">
-        <app-input type="number" formControlName="altura" label="Altura" placeholder="Altura (cm)" class="w-1/2" />
-        <app-input type="number" formControlName="largura" label="Largura" placeholder="Largura (cm)" class="w-1/2" />
+        <app-input type="number" formControlName="altura" label="Altura (cm)" placeholder="220" class="w-1/2" />
+        <app-input type="number" formControlName="largura" label="Largura (cm)" placeholder="150" class="w-1/2" />
       </div>
 
       <div class="flex gap-2">
-        <app-input type="number" formControlName="comprimento" label="Comprimento" placeholder="Comprimento (cm)" class="w-1/2" />
-        <app-input type="number" formControlName="pesoSuportado" label="Peso Suportado (kg)" placeholder="Peso Suportado (kg)" class="w-1/2"/>
+        <app-input type="number" formControlName="comprimento" label="Comprimento (cm)" placeholder="70" class="w-1/2" />
+        <app-input type="number" formControlName="pesoSuportado" label="Peso Suportado (kg)" placeholder="220" class="w-1/2"/>
       </div>
 
       <div class="flex gap-2">
