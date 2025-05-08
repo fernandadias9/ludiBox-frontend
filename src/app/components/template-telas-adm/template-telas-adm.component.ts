@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class TemplateTelasAdmComponent {
 
   menuList: { label: string; route: string }[] = [
-    { label: 'Dashboard', route: '' },
+    { label: 'Dashboard', route: '/dashboard' },
     { label: 'Usuários', route: '' },
     { label: 'Denúncias', route: '' },
     { label: 'Sair', route: '' }

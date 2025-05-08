@@ -8,6 +8,7 @@ import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.componen
 import { DetalheProdutoComponent } from './pages/detalhe-produto/detalhe-produto.component';
 import { EnderecosComponent } from './pages/enderecos/enderecos.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { CadastroAdministradorComponent } from './pages/cadastro-administrador/cadastro-administrador.component';
 
 const routes: Routes = [
   { path: 'login', component: TelaDeLoginComponent },
@@ -17,7 +18,8 @@ const routes: Routes = [
   { path: '', component: TelaInicialComponent },
   { path: 'produto/:id', component: DetalheProdutoComponent },
   { path: "enderecos", component:EnderecosComponent},
-  { path: "dashboard", component:DashboardComponent}
+  { path: "dashboard", component:DashboardComponent},
+  { path: "cadastro-adm", component: CadastroAdministradorComponent}
 ];
 
 @NgModule({
