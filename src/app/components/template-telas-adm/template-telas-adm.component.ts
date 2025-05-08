@@ -9,7 +9,7 @@ export class TemplateTelasAdmComponent {
 
   menuList: { label: string; route: string }[] = [
     { label: 'Dashboard', route: '/dashboard' },
-    { label: 'Usuários', route: '' },
+    { label: 'Usuários', route: '/administradores' },
     { label: 'Denúncias', route: '' },
     { label: 'Sair', route: '' }
   ];

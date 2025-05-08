@@ -38,6 +38,7 @@ import { CardEnderecoComponent } from './components/card-endereco/card-endereco.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { TemplateTelasAdmComponent } from './components/template-telas-adm/template-telas-adm.component';
 import { CadastroAdministradorComponent } from './pages/cadastro-administrador/cadastro-administrador.component';
+import { TelaDeUsuariosAdministradoresComponent } from './pages/tela-de-usuarios-administradores/tela-de-usuarios-administradores.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -73,7 +74,8 @@ export const MY_FORMATS = {
     CardEnderecoComponent,
     DashboardComponent,
     TemplateTelasAdmComponent,
-    CadastroAdministradorComponent
+    CadastroAdministradorComponent,
+    TelaDeUsuariosAdministradoresComponent
   ],
   imports: [
     BrowserModule,
