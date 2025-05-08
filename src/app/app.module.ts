@@ -35,6 +35,8 @@ import { EnderecosComponent } from './pages/enderecos/enderecos.component';
 import { TemplateTelasPerfilComponent } from './components/template-telas-perfil/template-telas-perfil.component';
 import { ModalEnderecoComponent } from './components/modal-endereco/modal-endereco.component';
 import { CardEnderecoComponent } from './components/card-endereco/card-endereco.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { TemplateTelasAdmComponent } from './components/template-telas-adm/template-telas-adm.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -67,7 +69,9 @@ export const MY_FORMATS = {
     EnderecosComponent,
     TemplateTelasPerfilComponent,
     ModalEnderecoComponent,
-    CardEnderecoComponent
+    CardEnderecoComponent,
+    DashboardComponent,
+    TemplateTelasAdmComponent
   ],
   imports: [
     BrowserModule,
