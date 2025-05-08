@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Produto } from '../../shared/model/entity/produto';
 import { ProdutoService } from '../../shared/service/produto.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-anuncios-crud',
@@ -56,8 +57,35 @@ export class AnunciosCrudComponent {
   }
 
   deletarProduto(id: number) {
-    this.produtoService.deletar(id).subscribe(() => {
-      this.listarPorPessoa();
-    });
+    Swal.fire({
+          title: 'Tem certeza que deseja deletar este endereço?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sim, deletar',
+          cancelButtonText: 'Cancelar'
+        }).then(result => {
+          if(result.isConfirmed) {
+            this.produtoService.deletar(id).subscribe({
+              next: () => {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Anúncio deletado com sucesso',
+                  showConfirmButton: false,
+                  timer: 2000,
+                });
+                this.listarPorPessoa();
+              },
+              error: (err) => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Erro ao deletar anúncio',
+                  text: err.error?.message || err.message,
+                  showConfirmButton: false,
+                  timer: 2000,
+                });
+              },
+            });
+          }
+        })
   }
 }
