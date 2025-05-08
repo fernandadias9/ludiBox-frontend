@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProdutoService } from '../../shared/service/produto.service';
 import { Produto } from '../../shared/model/entity/produto';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-anuncios',
@@ -74,17 +75,51 @@ export class ModalAnunciosComponent {
       if (this.produtoEditando) {
         this.produtoService
           .atualizar(this.produtoEditando.id, produto, this.arquivosImagens)
-          .subscribe(() => {
-            this.onProdutoAdicionado.emit();
-            this.fechar();
+          .subscribe({
+            next: () => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Anúncio editado com sucesso',
+                showConfirmButton: false,
+                timer: 2000
+              });
+              this.onProdutoAdicionado.emit();
+              this.fechar();
+            },
+            error: err => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Não foi possível editar anúncio',
+                text: err.error?.message || err.message,
+                showConfirmButton: false,
+                timer: 2000
+              });
+            }
           });
       } else {
         if (this.arquivosImagens.length > 0) {
           this.produtoService
             .salvar(produto, this.arquivosImagens)
-            .subscribe(() => {
-              this.onProdutoAdicionado.emit();
-              this.fechar();
+            .subscribe({
+              next: () => {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Anúncio criado com sucesso',
+                  showConfirmButton: false,
+                  timer: 2000
+                });
+                this.onProdutoAdicionado.emit();
+                this.fechar();
+              },
+              error: err => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Não foi possível criar anúncio',
+                  text: err.error?.message || err.message,
+                  showConfirmButton: false,
+                  timer: 2000
+                });
+              }
             });
         } else {
           this.produtoForm.markAllAsTouched();
