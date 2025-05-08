@@ -1,5 +1,5 @@
 <app-template-telas-iniciais [withOverflow]="isPessoaJuridica || withOverflow">
-  <div class="{{ isPessoaJuridica ? 'grid justify-items-center w-full lg:pt-11' : 'grid justify-items-center w-full lg:pt-24'}}">
+  <div class="grid justify-items-center w-full lg:pt-24">
     <header class="grid justify-items-center gap-1.5 mb-4 pt-5 lg:gap-3 lg:mb-6 lg:pt-10">
       <h1 class="text-xl font-extrabold drop-shadow-lg lg:text-3xl">
         Cadastre-se
@@ -31,8 +31,7 @@
           [(value)]="pessoa.nome"
           id="name"
           name="name"
-          [label]="isPessoaJuridica ? 'Razão Social' : 'Nome Completo'"
-          placeholder="{{ isPessoaJuridica ? 'Razão Social *' : 'Nome Completo *' }}"
+          [label]="isPessoaJuridica ? 'Razão Social *' : 'Nome Completo *'"
           [required]="true"
           class="w-full md:w-3/5"
           [invalid]="isFieldInvalid('nome')"
@@ -43,8 +42,7 @@
           [(value)]="pessoa.valorDocumento"
           id="document"
           name="document"
-          [label]="isPessoaJuridica ? 'CNPJ' : 'CPF'"
-          placeholder="{{ isPessoaJuridica ? 'CNPJ *' : 'CPF *' }}"
+          [label]="isPessoaJuridica ? 'CNPJ *' : 'CPF *'"
           [required]="true"
           class="w-full md:w-2/5"
           [invalid]="isFieldInvalid('valorDocumento')"
@@ -57,8 +55,8 @@
           [(value)]="pessoa.email"
           id="email"
           name="email"
-          label="Email"
-          placeholder="Email *"
+          label="Email *"
+          placeholder="exemplo@gmail.com"
           [required]="true"
           class="w-full md:w-3/5"
           [invalid]="isFieldInvalid('email')"
@@ -69,8 +67,8 @@
           [(value)]="pessoa.telefone"
           id="phone"
           name="phone"
-          label="Telefone"
-          placeholder="Telefone *"
+          label="Telefone *"
+          placeholder="(99) 99999-9999"
           [required]="true"
           class="w-full md:w-2/5"
           [invalid]="isFieldInvalid('telefone')"
@@ -83,10 +81,9 @@
           [(value)]="pessoa.senha"
           id="password"
           name="password"
-          label="Senha"
+          label="Senha *"
           type="password"
           [required]="true"
-          placeholder="Senha *"
           [invalid]="isFieldInvalid('senha')"
         />
 
@@ -98,7 +95,6 @@
           label="Confirmar Senha *"
           [required]="true"
           type="password"
-          placeholder="Confirmar Senha"
           [invalid]="isFieldInvalid('confirmarSenha')"
         />
       </div>
