@@ -17,12 +17,13 @@ export class ModalAnunciosComponent {
 
     if (value) {
       this.produtoForm.patchValue(value);
-      this.imagensExistentes = value.imagens || [];
+      this.imagensExistentes = [...(value.imagens || [])];
     }
   }
 
   get produtoEditando(): Produto | null {
     return this._produtoEditando;
+
   }
 
   private _produtoEditando: Produto | null = null;
@@ -33,13 +34,34 @@ export class ModalAnunciosComponent {
 
   constructor(private fb: FormBuilder, private produtoService: ProdutoService) {
     this.produtoForm = this.fb.group({
-      nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      descricao: ['', Validators.required],
+      nome: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50)
+        ]
+      ],
+      descricao: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(150)
+        ]
+      ],
       altura: [''],
       largura: [''],
       comprimento: [''],
       pesoSuportado: [''],
-      estoque: ['', [Validators.required]],
+      estoque: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(3),
+          Validators.pattern(/^[0-9]*$/)
+        ]
+      ],
       preco: ['', [Validators.required]],
     });
   }

@@ -3,27 +3,92 @@
     <h2 class="text-xl font-semibold mb-4">{{ produtoEditando ? 'Editar Produto' : 'Novo Produto' }}</h2>
 
     <form [formGroup]="produtoForm" (ngSubmit)="salvar()" class="grid gap-4">
-      <app-input formControlName="nome" label="Nome *" [required]="true" [invalid]="produtoForm.get('nome')?.invalid && produtoForm.get('nome')?.touched"/>
+      <app-input
+    formControlName="nome"
+    label="Nome *"
+    [required]="true"
+    [invalid]="produtoForm.get('nome')?.invalid && produtoForm.get('nome')?.touched"
+    [maxlength]="50"
+    [customErrorMsg]="
+      produtoForm.get('nome')?.hasError('minlength')
+        ? 'Mínimo de 3 caracteres'
+        : produtoForm.get('nome')?.hasError('maxlength')
+          ? 'Máximo de 50 caracteres'
+          : ''
+    "
+    [showCustomError]="
+      (produtoForm.get('nome')?.hasError('minlength')
+       || produtoForm.get('nome')?.hasError('maxlength'))
+      && produtoForm.get('nome')?.touched
+    ">
+  </app-input>
 
-      <app-input formControlName="descricao" label="Descrição *" [required]="true" />
+  <app-input
+    formControlName="descricao"
+    label="Descrição *"
+    [required]="true"
+    [invalid]="produtoForm.get('descricao')?.invalid && produtoForm.get('descricao')?.touched"
+    [maxlength]="150"
+    [customErrorMsg]="
+      produtoForm.get('descricao')?.hasError('minlength')
+        ? 'Mínimo de 10 caracteres'
+        : produtoForm.get('descricao')?.hasError('maxlength')
+          ? 'Máximo de 150 caracteres'
+          : ''
+    "
+    [showCustomError]="
+      (produtoForm.get('descricao')?.hasError('minlength')
+       || produtoForm.get('descricao')?.hasError('maxlength'))
+      && produtoForm.get('descricao')?.touched
+    ">
+  </app-input>
 
-      <div class="flex gap-2">
-        <app-input type="number" formControlName="altura" label="Altura (cm)" placeholder="220" class="w-1/2" />
-        <app-input type="number" formControlName="largura" label="Largura (cm)" placeholder="150" class="w-1/2" />
-      </div>
+  <div class="flex gap-2">
+    <app-input type="number" formControlName="altura" label="Altura (cm)" placeholder="220" class="w-1/2" />
+    <app-input type="number" formControlName="largura" label="Largura (cm)" placeholder="150" class="w-1/2" />
+  </div>
 
-      <div class="flex gap-2">
-        <app-input type="number" formControlName="comprimento" label="Comprimento (cm)" placeholder="70" class="w-1/2" />
-        <app-input type="number" formControlName="pesoSuportado" label="Peso Suportado (kg)" placeholder="220" class="w-1/2"/>
-      </div>
+  <div class="flex gap-2">
+    <app-input type="number" formControlName="comprimento" label="Comprimento (cm)" placeholder="70" class="w-1/2" />
+    <app-input type="number" formControlName="pesoSuportado" label="Peso Suportado (kg)" placeholder="220" class="w-1/2"/>
+  </div>
 
-      <div class="flex gap-2">
-        <app-input type="number" formControlName="estoque" label="Estoque *" [required]="true" class="w-1/2" />
-        <app-input type="number" formControlName="preco" label="Preço *" [required]="true" class="w-1/2" />
-      </div>
+  <div class="flex gap-2">
+    <app-input
+      type="number"
+      formControlName="estoque"
+      label="Estoque *"
+      [required]="true"
+      [invalid]="produtoForm.get('estoque')?.invalid && produtoForm.get('estoque')?.touched"
+      [maxlength]="3"
+      [numericOnly]="true"
+      [customErrorMsg]="
+        produtoForm.get('estoque')?.hasError('maxlength')
+          ? 'Máximo de 3 caracteres'
+          : ''
+      "
+      [showCustomError]="
+        produtoForm.get('estoque')?.hasError('maxlength')
+        && produtoForm.get('estoque')?.touched
+      "
+      class="w-1/2">
+    </app-input>
+
+    <app-input
+      type="number"
+      formControlName="preco"
+      label="Preço *"
+      type="text"
+    [currencyFormat]="true"
+    [integerMaxLength]="4"
+      [required]="true"
+      [invalid]="produtoForm.get('preco')?.invalid && produtoForm.get('preco')?.touched"
+      class="w-1/2">
+    </app-input>
+  </div>
 
       <div class="grid gap-2 items-start">
-        <label class="font-semibold text-sm">Imagens (máx. 5) *</label>
+        <label class="font-semibold text-sm">Imagens (máx. 4) *</label>
         <div class="flex gap-2 w-full">
           <div *ngIf="imagensExistentes.length > 0" class="flex gap-2">
             <div *ngFor="let imagem of imagensExistentes; let i = index" class="relative w-24 h-24 rounded-lg border overflow-hidden">

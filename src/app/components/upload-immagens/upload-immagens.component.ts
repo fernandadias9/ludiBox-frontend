@@ -1,16 +1,22 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-upload-immagens',
   templateUrl: './upload-immagens.component.html',
   styleUrl: './upload-immagens.component.scss'
 })
-export class UploadImmagensComponent {
+export class UploadImmagensComponent implements OnChanges {
   @Input() arquivos: File[] = [];
   @Output() onArquivosAlterados = new EventEmitter<File[]>();
 
   previews: string[] = [];
   erro: string | null = null;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['arquivos'] && this.arquivos.length === 0) {
+      this.previews = [];
+    }
+  }
 
   adicionarImagem(event: any) {
     const file: File = event.target.files[0];
