@@ -26,10 +26,15 @@ export class InputComponent implements ControlValueAccessor {
   @Input() invalid = false
   @Input() maxlength?: number;
   @Input() numericOnly = false;
+  @Input() customErrorMsg = '';
+  @Input() showCustomError = false;
+  @Input() currencyFormat = false;
+  @Input() integerMaxLength = 4;
 
   @Output() valueChange: EventEmitter<string> = new EventEmitter<string>()
   @Output() blur = new EventEmitter<FocusEvent>();
 
+  private rawValue = "";
   private onChange: any = () => {}
   private onTouched: any = () => {}
 
@@ -70,5 +75,31 @@ export class InputComponent implements ControlValueAccessor {
     if (this.numericOnly && !/^[0-9]$/.test(event.key)) {
       event.preventDefault();
     }
+  }
+
+  @HostListener("keydown", ["$event"])
+  onKeyDownCurrency(event: KeyboardEvent) {
+    if (!this.currencyFormat) return;
+    event.preventDefault();
+
+    if (event.key === "Backspace" || event.key === "Delete") {
+      this.rawValue = this.rawValue.slice(0, -1);
+
+    } else if (/^[0-9]$/.test(event.key)) {
+      const maxRaw = this.integerMaxLength + 2;
+      if (this.rawValue.length < maxRaw) {
+        this.rawValue += event.key;
+      }
+    } else {
+      return;
+    }
+
+    const num = parseInt(this.rawValue || "0", 10) / 100;
+    const [intPart, decPart] = num.toFixed(2).split(".");
+    const formatted = `${intPart},${decPart}`;
+
+    this.value = formatted;
+    this.onChange(num);
+    this.valueChange.emit(formatted);
   }
 }

@@ -26,4 +26,8 @@
   <div *ngIf="invalid && required" class="flex text-red-500 text-xs mt-1 items-start ml-2">
     Este campo é obrigatório
   </div>
+
+  <div *ngIf="showCustomError && customErrorMsg" class="flex text-red-500 text-xs mt-1 items-start ml-2">
+    {{ customErrorMsg }}
+  </div>
 </div>
