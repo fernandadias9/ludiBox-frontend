@@ -10,6 +10,7 @@ import { EnderecosComponent } from './pages/enderecos/enderecos.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { CadastroAdministradorComponent } from './pages/cadastro-administrador/cadastro-administrador.component';
 import { TelaDeUsuariosAdministradoresComponent } from './pages/tela-de-usuarios-administradores/tela-de-usuarios-administradores.component';
+import { TelaDeDenunciasComponent } from './pages/tela-de-denuncias/tela-de-denuncias.component';
 
 const routes: Routes = [
   { path: 'login', component: TelaDeLoginComponent },
@@ -21,7 +22,8 @@ const routes: Routes = [
   { path: "enderecos", component:EnderecosComponent},
   { path: "dashboard", component:DashboardComponent},
   { path: "cadastro-adm", component: CadastroAdministradorComponent},
-  { path: "administradores", component: TelaDeUsuariosAdministradoresComponent}
+  { path: "administradores", component: TelaDeUsuariosAdministradoresComponent},
+  { path: "denuncias", component: TelaDeDenunciasComponent}
 ];
 
 @NgModule({
