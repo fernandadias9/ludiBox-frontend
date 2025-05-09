@@ -9,7 +9,7 @@ export class TemplateTelasPerfilComponent {
   menuList: { label: string; route: string }[] = [
     { label: 'Perfil', route: '' },
     { label: 'Endereços', route: '/enderecos' },
-    { label: 'Anúncios', route: '' },
+    { label: 'Anúncios', route: '/anuncios' },
     { label: 'Locações', route: '' },
     { label: 'Tela inicial', route: '' },
     { label: 'Sair', route: '' }

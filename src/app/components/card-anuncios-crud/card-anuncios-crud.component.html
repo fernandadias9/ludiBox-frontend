@@ -1,0 +1,29 @@
+<div class="relative w-[250px] h-[220px] border border-gray-200 rounded-lg shadow-md p-3 flex flex-col">
+  <div class="flex justify-between items-start mb-3">
+    <p class="font-semibold text-gray-800 text-sm line-clamp-2">
+      {{ produto.nome }}
+    </p>
+    <button (click)="toggleMenu()" class="text-gray-500">
+      <i class="bi bi-three-dots-vertical text-xl"></i>
+    </button>
+  </div>
+
+  <img
+    [src]="imagemPrincipal"
+    alt="Imagem do produto"
+    class="w-full h-[100px] object-cover rounded mb-2"
+  />
+
+  <p class="text-sm text-gray-700 font-medium">R$ {{ produto.preco| number:'1.2-2' }}/dia</p>
+
+  <div class="absolute top-2 right-2">
+    <button (click)="toggleMenu()">
+      <i class="fas fa-ellipsis-v"></i>
+    </button>
+
+    <div *ngIf="menuAberto" class="absolute right-0 mt-2 w-32 bg-white border rounded shadow-md z-10">
+      <button (click)="onEditar()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">Editar</button>
+      <button (click)="onDeletar()" class="block w-full text-left px-4 py-2 text-red-500 hover:bg-red-100">Excluir</button>
+    </div>
+  </div>
+</div>
