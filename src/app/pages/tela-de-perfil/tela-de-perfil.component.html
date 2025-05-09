@@ -1,4 +1,5 @@
 <app-sidebar [withOverflow]="true" [menuItems]="menuList">
+  <router-outlet></router-outlet>
   <div class="flex justify-center items-start min-h-screen mt-5">
     <div class="bg-white p-4 rounded-lg shadow-lg w-full lg:w-4/5 max-w-4xl text-center">
       <div class="flex items-center justify-between gap-4 top-0 pb-6">
@@ -79,11 +80,9 @@
           <app-input 
             formControlName="telefone"
             id="phone" name="phone" label="Telefone"  
-            [(ngModel)]="perfil.telefone"
-            [(value)]="perfil.telefone"
             [disabled]="!isEditing"
-            mask="(00) 00000-0000"
-            placeholder="(00) 00000-0000"
+            mask="(00) 0000-0000"
+            placeholder="(00) 0000-0000"
             [required]="true"
             [invalid]="isFieldInvalid('telefone')"
             class="input-field w-full">

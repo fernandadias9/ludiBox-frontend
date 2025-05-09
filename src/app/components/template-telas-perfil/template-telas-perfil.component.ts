@@ -7,11 +7,11 @@ import { Component } from '@angular/core';
 })
 export class TemplateTelasPerfilComponent {
   menuList: { label: string; route: string }[] = [
-    { label: 'Perfil', route: '' },
-    { label: 'Endereços', route: '' },
+    { label: 'Perfil', route: '/tela-perfil' },
+    { label: 'Endereços', route: '/enderecos' },
     { label: 'Anúncios', route: '' },
     { label: 'Anúncios', route: '' },
     { label: 'Locações', route: '' },
-    { label: 'Sair', route: '' }
+    { label: 'Sair', route: '/login' }
   ];
 }

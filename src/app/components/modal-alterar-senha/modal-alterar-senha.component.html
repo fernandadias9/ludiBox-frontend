@@ -12,6 +12,7 @@
             label="Senha atual"
             placeholder="Digite sua senha atual"
             [required]="true"
+            [invalid]="isFieldInvalid('senhaAtual')"
             [type]="'password'"
           ></app-input>
         </div>
@@ -25,8 +26,12 @@
             label="Nova senha"
             placeholder="Digite sua nova senha"
             [required]="true"
+            [invalid]="isFieldInvalid('novaSenha')"
             [type]="'password'"
           ></app-input>
+          <div *ngIf="senhaForm.errors?.['senhasDiferentes']">
+            <p class="text-red-500 text-sm">As senhas não coincidem.</p>
+          </div>
         </div>
   
         <div class="grid w-full text-left">
@@ -38,8 +43,12 @@
             label="Confirmar senha"
             placeholder="Confirme a nova senha"
             [required]="true"
+            [invalid]="isFieldInvalid('confirmarSenha')"
             [type]="'password'"
           ></app-input>
+        <div *ngIf="senhaForm.errors?.['senhasDiferentes']">
+          <p class="text-red-500 text-sm">As senhas não coincidem.</p>
+        </div>
         </div>
           
         <div class="flex justify-end gap-4 pt-4">

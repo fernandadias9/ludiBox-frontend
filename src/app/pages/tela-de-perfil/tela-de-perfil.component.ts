@@ -25,19 +25,18 @@ throw new Error('Method not implemented.');
   isOpen: boolean = false;
   isModalOpen: boolean = false;
   
-
-
   constructor(
       private router: Router,
       private pessoaService: PessoaService,
       private loginService: LoginService,
       private formBuilder: FormBuilder,
-    ) {
-    }
-
+    ) {}
   
   ngOnInit() {
     this.usuarioLogado();
+    this.formSubmitted = true;
+    
+
   }
 
   initForm(): void {
@@ -45,9 +44,8 @@ throw new Error('Method not implemented.');
       nome: [this.perfil.nome, Validators.required],
       email: [this.perfil.email, [Validators.required, Validators.email]],
       telefone: [this.perfil.telefone, Validators.required],
-    })
-
-  
+    });
+    this.perfilForm.disable(); 
   }
 
   get f() {
@@ -68,12 +66,11 @@ throw new Error('Method not implemented.');
 
   
   menuList: { label: string; route: string }[] = [
-    { label: 'Perfil', route: '' },
-    { label: 'Endereços', route: '' },
-    { label: 'Anúncios', route: '' },
+    { label: 'Perfil', route: '/tela-perfil' },
+    { label: 'Endereços', route: '/enderecos' },
     { label: 'Anúncios', route: '' },
     { label: 'Locações', route: '' },
-    { label: 'Sair', route: '' }
+    { label: 'Sair', route: '/login' }
   ];
 
   usuarioLogado() {
@@ -92,25 +89,25 @@ throw new Error('Method not implemented.');
   }
   
   toggleEdit() {
+    this.isEditing = !this.isEditing;
     if (this.isEditing) {
-      this.isEditing = false;
-      this.perfilForm.reset(this.perfilOriginal);
-    } else {
-      this.isEditing = true;
+      this.perfilForm.enable();
       this.perfilForm.patchValue(this.perfil);
+    } else {
+      this.perfilForm.disable();
+      this.perfilForm.reset(this.perfilOriginal);
     }
   }
+  
 
 
   salvarPerfil() {
     this.formSubmitted = true;
-  
     if (this.perfilForm.invalid) {
-      this.mostrarMensagemErroValidacao();
-      this.perfilForm.reset(this.perfilOriginal);
+      //this.mostrarMensagemErroValidacao();
+      //this.perfilForm.reset(this.perfilOriginal);
       return;
     }
-  
     this.perfil = {
       ...this.perfil,
       ...this.perfilForm.value
@@ -127,7 +124,8 @@ throw new Error('Method not implemented.');
       next: () => {
         this.isEditing = false;
         this.perfilForm.reset(this.perfilOriginal);
-  
+        this.initForm();
+
         Swal.fire({
           title: 'Sucesso!',
           text: 'Perfil atualizado com sucesso!',

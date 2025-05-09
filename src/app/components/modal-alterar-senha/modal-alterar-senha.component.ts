@@ -14,10 +14,8 @@ export class ModalAlterarSenhaComponent {
   @Output() onSenhaAlterada = new EventEmitter<void>(); 
   
   senhaForm: FormGroup;
-
   dto: SenhasDTO;
-
-  
+  formSubmitted = false; 
 
   constructor(
     private fb: FormBuilder,
@@ -26,21 +24,40 @@ export class ModalAlterarSenhaComponent {
     this.senhaForm = this.fb.group({
       senhaAtual: ['', [Validators.required]],
       novaSenha: ['', [Validators.required, Validators.minLength(6)]],
-      confirmarSenha: ['', [Validators.required]],
+      confirmarSenha: ['', [Validators.required, Validators.minLength(6)]],
     }, {
       validators: this.matchPasswords
     });
+  } 
+
+  get f() {
+    return this.senhaForm.controls
   }
 
+  isFieldInvalid(fieldName: string): boolean {
+    return this.formSubmitted && this.f[fieldName].invalid
+    
+  }
 
   matchPasswords(group: FormGroup) {
     const novaSenha = group.get('novaSenha')?.value;
     const confirmarSenha = group.get('confirmarSenha')?.value;
-    return novaSenha === confirmarSenha ? null : { senhasDiferentes: true };
+    if (novaSenha.length < 6 || confirmarSenha.length < 6) {
+      return null 
+    } else {
+      return novaSenha === confirmarSenha ? null : { senhasDiferentes: true };
+    }
   }
 
-
   salvarSenha() {
+    this.formSubmitted = true;
+    console.log(this.senhaForm.value)
+    console.log(this.senhaForm.valid)
+    console.log(this.senhaForm.invalid)
+    if (this.senhaForm.invalid) {
+      return;
+    }
+
     if (this.senhaForm.valid) {
       const dados = this.senhaForm.value;
       this.dto = {
@@ -48,7 +65,6 @@ export class ModalAlterarSenhaComponent {
         novaSenha: dados.novaSenha,
         confirmarSenha: dados.confirmarSenha
       };
-      console.log(this.dto);
       this.emailService.alterarSenha(this.dto).subscribe({
          next: () => {
            Swal.fire({
@@ -68,19 +84,18 @@ export class ModalAlterarSenhaComponent {
            });
          }
        });
-    } else {
-      this.senhaForm.markAllAsTouched();
-      Swal.fire({
-        icon: 'warning',
-        title: 'Formulário inválido',
-        text: 'Por favor, preencha todos os campos obrigatórios corretamente.',
-      });
     }
   }
 
-
   fecharModal() {
-    this.senhaForm.reset();  
-    this.onClose.emit();  
+    this.onClose.emit();
+    this.formSubmitted = false; // Zera estado de envio manual
+    this.senhaForm.reset({
+      senhaAtual: '',
+      novaSenha: '',
+      confirmarSenha: ''
+    });
+    
   }
+  
 }
