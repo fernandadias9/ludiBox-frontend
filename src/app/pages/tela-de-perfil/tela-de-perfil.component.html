@@ -36,9 +36,7 @@
           </label>
           <app-input 
             formControlName="nome" 
-            [(value)]="perfil.nome"
-            id="name" name="name" label="Nome Completo" 
-            [(ngModel)]="perfil.nome"
+            id="name" name="name" 
             [disabled]="!isEditing"
             placeholder="Nome Sobrenome"
             [required]="true"
@@ -52,9 +50,7 @@
           </label>
           <app-input
           formControlName="email" 
-          id="email" name="email" label="Email" 
-          [(ngModel)]="perfil.email"
-          [(value)]="perfil.email"
+          id="email" name="email" 
           [disabled]="!isEditing"
           placeholder="@exemplo.com"
           [required]="true"
@@ -64,7 +60,7 @@
         <div class="grid w-full text-left">
           <label class="text-lg font-semibold">CPF/CNPJ</label>
           <app-input 
-            id="cpf" name="cpf" label="CPF"  
+            id="cpf" name="cpf" 
             [value]="perfil?.valorDocumento" 
             [disabled]="true"
             placeholder="{{ perfil?.valorDocumento }}" 
@@ -78,12 +74,10 @@
           </label>
           <app-input 
             formControlName="telefone"
-            id="phone" name="phone" label="Telefone"  
-            [(ngModel)]="perfil.telefone"
-            [(value)]="perfil.telefone"
+            id="phone" name="phone"   
             [disabled]="!isEditing"
-            mask="(00) 00000-0000"
-            placeholder="(00) 00000-0000"
+            mask="(00) 0000-0000"
+            placeholder="(00) 0000-0000"
             [required]="true"
             [invalid]="isFieldInvalid('telefone')"
             class="input-field w-full">

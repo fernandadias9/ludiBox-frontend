@@ -25,19 +25,17 @@ throw new Error('Method not implemented.');
   isOpen: boolean = false;
   isModalOpen: boolean = false;
   
-
-
   constructor(
       private router: Router,
       private pessoaService: PessoaService,
       private loginService: LoginService,
       private formBuilder: FormBuilder,
-    ) {
-    }
-
+    ) {}
   
   ngOnInit() {
     this.usuarioLogado();
+    this.formSubmitted = true;
+
   }
 
   initForm(): void {
@@ -45,7 +43,8 @@ throw new Error('Method not implemented.');
       nome: [this.perfil.nome, Validators.required],
       email: [this.perfil.email, [Validators.required, Validators.email]],
       telefone: [this.perfil.telefone, Validators.required],
-    })
+    });
+    this.perfilForm.disable(); 
 
   
   }
@@ -92,25 +91,25 @@ throw new Error('Method not implemented.');
   }
   
   toggleEdit() {
+    this.isEditing = !this.isEditing;
     if (this.isEditing) {
-      this.isEditing = false;
-      this.perfilForm.reset(this.perfilOriginal);
-    } else {
-      this.isEditing = true;
+      this.perfilForm.enable();
       this.perfilForm.patchValue(this.perfil);
+    } else {
+      this.perfilForm.disable();
+      this.perfilForm.reset(this.perfilOriginal);
     }
   }
+  
 
 
   salvarPerfil() {
     this.formSubmitted = true;
-  
     if (this.perfilForm.invalid) {
-      this.mostrarMensagemErroValidacao();
-      this.perfilForm.reset(this.perfilOriginal);
+      //this.mostrarMensagemErroValidacao();
+      //this.perfilForm.reset(this.perfilOriginal);
       return;
     }
-  
     this.perfil = {
       ...this.perfil,
       ...this.perfilForm.value
@@ -125,9 +124,16 @@ throw new Error('Method not implemented.');
   
     this.pessoaService.atualizarPerfil(this.idUsuario, camposAlterados).subscribe({
       next: () => {
+        this.perfil = {
+          ...this.perfil,
+          ...this.perfilForm.value
+        };
+        
+        this.perfilOriginal = { ...this.perfil };
+        
         this.isEditing = false;
-        this.perfilForm.reset(this.perfilOriginal);
-  
+        this.perfilForm.disable();
+
         Swal.fire({
           title: 'Sucesso!',
           text: 'Perfil atualizado com sucesso!',
@@ -161,10 +167,10 @@ throw new Error('Method not implemented.');
   
       let mensagem = ""
       if (camposInvalidos.length === 1) {
-        mensagem = `O campo ${camposInvalidos[0]} é obrigatório`
+        mensagem = `O campo ${camposInvalidos[0]} é obrigatório`;
       } else if (camposInvalidos.length > 1) {
         const ultimoCampo = camposInvalidos.pop()
-        mensagem = `Os campos ${camposInvalidos.join(", ")} e ${ultimoCampo} são obrigatórios`
+        mensagem = `Os campos ${camposInvalidos.join(", ")} e ${ultimoCampo} são obrigatórios`;
       }
   
       Swal.fire({
@@ -177,3 +183,4 @@ throw new Error('Method not implemented.');
       })
     }   
 }
+
