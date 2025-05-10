@@ -1,6 +1,6 @@
 <main class="relative w-screen h-screen overflow-hidden">
   <div class="w-full h-24 bg-primary flex items-center justify-between px-5 lg:px-10 shadow-md fixed top-0 left-0 z-50">
-    <img src="/images/logo.png" alt="Logomarca LudiBox" class="w-40 h-auto pt-2">
+    <img src="/images/logo.png" alt="Logomarca LudiBox" routerLink="/" class="w-40 h-auto pt-2 cursor-pointer">
 
     <div *ngIf="eTelaInicial" class="relative w-2/6 bg-background_light rounded-full">
       <input type="text" placeholder="Pesquisar"
@@ -27,12 +27,12 @@
 
           <ng-template #guestMenu>
             <div class="flex items-center gap-2 mb-2 hover:bg-gray-100">
-              <p class="cursor-pointer text-base md:text-lg" routerLink="login">Entrar</p>
+              <p class="cursor-pointer text-base md:text-lg" routerLink="/login">Entrar</p>
               <i class="bi bi-box-arrow-in-right"></i>
             </div>
 
             <div class="flex items-center gap-2 hover:bg-gray-100">
-              <p class="cursor-pointer text-base md:text-lg" routerLink="cadastro">Cadastre-se</p>
+              <p class="cursor-pointer text-base md:text-lg" routerLink="/cadastro">Cadastre-se</p>
               <i class="bi bi-person-plus"></i>
             </div>
           </ng-template>

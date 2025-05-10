@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { PerfilDTO } from '../../shared/model/dto/PerfilDTO';
 import { AnuncioLeituraDto } from '../../shared/model/dto/anuncioLeituraDto';
 import { AnuncioService } from '../../shared/service/anuncio.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tela-inicial',
@@ -101,8 +102,8 @@ export class TelaInicialComponent implements OnInit{
     return pages;
   }
 
-
   usuarioLogado(){
+    const token = localStorage.getItem('tokenUsuarioAutenticado');
     this.idUsuario = this.loginService.buscarIdUsuarioComToken();
 
     if(this.idUsuario == null){
@@ -115,12 +116,18 @@ export class TelaInicialComponent implements OnInit{
       }
     );
 
-    if(this.perfil){
+    if(this.perfil && token){
       this.isLoggedIn = true
     }
   }
 
-  logoutUser(){
+  logoutUser() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Logout realizado com sucesso',
+      showConfirmButton: false,
+      timer: 2000
+    });
     this.isLoggedIn = false;
     this.menuOpen = false;
     this.loginService.logout();
