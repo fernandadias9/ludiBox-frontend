@@ -146,6 +146,7 @@ export class ModalEnderecoComponent implements OnInit {
     if (this.enderecoForm.valid) {
       const dados = this.enderecoForm.value;
       dados.cep = Number(String(dados.cep).replace(/\D/g, ''));
+
       if (this.enderecoEditando) {
         this.enderecoService.atualizarEndereco(this.enderecoEditando.id, dados).subscribe({
           next: () => {
@@ -193,15 +194,8 @@ export class ModalEnderecoComponent implements OnInit {
       }
     } else {
       this.enderecoForm.markAllAsTouched();
-      Swal.fire({
-        icon: 'warning',
-        title: 'Formulário inválido',
-        text: 'Por favor, preencha todos os campos obrigatórios corretamente.',
-      });
     }
   }
-  
-  
 
   onCepInput(event: any) {
     let value = event.target.value.replace(/\D/g, '');
