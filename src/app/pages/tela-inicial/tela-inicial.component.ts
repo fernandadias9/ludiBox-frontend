@@ -134,13 +134,4 @@ export class TelaInicialComponent implements OnInit{
     this.router.navigate(['/']);
     this.perfil = null;
   }
-
-  irParaEnderecos() {
-    this.router.navigate(['/enderecos']);
-  }
-
-  irParaPerfil() {
-    this.router.navigate(['/tela-perfil'])
-  }
-
 }
