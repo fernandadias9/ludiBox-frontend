@@ -67,12 +67,11 @@ throw new Error('Method not implemented.');
 
   
   menuList: { label: string; route: string }[] = [
-    { label: 'Perfil', route: '' },
-    { label: 'Endereços', route: '' },
-    { label: 'Anúncios', route: '' },
-    { label: 'Anúncios', route: '' },
+    { label: 'Perfil', route: '/tela-perfil' },
+    { label: 'Endereços', route: '/enderecos' },
+    { label: 'Anúncios', route: '/anuncios' },
     { label: 'Locações', route: '' },
-    { label: 'Sair', route: '' }
+    { label: 'Sair', route: '/login' }
   ];
 
   usuarioLogado() {
