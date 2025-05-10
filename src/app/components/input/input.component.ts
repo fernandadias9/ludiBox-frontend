@@ -23,7 +23,8 @@ export class InputComponent implements ControlValueAccessor {
   @Input() placeholder = ""
   @Input() name = ""
   @Input() required = false
-  @Input() invalid = false
+  @Input() invalid = false 
+  @Input() mask?: string
   @Input() maxlength?: number;
   @Input() numericOnly = false;
   @Input() customErrorMsg = '';

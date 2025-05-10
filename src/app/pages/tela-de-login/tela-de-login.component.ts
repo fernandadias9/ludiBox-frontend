@@ -2,29 +2,40 @@ import { Router } from "@angular/router"
 import { PessoaDTO } from "../../shared/model/dto/PessoaDTO"
 import { Pessoa } from "../../shared/model/entity/pessoa"
 import { LoginService } from "../../shared/service/LoginService"
-import { Component } from "@angular/core"
+import { Component, OnInit } from "@angular/core"
 import { FormBuilder, type FormGroup, Validators } from "@angular/forms"
 import Swal from "sweetalert2"
 import { jwtDecode } from "jwt-decode"
+import { PerfilDTO } from "../../shared/model/dto/PerfilDTO"
+import { PessoaService } from "../../shared/service/PessoaService"
 
 @Component({
   selector: "app-tela-de-login",
   templateUrl: "./tela-de-login.component.html",
   styleUrl: "./tela-de-login.component.scss",
 })
-export class TelaDeLoginComponent {
-  public pessoa: Pessoa = new Pessoa()
-  public id: number
-  public dto: PessoaDTO = new PessoaDTO()
-  loginForm: FormGroup
-  formSubmitted = false
+export class TelaDeLoginComponent implements OnInit {
+  isLoggedIn = false;
+  public pessoa: Pessoa = new Pessoa();
+  public id: number;
+  public dto: PessoaDTO = new PessoaDTO();
+  public perfil: PerfilDTO = new PerfilDTO();
+  loginForm: FormGroup;
+  formSubmitted = false;
+  public idUsuario: number;
 
   constructor(
     private service: LoginService,
     private router: Router,
     private formBuilder: FormBuilder,
+    private loginService: LoginService,
+    private pessoaService: PessoaService,
   ) {
     this.initForm()
+  }
+
+  ngOnInit() {
+    this.usuarioLogado();
   }
 
   initForm(): void {
@@ -104,6 +115,24 @@ export class TelaDeLoginComponent {
       timerProgressBar: true,
       showConfirmButton: false,
     })
+  }
+
+  usuarioLogado(){
+    this.idUsuario = this.loginService.buscarIdUsuarioComToken();
+
+    if(this.idUsuario == null){
+      return;
+    }
+
+    this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(
+      resultado => {
+        this.perfil = resultado;
+      }
+    );
+
+    if(this.perfil){
+      this.isLoggedIn = true
+    }
   }
 
   voltar() {

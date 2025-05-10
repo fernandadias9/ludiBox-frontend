@@ -6,13 +6,14 @@
   <input
     [id]="id"
     [type]="type"
-    [value]="value"
+    [(ngModel)]="value"
     (input)="onInput($event)"
     (blur)="markAsTouched()"
     [disabled]="disabled"
     [placeholder]="placeholder"
     [name]="name"
     [required]="required"
+    [mask]="mask"
     [attr.maxlength]="maxlength ?? null"
     [attr.inputmode]="numericOnly ? 'numeric' : null"
     [ngClass]="{

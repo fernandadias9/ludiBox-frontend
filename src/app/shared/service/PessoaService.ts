@@ -17,5 +17,11 @@ export class PessoaService {
     buscarPerfilPorId(id: number): Observable<PerfilDTO>{
         return this.httpCliente.get<PerfilDTO>(`${this.API}/buscar_perfil/${id}`);
     }
+
+    atualizarPerfil(id: number, dadosAtualizados: any): Observable<any> {
+      return this.httpCliente.patch(`${this.API}/atualizar/${id}`, dadosAtualizados);
+    }
+    
+
 }
 
