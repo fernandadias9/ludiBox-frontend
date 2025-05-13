@@ -6,13 +6,14 @@
   <input
     [id]="id"
     [type]="type"
-    [value]="value"
+    [(ngModel)]="value"
     (input)="onInput($event)"
     (blur)="markAsTouched()"
     [disabled]="disabled"
     [placeholder]="placeholder"
     [name]="name"
     [required]="required"
+    [mask]="mask"
     [attr.maxlength]="maxlength ?? null"
     [attr.inputmode]="numericOnly ? 'numeric' : null"
     [ngClass]="{
@@ -25,5 +26,9 @@
     }" />
   <div *ngIf="invalid && required" class="flex text-red-500 text-xs mt-1 items-start ml-2">
     Este campo é obrigatório
+  </div>
+
+  <div *ngIf="showCustomError && customErrorMsg" class="flex text-red-500 text-xs mt-1 items-start ml-2">
+    {{ customErrorMsg }}
   </div>
 </div>

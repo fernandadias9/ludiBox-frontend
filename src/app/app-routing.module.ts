@@ -11,6 +11,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { CadastroAdministradorComponent } from './pages/cadastro-administrador/cadastro-administrador.component';
 import { TelaDeUsuariosAdministradoresComponent } from './pages/tela-de-usuarios-administradores/tela-de-usuarios-administradores.component';
 import { TelaDeDenunciasComponent } from './pages/tela-de-denuncias/tela-de-denuncias.component';
+import { AnunciosCrudComponent } from './pages/anuncios-crud/anuncios-crud.component';
 
 const routes: Routes = [
   { path: 'login', component: TelaDeLoginComponent },
@@ -23,7 +24,8 @@ const routes: Routes = [
   { path: "dashboard", component:DashboardComponent},
   { path: "cadastro-adm", component: CadastroAdministradorComponent},
   { path: "administradores", component: TelaDeUsuariosAdministradoresComponent},
-  { path: "denuncias", component: TelaDeDenunciasComponent}
+  { path: "denuncias", component: TelaDeDenunciasComponent},
+  { path: "anuncios", component: AnunciosCrudComponent},
 ];
 
 @NgModule({

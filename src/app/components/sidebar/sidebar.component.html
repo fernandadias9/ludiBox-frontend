@@ -1,4 +1,4 @@
-<main class="overflow-hidden relative bg-background_light">
+<main class="overflow-hidden relative bg-background_light h-screen">
   <div class="w-full h-24 bg-primary flex items-center px-5 lg:px-10 shadow-md fixed top-0 left-0 z-50">
     <button
       (click)="toggleSidebar()"
@@ -24,8 +24,8 @@
       </strong>
     </ul>
   </nav>
-
   <div class="min-h-screen pt-28 px-4 z-0 relative flex flex-col">
     <ng-content></ng-content>
   </div>  
+
 </main>
