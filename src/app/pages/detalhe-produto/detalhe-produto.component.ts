@@ -6,11 +6,13 @@ import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 import { startOfDay, isBefore, isToday } from 'date-fns';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { LocacaoService } from '../../shared/service/locacao.service';
+import { LoginService } from '../../shared/service/LoginService';
 
 @Component({
   selector: 'app-detalhe-produto',
   templateUrl: './detalhe-produto.component.html',
-  styleUrl: './detalhe-produto.component.scss'
+  styleUrl: './detalhe-produto.component.scss',
 })
 export class DetalheProdutoComponent implements OnInit {
   anuncio: DetalheAnuncioDto | null = null;
@@ -19,14 +21,16 @@ export class DetalheProdutoComponent implements OnInit {
   viewDate: Date = new Date();
   events: CalendarEvent[] = [];
   galleryItems: GalleryItem[] = [];
-  dateFilter: (date: Date | null) => boolean
+  dateFilter: (date: Date | null) => boolean;
   form: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private anuncioService: AnuncioService,
     private gallery: Gallery,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private locacaoService: LocacaoService,
+    private loginService: LoginService
   ) {}
 
   ngOnInit() {
@@ -38,16 +42,19 @@ export class DetalheProdutoComponent implements OnInit {
     this.form = this.fb.group({
       periodoLocacao: new FormGroup({
         inicio: new FormControl(),
-        final: new FormControl()
-      })
+        final: new FormControl(),
+      }),
     });
 
-    this.dateFilter = this.criarFiltroData()
+    this.dateFilter = this.criarFiltroData();
   }
 
   carregarAnuncio(id: number) {
     this.anuncioService.buscar(id).subscribe(
       (data) => {
+        data.datasIndisponiveis = data.datasIndisponiveis.map((dataStr: string | Date) =>
+        dataStr instanceof Date ? dataStr : new Date(dataStr)
+      );
         this.anuncio = data;
         this.setupGallery();
       },
@@ -60,7 +67,7 @@ export class DetalheProdutoComponent implements OnInit {
   setupGallery() {
     if (!this.anuncio) return;
 
-    this.galleryItems = this.anuncio.imagens.map(img => {
+    this.galleryItems = this.anuncio.imagens.map((img) => {
       const imageSrc = `data:image/jpeg;base64,${img}`;
       return new ImageItem({ src: imageSrc, thumb: imageSrc });
     });
@@ -72,31 +79,68 @@ export class DetalheProdutoComponent implements OnInit {
   criarFiltroData(): (date: Date | null) => boolean {
     return (date: Date | null): boolean => {
       if (!date) {
-        return false
+        return false;
       }
 
-      // Obtém a data atual sem o horário
-      const hoje = new Date()
-      hoje.setHours(0, 0, 0, 0)
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
 
-      // Verifica se a data é anterior ou igual a hoje
       if (date <= hoje) {
-        return false
+        return false;
       }
 
-      // Verifica se a data está no array de datas indisponíveis
       return !this.anuncio.datasIndisponiveis.some((dataIndisponivel: Date) => {
-        // Compara apenas ano, mês e dia
         return (
           date.getFullYear() === dataIndisponivel.getFullYear() &&
           date.getMonth() === dataIndisponivel.getMonth() &&
           date.getDate() === dataIndisponivel.getDate()
-        )
-      })
-    }
+        );
+      });
+    };
   }
 
   alugar() {
-    console.log(this.form.value);
+  if (!this.anuncio) return;
+
+  const periodo = this.form.value.periodoLocacao;
+  if (!periodo.inicio || !periodo.final) {
+    alert('Selecione um período válido!');
+    return;
   }
+
+  const produtoLocacao = {
+    produto: { id: this.anuncio.id },
+    dataInicio: periodo.inicio,
+    dataFim: periodo.final,
+    valorDiario: this.anuncio.preco,
+  };
+
+  const usuarioId = this.loginService.buscarIdUsuarioComToken();
+  if (!usuarioId) {
+    alert('Usuário não autenticado!');
+    return;
+  }
+
+  this.locacaoService.verificarLocacaoPendente(usuarioId).subscribe((locacaoExistente) => {
+    if (locacaoExistente) {
+      this.locacaoService
+        .incluirProdutoNaLocacao(locacaoExistente.id, produtoLocacao)
+        .subscribe({
+          next: () => alert('Produto adicionado à locação existente com sucesso!'),
+          error: (err) => console.error(err),
+        });
+    } else {
+      const novaLocacao = {
+        locador: { id: usuarioId },
+        produtos: [produtoLocacao],
+      };
+
+      this.locacaoService.abrirNovaLocacao(novaLocacao).subscribe({
+        next: () => alert('Locação criada com sucesso!'),
+        error: (err) => console.error(err),
+      });
+    }
+  });
+}
+
 }
