@@ -126,7 +126,10 @@ export class DetalheProdutoComponent implements OnInit {
       this.locacaoService
         .incluirProdutoNaLocacao(locacaoExistente.id, produtoLocacao)
         .subscribe({
-          next: () => alert('Produto adicionado à locação existente com sucesso!'),
+          next: () => {
+            alert('Produto adicionado à locação existente com sucesso!');
+            this.locacaoService.notificarCarrinhoAtualizado();
+          },
           error: (err) => console.error(err),
         });
     } else {
@@ -136,7 +139,10 @@ export class DetalheProdutoComponent implements OnInit {
       };
 
       this.locacaoService.abrirNovaLocacao(novaLocacao).subscribe({
-        next: () => alert('Locação criada com sucesso!'),
+        next: () => {
+          alert('Locação criada com sucesso!');
+          this.locacaoService.notificarCarrinhoAtualizado();
+        },
         error: (err) => console.error(err),
       });
     }

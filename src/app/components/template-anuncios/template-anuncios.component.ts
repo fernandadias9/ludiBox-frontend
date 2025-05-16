@@ -17,11 +17,14 @@ export class TemplateAnunciosComponent implements OnInit {
   userName = '';
   userImage = '';
   menuOpen = false;
+  locacaoId: number | null = null;
   public perfil: PerfilDTO = new PerfilDTO();
   public idUsuario: number;
   cartCount: number | null = null;
   cartItems: ProdutoLocacao[] = [];
   showCartMenu = false;
+  valorTotalLocacao: number = 0;
+  hasLocacao: boolean = false;
   @ViewChild('cartContainer', { read: ElementRef }) cartContainer!: ElementRef;
 
   @Input() eTelaInicial: boolean = true;
@@ -35,6 +38,10 @@ export class TemplateAnunciosComponent implements OnInit {
   ngOnInit(): void {
     this.usuarioLogado();
     this.carregarCarrinho();
+
+    this.locacaoService.carrinhoAtualizado$.subscribe(() => {
+      this.carregarCarrinho();
+    });
   }
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
@@ -65,24 +72,30 @@ export class TemplateAnunciosComponent implements OnInit {
 
     this.locacaoService.verificarLocacaoPendente(uid).subscribe(loc => {
       if (loc && loc.produtos && loc.produtos.length > 0) {
-        this.cartItems = loc.produtos;
-        this.cartCount = loc.produtos.length;
-      } else {
-        this.cartItems = [];
-        this.cartCount = null;
-      }
-    }, err => {
+    this.cartItems = loc.produtos;
+    this.cartCount = loc.produtos.length;
+    this.locacaoId = loc.id;
+    this.valorTotalLocacao = loc.valorTotal;
+    this.hasLocacao = true;
+  } else {
+    this.cartItems = [];
+    this.cartCount = null;
+    this.valorTotalLocacao = 0;
+    this.hasLocacao = false;
+  }
+}, err => {
       console.error(err);
       this.cartItems = [];
-      this.cartCount = null;
+    this.cartCount = null;
+    this.locacaoId = null;
+    this.valorTotalLocacao = 0;
+    this.hasLocacao = false;
     });
   }
 
   get totalLocacao(): number {
-    return this.cartItems
-      .map(item => item.valorDiario * (new Date(item.dataFim).getTime() - new Date(item.dataInicio).getTime())/ (1000*60*60*24) + item.valorDiario)
-      .reduce((sum, v) => sum + v, 0);
-  }
+  return this.valorTotalLocacao;
+}
 
   toggleCartMenu() {
     this.showCartMenu = !this.showCartMenu;
@@ -95,15 +108,52 @@ export class TemplateAnunciosComponent implements OnInit {
     }
   }
 
-  removerItem(item: ProdutoLocacao) {
-    console.log('Remover produto', item);
-    // implementar exclusão depois ...
-  }
+  removerItem(item: ProdutoLocacao): void {
+  if (!item || !item.id || !this.locacaoId) return;
+
+  this.locacaoService.removerProdutoDaLocacao(this.locacaoId, item.id).subscribe({
+    next: (locacaoAtualizada) => {
+      this.cartItems = locacaoAtualizada.produtos;
+      this.cartCount = locacaoAtualizada.produtos.length;
+      this.valorTotalLocacao = locacaoAtualizada.valorTotal;
+    },
+    error: (err) => {
+      console.error('Erro ao remover produto da locação:', err);
+    }
+  });
+}
 
   cancelarLocacao() {
-    console.log('Cancelar locação');
-    // implementar cancelamento ...
-  }
+  if (!this.locacaoId) return;
+
+  this.locacaoService.deletarLocacao(this.locacaoId).subscribe({
+    next: () => {
+      this.hasLocacao = false;
+      this.showCartMenu = false;
+      this.cartItems = [];
+      this.cartCount = null;
+      this.locacaoId = null;
+      this.valorTotalLocacao = 0;
+
+      this.locacaoService.notificarCarrinhoAtualizado();
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Locação cancelada com sucesso',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    },
+    error: (err) => {
+      console.error('Erro ao cancelar a locação:', err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro ao cancelar locação',
+        text: 'Tente novamente mais tarde.'
+      });
+    }
+  });
+}
 
   finalizarLocacao() {
     console.log('Finalizar locação');

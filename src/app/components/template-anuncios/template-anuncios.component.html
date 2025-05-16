@@ -27,7 +27,7 @@
       <div class="relative" #cartContainer>
         <i
           class="bi bi-cart3 bi-cart-responsive text-2xl cursor-pointer"
-          (click)="toggleCartMenu()"
+          (click)="hasLocacao ? toggleCartMenu() : null"
         ></i>
 
         <span
@@ -60,7 +60,7 @@
           <div class="px-4 py-2 flex justify-between">
             <span class="font-semibold">Total:</span>
             <span class="font-semibold"
-              >R$ {{ totalLocacao | number : "1.2-2" }}</span
+              >R$ {{ valorTotalLocacao | number : "1.2-2" }}</span
             >
           </div>
           <div class="px-4 py-3 flex gap-2">
