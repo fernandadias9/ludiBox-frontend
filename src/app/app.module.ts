@@ -50,6 +50,11 @@ import { EnderecosComponent } from './pages/enderecos/enderecos.component';
 import { TemplateTelasPerfilComponent } from './components/template-telas-perfil/template-telas-perfil.component';
 import { ModalEnderecoComponent } from './components/modal-endereco/modal-endereco.component';
 import { CardEnderecoComponent } from './components/card-endereco/card-endereco.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { TemplateTelasAdmComponent } from './components/template-telas-adm/template-telas-adm.component';
+import { CadastroAdministradorComponent } from './pages/cadastro-administrador/cadastro-administrador.component';
+import { TelaDeUsuariosAdministradoresComponent } from './pages/tela-de-usuarios-administradores/tela-de-usuarios-administradores.component';
+import { TelaDeDenunciasComponent } from './pages/tela-de-denuncias/tela-de-denuncias.component';
 import { ModalAlterarSenhaComponent } from './components/modal-alterar-senha/modal-alterar-senha.component';
 import { AnunciosCrudComponent } from './pages/anuncios-crud/anuncios-crud.component';
 import { HeaderTelasPerfilComAddComponent } from './components/header-telas-perfil-com-add/header-telas-perfil-com-add.component';
@@ -90,6 +95,11 @@ export const MY_FORMATS = {
     TemplateTelasPerfilComponent,
     ModalEnderecoComponent,
     CardEnderecoComponent,
+    DashboardComponent,
+    TemplateTelasAdmComponent,
+    CadastroAdministradorComponent,
+    TelaDeUsuariosAdministradoresComponent,
+    TelaDeDenunciasComponent,
     ModalAlterarSenhaComponent,
     AnunciosCrudComponent,
     HeaderTelasPerfilComAddComponent,

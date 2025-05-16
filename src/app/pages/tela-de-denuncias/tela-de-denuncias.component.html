@@ -1,0 +1,54 @@
+<app-template-telas-adm>
+  <div class="w-full max-w-6xl mx-auto rounded-lg p-4">
+    <div class="p-4 rounded-md text-center mb-6">
+      <h2 class="text-2xl font-bold mb-4">Denuncias</h2>
+      <div class="flex flex-wrap justify-center items-center gap-3">
+        <app-input placeholder="Data Início"></app-input>
+        <app-input placeholder="Data Fim"></app-input>
+        <app-input placeholder="Status"></app-input>
+        <button class="bg-primary hover:bg-[#e68f32] text-white font-semibold px-4 py-2 rounded-md">
+          Filtrar
+        </button>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table-auto w-full text-left border-collapse border border-gray-300">
+        <thead class="bg-[#f5a052] text-white font-semibold">
+          <tr>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Denunciado</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Denunciante</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Data</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Motivo</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Descrição do Motivo</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Status</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Publicação</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Ação</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white text-center">
+          <tr class="hover:bg-gray-100">
+            <td class="px-4 py-2 border-2 border-gray-300">Kid Fest</td>
+            <td class="px-4 py-2 border-2 border-gray-300">João Pereira</td>
+            <td class="px-4 py-2 border-2 border-gray-300">13/02/2025</td>
+            <td class="px-4 py-2 border-2 border-gray-300">Preços Abusivos</td>
+            <td class="px-4 py-2 border-2 border-gray-300">Valor muito acima do normal</td>
+            <td class="px-4 py-2 border-2 border-gray-300">
+              <span class="bg-green-400 hover:bg-green-600 text-white text-sm font-semibold rounded px-3 py-1">Novo</span>
+            </td>
+            <td class="px-4 py-2 border-2 border-gray-300">
+              <button type="button" class="btn btn-outline-secondary text-xl leading-none px-2 py-1">
+                👁️
+              </button>
+            </td>
+            <td class="px-4 py-2 border-2 border-gray-300">
+              <div class="flex justify-center space-x-2">
+                <button class="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded px-3 py-1">Permitir</button>
+                <button class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded px-2.5 py-1">Bloquear</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-template-telas-adm>
