@@ -1,4 +1,5 @@
 export class DetalheAnuncioDto {
+  id: number;
   nome: string;
   dataCadastro: Date;
   altura?: number;
