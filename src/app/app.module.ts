@@ -106,6 +106,7 @@ export const MY_FORMATS = {
     ModalAnunciosComponent,
     UploadImmagensComponent,
     CardAnunciosCrudComponent,
+  
   ],
   imports: [
     BrowserModule,
