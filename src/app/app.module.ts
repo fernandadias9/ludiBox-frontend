@@ -62,6 +62,7 @@ import { ModalAnunciosComponent } from './components/modal-anuncios/modal-anunci
 import { UploadImmagensComponent } from './components/upload-immagens/upload-immagens.component';
 import { CardAnunciosCrudComponent } from './components/card-anuncios-crud/card-anuncios-crud.component';
 import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.component';
+import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -106,6 +107,7 @@ export const MY_FORMATS = {
     ModalAnunciosComponent,
     UploadImmagensComponent,
     CardAnunciosCrudComponent,
+    LocacaoFinalizarComponent,
   ],
   imports: [
     BrowserModule,

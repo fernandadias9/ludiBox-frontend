@@ -1,0 +1,57 @@
+<app-template-anuncios>
+  <div class="flex flex-col md:flex-row w-full gap-4 p-4">
+
+    <div class="w-1/2 bg-white shadow rounded p-4">
+      <div class="flex flex-col justify-between">
+        <div>
+          <h2 class="text-lg font-semibold mb-2">Selecione o endereço de entrega</h2>
+          <select [(ngModel)]="enderecoSelecionado" (change)="carregarEnderecoSelecionado()"
+            class="w-full p-2 border rounded">
+            <option *ngFor="let endereco of enderecos" [value]="endereco.id">
+              {{ endereco.nome }} - {{ endereco.bairro }}
+            </option>
+          </select>
+          <div *ngIf="enderecoCompletoSelecionado" class="mt-4 border-t pt-2">
+            <h3 class="font-semibold text-md">Endereço selecionado</h3>
+            <p> {{ enderecoCompletoSelecionado.nome }}</p>
+            <p>{{ enderecoCompletoSelecionado.rua }}, {{ enderecoCompletoSelecionado.numero }} <span
+                *ngIf="enderecoCompletoSelecionado.complemento">({{ enderecoCompletoSelecionado.complemento }})</span></p>
+            <p>{{ enderecoCompletoSelecionado.bairro }} - {{ enderecoCompletoSelecionado.cidade }}/{{
+              enderecoCompletoSelecionado.estado }}</p>
+            <p>CEP: {{ enderecoCompletoSelecionado.cep }}</p>
+        </div>
+        <div class="flex items-center">
+          <app-button-secondary title="Adicionar endereço" (click)="abrirModal()" />
+          <i class="bi bi-plus text-primary text-4xl font-bold"></i>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <app-modal-endereco [hidden]="!modalEnderecoAberto" (onClose)="fecharModal()"
+      (onEnderecoAdicionado)="onEnderecoAdicionado()">
+    </app-modal-endereco>
+
+
+    <div class="w-1/2 bg-white shadow rounded p-4">
+      <h2 class="text-lg font-semibold mb-2">Resumo da Locação</h2>
+      <div *ngFor="let item of produtos" class="border-b pb-2 mb-2 flex justify-between items-start gap-2">
+        <div>
+          <p><strong>{{ item.produto.nome }}</strong></p>
+          <p>Dias: {{ item.diasLocados }}</p>
+          <p>Valor diária: R$ {{ item.produto.preco | number: '1.2-2' }}</p>
+          <p>Total: R$ {{ item.totalProduto | number: '1.2-2' }}</p>
+        </div>
+
+        <i class="bi bi-trash text-red-500 cursor-pointer" (click)="removerItem(item)"></i>
+      </div>
+
+      <div class="mt-4 text-right">
+        <p class="font-bold text-lg mb-10">
+          Total Geral: R$ {{ locacao?.valorTotal| number: '1.2-2' }}
+        </p>
+        <app-button-primary title="Ir para pagamento" (click)="irParaPagamento()" />
+      </div>
+    </div>
+  </div>
+</app-template-anuncios>

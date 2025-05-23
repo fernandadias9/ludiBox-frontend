@@ -12,6 +12,7 @@ import { CadastroAdministradorComponent } from './pages/cadastro-administrador/c
 import { TelaDeUsuariosAdministradoresComponent } from './pages/tela-de-usuarios-administradores/tela-de-usuarios-administradores.component';
 import { TelaDeDenunciasComponent } from './pages/tela-de-denuncias/tela-de-denuncias.component';
 import { AnunciosCrudComponent } from './pages/anuncios-crud/anuncios-crud.component';
+import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
 
 const routes: Routes = [
   { path: 'login', component: TelaDeLoginComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: "administradores", component: TelaDeUsuariosAdministradoresComponent},
   { path: "denuncias", component: TelaDeDenunciasComponent},
   { path: "anuncios", component: AnunciosCrudComponent},
+  { path: "finalizar-locacao/:id", component: LocacaoFinalizarComponent}
 ];
 
 @NgModule({

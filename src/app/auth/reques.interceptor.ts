@@ -7,8 +7,7 @@ import { LoginService } from "../shared/service/LoginService";
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
-  router: any;
-  constructor(private loginService: LoginService, router: Router) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const tokenUsuarioAutenticado = localStorage.getItem('tokenUsuarioAutenticado');
@@ -31,6 +30,4 @@ export class RequestInterceptor implements HttpInterceptor {
     );
 
   }
-
-
 }
