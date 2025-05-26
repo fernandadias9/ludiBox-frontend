@@ -33,7 +33,7 @@ export class TelaInicialComponent implements OnInit{
   ) {}
 
   ngOnInit() {
-    this.usuarioLogado();
+    // this.usuarioLogado();
     this.carregarAnuncios();
   }
 
@@ -102,24 +102,28 @@ export class TelaInicialComponent implements OnInit{
     return pages;
   }
 
-  usuarioLogado(){
-    const token = localStorage.getItem('tokenUsuarioAutenticado');
-    this.idUsuario = this.loginService.buscarIdUsuarioComToken();
+//   usuarioLogado() {
+//   const token = localStorage.getItem('tokenUsuarioAutenticado');
+//   this.idUsuario = this.loginService.buscarIdUsuarioComToken();
 
-    if(this.idUsuario == null){
-      return;
-    }
+//   if (this.idUsuario == null) {
+//     return;
+//   }
 
-    this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(
-      resultado => {
-        this.perfil = resultado;
-      }
-    );
+//   this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(
+//     resultado => {
+//       this.perfil = resultado;
+//       if (this.perfil && token) {
+//         this.isLoggedIn = true;
+//       }
+//     },
+//     error => {
+//       console.error('Erro ao buscar perfil:', error);
+//       this.isLoggedIn = false;
+//     }
+//   );
+// }
 
-    if(this.perfil && token){
-      this.isLoggedIn = true
-    }
-  }
 
   logoutUser() {
     Swal.fire({

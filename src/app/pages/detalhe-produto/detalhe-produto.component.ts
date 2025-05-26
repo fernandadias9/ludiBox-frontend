@@ -8,6 +8,7 @@ import { startOfDay, isBefore, isToday } from 'date-fns';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { LocacaoService } from '../../shared/service/locacao.service';
 import { LoginService } from '../../shared/service/LoginService';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detalhe-produto',
@@ -52,9 +53,10 @@ export class DetalheProdutoComponent implements OnInit {
   carregarAnuncio(id: number) {
     this.anuncioService.buscar(id).subscribe(
       (data) => {
-        data.datasIndisponiveis = data.datasIndisponiveis.map((dataStr: string | Date) =>
-        dataStr instanceof Date ? dataStr : new Date(dataStr)
-      );
+        data.datasIndisponiveis = data.datasIndisponiveis.map(
+          (dataStr: string | Date) =>
+            dataStr instanceof Date ? dataStr : new Date(dataStr)
+        );
         this.anuncio = data;
         this.setupGallery();
       },
@@ -100,53 +102,64 @@ export class DetalheProdutoComponent implements OnInit {
   }
 
   alugar() {
-  if (!this.anuncio) return;
+    if (!this.anuncio) return;
 
-  const periodo = this.form.value.periodoLocacao;
-  if (!periodo.inicio || !periodo.final) {
-    alert('Selecione um período válido!');
-    return;
-  }
-
-  const produtoLocacao = {
-    produto: { id: this.anuncio.id },
-    dataInicio: periodo.inicio,
-    dataFim: periodo.final,
-    valorDiario: this.anuncio.preco,
-  };
-
-  const usuarioId = this.loginService.buscarIdUsuarioComToken();
-  if (!usuarioId) {
-    alert('Usuário não autenticado!');
-    return;
-  }
-
-  this.locacaoService.verificarLocacaoPendente(usuarioId).subscribe((locacaoExistente) => {
-    if (locacaoExistente) {
-      this.locacaoService
-        .incluirProdutoNaLocacao(locacaoExistente.id, produtoLocacao)
-        .subscribe({
-          next: () => {
-            alert('Produto adicionado à locação existente com sucesso!');
-            this.locacaoService.notificarCarrinhoAtualizado();
-          },
-          error: (err) => console.error(err),
-        });
-    } else {
-      const novaLocacao = {
-        locador: { id: usuarioId },
-        produtos: [produtoLocacao],
-      };
-
-      this.locacaoService.abrirNovaLocacao(novaLocacao).subscribe({
-        next: () => {
-          alert('Locação criada com sucesso!');
-          this.locacaoService.notificarCarrinhoAtualizado();
-        },
-        error: (err) => console.error(err),
-      });
+    const periodo = this.form.value.periodoLocacao;
+    if (!periodo.inicio || !periodo.final) {
+      alert('Selecione um período válido!');
+      return;
     }
-  });
-}
 
+    const produtoLocacao = {
+      produto: { id: this.anuncio.id },
+      dataInicio: periodo.inicio,
+      dataFim: periodo.final,
+      valorDiario: this.anuncio.preco,
+    };
+
+    const usuarioId = this.loginService.buscarIdUsuarioComToken();
+    if (!usuarioId) {
+      alert('Usuário não autenticado!');
+      return;
+    }
+
+    this.locacaoService
+      .verificarLocacaoPendente(usuarioId)
+      .subscribe((locacaoExistente) => {
+        if (locacaoExistente) {
+          this.locacaoService
+            .incluirProdutoNaLocacao(locacaoExistente.id, produtoLocacao)
+            .subscribe({
+              next: () => {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Produto adicionado à locação existente com sucesso!',
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                this.locacaoService.notificarCarrinhoAtualizado();
+              },
+              error: (err) => console.error(err),
+            });
+        } else {
+          const novaLocacao = {
+            locador: { id: usuarioId },
+            produtos: [produtoLocacao],
+          };
+
+          this.locacaoService.abrirNovaLocacao(novaLocacao).subscribe({
+            next: () => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Locação criada com sucesso!',
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              this.locacaoService.notificarCarrinhoAtualizado();
+            },
+            error: (err) => console.error(err),
+          });
+        }
+      });
+  }
 }

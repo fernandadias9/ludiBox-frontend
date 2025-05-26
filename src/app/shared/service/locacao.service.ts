@@ -49,4 +49,15 @@ export class LocacaoService {
   deletarLocacao(locacaoId: number): Observable<void> {
     return this.http.delete<void>(`${this.API}/${locacaoId}`);
   }
+
+  buscarPorId(id: number): Observable<Locacao> {
+    return this.http.get<Locacao>(`${this.API}/${id}`);
+  }
+
+  finalizarLocacao(locacaoId: number, enderecoId: number, locadorId: number) {
+    return this.http.post(
+      `${this.API}/finalizar/${locacaoId}/${enderecoId}/${locadorId}`,
+      null
+    );
+  }
 }
