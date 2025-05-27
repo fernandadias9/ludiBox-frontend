@@ -8,7 +8,6 @@ export class Produto {
   largura: number;
   comprimento: number;
   pesoSuportado: number;
-  estoque: number;
   preco: number;
   imagens: string[];
   datasIndisponiveis: string[];

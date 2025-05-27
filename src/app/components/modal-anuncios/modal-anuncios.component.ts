@@ -55,14 +55,6 @@ export class ModalAnunciosComponent {
       largura: [''],
       comprimento: [''],
       pesoSuportado: [''],
-      estoque: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(3),
-          Validators.pattern(/^[0-9]*$/)
-        ]
-      ],
       preco: ['', [Validators.required]],
     });
   }

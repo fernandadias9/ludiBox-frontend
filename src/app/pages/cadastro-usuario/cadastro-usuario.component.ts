@@ -41,11 +41,12 @@ export class CadastroUsuarioComponent {
 
   initForm(): void {
     this.cadastroForm = this.formBuilder.group({
-      nome: [this.pessoa.nome, Validators.required],
+      nome: [this.pessoa.nome, [Validators.required, Validators.minLength(10), Validators.maxLength(50)]],
       valorDocumento: [this.pessoa.valorDocumento, Validators.required],
       email: [this.pessoa.email, [Validators.required, Validators.email]],
       telefone: [this.pessoa.telefone, Validators.required],
-      senha: [this.pessoa.senha, Validators.required],
+      senha: [this.pessoa.senha, [Validators.required, Validators.minLength(6), Validators.maxLength(10)]
+    ],
       confirmarSenha: [this.confirmarSenha, Validators.required],
       aceitaTermos: [this.aceitaTermos, Validators.requiredTrue],
     });
