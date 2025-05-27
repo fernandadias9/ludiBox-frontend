@@ -10,9 +10,8 @@ export class AuthGuard implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const token = localStorage.getItem('tokenUsuarioAutenticado');
-
     if (!token) {
-      this.router.navigate(['/403']);
+      this.router.navigate(['/acesso-negado']);
       return false;
     }
 
@@ -21,7 +20,6 @@ export class AuthGuard implements CanActivate {
       const perfil = decoded.roles;
 
       const rolesPermitidos = next.data['roles'] as string[] | undefined;
-
       if (!rolesPermitidos || rolesPermitidos.length === 0) {
         return true;
       }
@@ -29,6 +27,7 @@ export class AuthGuard implements CanActivate {
         this.router.navigate(['/acesso-negado']);
         return false;
       }
+
       return true;
 
     } catch (e) {
