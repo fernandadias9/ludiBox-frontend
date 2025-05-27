@@ -15,6 +15,7 @@ import { AnunciosCrudComponent } from './pages/anuncios-crud/anuncios-crud.compo
 import { AuthGuard } from './auth/auth.guard';
 import { TelaAcessoNegadoComponent } from './pages/tela-acesso-negado/tela-acesso-negado.component';
 import { UsuarioGuard } from './auth/usuario.guard';
+import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
 
 const routes: Routes = [
 
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'tela-perfil', component: TelaDePerfilComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
   { path: 'enderecos', component: EnderecosComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
   { path: 'anuncios', component: AnunciosCrudComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
+  { path: "finalizar-locacao/:id", component: LocacaoFinalizarComponent , canActivate: [AuthGuard], data: { roles: ['USUARIO'] }},
 
   // Rotas Administrativas
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
