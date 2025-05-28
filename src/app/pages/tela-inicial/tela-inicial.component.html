@@ -1,4 +1,4 @@
-<app-template-anuncios>
+<app-template-anuncios (searchTermChange)="onSearch($event)">
   <div class="flex flex-wrap justify-center gap-9 p-6 w-full h-full mb-20">
     <ng-container *ngFor="let anuncio of anuncios">
       <app-card-anuncios [id]="anuncio.id" [imagem]="anuncio.imagem" [itemName]="anuncio.nome" [itemPrice]="anuncio.preco" [userName]="anuncio.nomeAnunciante"></app-card-anuncios>

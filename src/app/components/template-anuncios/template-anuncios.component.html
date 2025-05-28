@@ -16,6 +16,8 @@
       <input
         type="text"
         placeholder="Pesquisar"
+        [(ngModel)]="searchTerm"
+        (input)="onInputChange()"
         class="w-full pl-4 pr-10 py-2 rounded-full bg-background_light border-transparent focus:outline-none focus:border-primary border-2"
       />
       <i

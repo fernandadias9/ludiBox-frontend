@@ -1,9 +1,11 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { LoginService } from '../../shared/service/LoginService';
@@ -36,6 +38,9 @@ export class TemplateAnunciosComponent implements OnInit {
 
   @Input() eTelaInicial: boolean = true;
 
+  @Output() searchTermChange = new EventEmitter<string>();
+  searchTerm: string = '';
+
   constructor(
     private loginService: LoginService,
     private pessoaService: PessoaService,
@@ -53,6 +58,10 @@ export class TemplateAnunciosComponent implements OnInit {
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
+
+  onInputChange() {
+  this.searchTermChange.emit(this.searchTerm);
+}
 
   usuarioLogado() {
     const token = localStorage.getItem('tokenUsuarioAutenticado');

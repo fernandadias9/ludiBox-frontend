@@ -6,6 +6,8 @@ import { PerfilDTO } from '../../shared/model/dto/PerfilDTO';
 import { AnuncioLeituraDto } from '../../shared/model/dto/anuncioLeituraDto';
 import { AnuncioService } from '../../shared/service/anuncio.service';
 import Swal from 'sweetalert2';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tela-inicial',
@@ -21,6 +23,7 @@ export class TelaInicialComponent implements OnInit{
   anuncios: AnuncioLeituraDto[] = [];
   public perfil: PerfilDTO = new PerfilDTO();
   public idUsuario: number;
+  private searchSubject = new Subject<string>();
 
   itemsPerPage = 20;
   currentPage = 1;
@@ -35,6 +38,9 @@ export class TelaInicialComponent implements OnInit{
   ngOnInit() {
     // this.usuarioLogado();
     this.carregarAnuncios();
+    this.searchSubject.pipe(debounceTime(500)).subscribe(term => {
+      this.filtrarAnuncios(term as string);
+    });
   }
 
   public carregarAnuncios(): void {
@@ -44,6 +50,21 @@ export class TelaInicialComponent implements OnInit{
       },
       error => {
         console.error('Error fetching anuncios:', error);
+      }
+    );
+  }
+
+  onSearch(term: string) {
+    this.searchSubject.next(term);
+  }
+
+  public filtrarAnuncios(nomeBusca: string = ''): void {
+    this.anuncioService.listarComFiltro(nomeBusca).subscribe(
+      resultado => {
+        this.anuncios = resultado;
+      },
+      error => {
+        console.error('Erro ao buscar anúncios:', error);
       }
     );
   }
