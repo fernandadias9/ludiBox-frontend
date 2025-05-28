@@ -25,8 +25,9 @@ export class TelaInicialComponent implements OnInit{
   public idUsuario: number;
   private searchSubject = new Subject<string>();
 
-  itemsPerPage = 20;
-  currentPage = 1;
+  currentPage = 0;
+  loading = false;
+  allLoaded = false;
 
   constructor(
     private loginService: LoginService,
@@ -41,17 +42,45 @@ export class TelaInicialComponent implements OnInit{
     this.searchSubject.pipe(debounceTime(500)).subscribe(term => {
       this.filtrarAnuncios(term as string);
     });
+    window.addEventListener('scroll', this.onScroll.bind(this));
+
   }
 
-  public carregarAnuncios(): void {
-    this.anuncioService.listar().subscribe(
-      resultado => {
-        this.anuncios = resultado;
+  carregarAnuncios(): void {
+    if (this.loading || this.allLoaded) return;
+
+    this.loading = true;
+
+    this.anuncioService.listarComFiltro('', this.currentPage, 12).subscribe(
+      (res: any) => {
+        const novos = res.content;
+        if (novos.length === 0) {
+          this.allLoaded = true;
+        } else {
+          this.anuncios = [...this.anuncios, ...novos];
+          this.currentPage++;
+        }
+        this.loading = false;
       },
       error => {
-        console.error('Error fetching anuncios:', error);
+        console.error('Erro ao carregar anúncios:', error);
+        this.loading = false;
       }
     );
+  }
+
+  onScroll() {
+    const threshold = 300; // px do fundo
+    const pos = window.innerHeight + window.scrollY;
+    const max = document.body.offsetHeight;
+
+    if (max - pos < threshold) {
+      this.carregarAnuncios();
+    }
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('scroll', this.onScroll.bind(this));
   }
 
   onSearch(term: string) {
@@ -61,7 +90,7 @@ export class TelaInicialComponent implements OnInit{
   public filtrarAnuncios(nomeBusca: string = ''): void {
     this.anuncioService.listarComFiltro(nomeBusca).subscribe(
       resultado => {
-        this.anuncios = resultado;
+        this.anuncios = resultado.content;
       },
       error => {
         console.error('Erro ao buscar anúncios:', error);
@@ -69,58 +98,8 @@ export class TelaInicialComponent implements OnInit{
     );
   }
 
-  get totalPages(): number {
-    return Math.ceil(this.anuncios.length / this.itemsPerPage);
-  }
-
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
-  }
-
-  exibirAnuncios() {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    return this.anuncios.slice(startIndex, endIndex);
-  }
-
-  changePage(direction: string) {
-    if (direction === 'next' && this.currentPage < this.totalPages) {
-      this.currentPage++;
-    } else if (direction === 'prev' && this.currentPage > 1) {
-      this.currentPage--;
-    }
-  }
-
-  goToPage(page: number) {
-    this.currentPage = page;
-  }
-
-  get pageNumbers(): number[] {
-    const pages: number[] = [];
-    const total = this.totalPages;
-    let startPage: number;
-    let endPage: number;
-
-    if (total <= 5) {
-      startPage = 1;
-      endPage = total;
-    } else {
-      if (this.currentPage <= 3) {
-        startPage = 1;
-        endPage = 5;
-      } else if (this.currentPage + 2 >= total) {
-        startPage = total - 4;
-        endPage = total;
-      } else {
-        startPage = this.currentPage - 2;
-        endPage = this.currentPage + 2;
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
-    return pages;
   }
 
 //   usuarioLogado() {
