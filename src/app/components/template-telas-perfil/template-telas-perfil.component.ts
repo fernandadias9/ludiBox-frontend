@@ -12,6 +12,5 @@ export class TemplateTelasPerfilComponent {
     { label: 'Anúncios', route: '/anuncios' },
     { label: 'Locações', route: '' },
     { label: 'Tela inicial', route: '' },
-    { label: 'Sair', route: '/login' }
   ];
 }

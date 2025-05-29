@@ -56,29 +56,38 @@ export class TelaDeLoginComponent implements OnInit {
   }
 
   public realizarLogin() {
-    this.formSubmitted = true
-
+    this.formSubmitted = true;
+  
     if (this.loginForm.invalid) {
-      this.mostrarMensagemErroValidacao()
-      return
+      this.mostrarMensagemErroValidacao();
+      return;
     }
-
+  
     this.service.autenticar(this.dto).subscribe({
       next: (jwt) => {
         Swal.fire("Sucesso", "Usuário autenticado com sucesso", "success");
         const token: string = jwt.body + "";
         localStorage.setItem("tokenUsuarioAutenticado", token);
-
-        // Decodifica o token para obter o ID do usuário
+  
         try {
           const tokenDecodificado: any = jwtDecode(token);
           const idUsuario = tokenDecodificado.id;
+          const perfil = tokenDecodificado.roles;
+  
           localStorage.setItem("idUsuarioAutenticado", idUsuario.toString());
+
+          if (perfil === 'ADMINISTRADOR') {
+            this.router.navigate(['/dashboard']);
+          } else if (perfil === 'USUARIO') {
+            this.router.navigate(['']);
+          } else {
+            this.router.navigate(['/acesso-negado']);
+          }
+  
         } catch (error) {
           console.error("Erro ao decodificar o token:", error);
+          this.router.navigate(['/acesso-negado']);
         }
-
-        this.router.navigate(["/"]);
       },
       error: (erro) => {
         var mensagem: string;
@@ -89,7 +98,7 @@ export class TelaDeLoginComponent implements OnInit {
         }
         Swal.fire("Erro", mensagem, "error");
       }
-    })
+    });
   }
 
   mostrarMensagemErroValidacao() {
