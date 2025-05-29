@@ -9,41 +9,41 @@ import { Pessoa } from "../model/entity/pessoa";
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+  export class LoginService {
 
-  private readonly API = 'http://localhost:8080/auth';
+    private readonly API = 'http://localhost:8080/auth';
 
-  constructor(private httpCliente: HttpClient) { }
+    constructor(private httpCliente: HttpClient) { }
 
-  autenticar(dto: PessoaDTO): Observable<HttpResponse<string>> {
-    const authHeader = 'Basic ' + btoa(`${dto.login}:${dto.senha}`);
-    const headers = new HttpHeaders({
-      'authorization': authHeader
-    });
+    autenticar(dto: PessoaDTO): Observable<HttpResponse<string>> {
+      const authHeader = 'Basic ' + btoa(`${dto.login}:${dto.senha}`);
+      const headers = new HttpHeaders({
+        'authorization': authHeader
+      });
 
-    return this.httpCliente.post<string>(`${this.API}/authenticatePessoa`, dto, {
-      headers,
-      observe: 'response',
-      responseType: 'text' as 'json'
-    });
-  }
-
-  cadastrar(pessoa: Pessoa): Observable<any>{
-    return this.httpCliente.post<any>(this.API+"/nova-pessoa", pessoa);
-  }
-
-  buscarIdUsuarioComToken(): number | null {
-  try {
-    const token = localStorage.getItem('tokenUsuarioAutenticado');
-    if (token) {
-      const tokenDecodificado: any = jwtDecode(token);
-      return tokenDecodificado.id;
+      return this.httpCliente.post<string>(`${this.API}/authenticatePessoa`, dto, {
+        headers,
+        observe: 'response',
+        responseType: 'text' as 'json'
+      });
     }
-  } catch (error) {
-    console.error('Erro ao decodificar o token:', error);
-  }
-  return null;
-  }
+
+    cadastrar(pessoa: Pessoa): Observable<any>{
+      return this.httpCliente.post<any>(this.API+"/nova-pessoa", pessoa);
+    }
+
+    buscarIdUsuarioComToken(): number | null {
+    try {
+      const token = localStorage.getItem('tokenUsuarioAutenticado');
+      if (token) {
+        const tokenDecodificado: any = jwtDecode(token);
+        return tokenDecodificado.id;
+      }
+    } catch (error) {
+      console.error('Erro ao decodificar o token:', error);
+    }
+    return null;
+    }
 
   logout() {
     localStorage.removeItem('tokenUsuarioAutenticado');

@@ -1,19 +1,7 @@
 <app-template-telas-perfil>
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-semibold text-gray-800">Meus endereços</h2>
-      <div class="flex items-center gap-x-1" (click)="abrirModal()">
-        <app-button-secondary title="Adicionar novo endereço"></app-button-secondary>
-        <i class="bi bi-plus text-primary text-4xl font-bold"></i>
-      </div>
-    </div>
-
-    <app-modal-endereco
-      [hidden]="!isOpen"
-      [enderecoEditando]="enderecoSendoEditado"
-      (onClose)="fecharModal()"
-      (onEnderecoAdicionado)="onEnderecoAdicionado()"
-    >
+  <app-header-telas-perfil-com-add titulo="Meus endereços" botaoTitulo="Adicionar novo endereço" (botaoClicado)="abrirModal()">
+    <app-modal-endereco [hidden]="!isOpen" [enderecoEditando]="enderecoSendoEditado" (onClose)="fecharModal()"
+      (onEnderecoAdicionado)="onEnderecoAdicionado()">
     </app-modal-endereco>
 
     <ng-container *ngIf="enderecos.length === 0; else listaEnderecos">
@@ -26,14 +14,11 @@
 
     <ng-template #listaEnderecos>
       <div class="flex flex-wrap gap-4">
-        <app-card-endereco
-          *ngFor="let endereco of enderecos"
-          [endereco]="endereco"
-          (editar)="abrirModalEdicao($event)"
+        <app-card-endereco *ngFor="let endereco of enderecos" [endereco]="endereco" (editar)="abrirModalEdicao($event)"
           (deletar)="deletarEndereco($event)">
-        >
+          >
         </app-card-endereco>
       </div>
     </ng-template>
-  </div>
+  </app-header-telas-perfil-com-add>
 </app-template-telas-perfil>

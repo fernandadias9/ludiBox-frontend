@@ -1,0 +1,33 @@
+<app-template-telas-perfil>
+  <app-header-telas-perfil-com-add
+    titulo="Meus Produtos"
+    botaoTitulo="Adicionar novo produto"
+    (botaoClicado)="abrirModal()"
+  >
+    <app-modal-anuncios
+      [hidden]="!isOpen"
+      [produtoEditando]="produtoSendoEditado"
+      (onClose)="fecharModal()"
+      (onProdutoAdicionado)="onProdutoAdicionado()"
+    ></app-modal-anuncios>
+
+    <ng-container *ngIf="anuncios.length === 0; else listaProdutos">
+      <p class="text-gray-600 text-lg w-2/3 text-left">
+        Nenhum produto cadastrado, clique em
+        <strong class="text-primary">"Adicionar novo produto"</strong>
+        para cadastrar o primeiro produto.
+      </p>
+    </ng-container>
+
+    <ng-template #listaProdutos>
+      <div class="flex flex-wrap gap-4">
+        <app-card-anuncios-crud
+          *ngFor="let anuncio of anuncios"
+          [produto]="anuncio"
+          (editar)="abrirModalEdicao(anuncio)"
+          (deletar)="deletarProduto(anuncio.id)"
+        ></app-card-anuncios-crud>
+      </div>
+    </ng-template>
+  </app-header-telas-perfil-com-add>
+</app-template-telas-perfil>

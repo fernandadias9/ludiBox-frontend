@@ -20,10 +20,10 @@
         <div
           class="bg-gray-50 rounded-lg shadow-sm"
           *ngIf="
-            anuncio.altura ||
-            anuncio.largura ||
-            anuncio.comprimento ||
-            anuncio.pesoSuportado
+            anuncio?.altura ||
+            anuncio?.largura ||
+            anuncio?.comprimento ||
+            anuncio?.pesoSuportado
           "
         >
           <h2 class="text-lg xl:text-xl font-semibold text-gray-700">Características</h2>
@@ -95,6 +95,11 @@
         >
           Alugar
         </button>
+
+        <app-button-secondary
+          title="Voltar para página inicial"
+          [routerLink]="['/']"
+        ></app-button-secondary>
       </div>
     </div>
 

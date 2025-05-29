@@ -26,4 +26,8 @@ export class EnderecoService {
   deletarEndereco(id: number) {
     return this.http.delete(`${this.API}/deletar-endereco/${id}`);
   }
+
+  buscarPorId(id: number): Observable<Endereco> {
+  return this.http.get<Endereco>(`${this.API}/${id}`);
+}
 }

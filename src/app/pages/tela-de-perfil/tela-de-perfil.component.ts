@@ -35,7 +35,6 @@ throw new Error('Method not implemented.');
   ngOnInit() {
     this.usuarioLogado();
     this.formSubmitted = true;
-    
 
   }
 
@@ -46,6 +45,8 @@ throw new Error('Method not implemented.');
       telefone: [this.perfil.telefone, Validators.required],
     });
     this.perfilForm.disable(); 
+
+  
   }
 
   get f() {
@@ -68,7 +69,7 @@ throw new Error('Method not implemented.');
   menuList: { label: string; route: string }[] = [
     { label: 'Perfil', route: '/tela-perfil' },
     { label: 'Endereços', route: '/enderecos' },
-    { label: 'Anúncios', route: '' },
+    { label: 'Anúncios', route: '/anuncios' },
     { label: 'Locações', route: '' },
     { label: 'Sair', route: '/login' }
   ];
@@ -122,9 +123,15 @@ throw new Error('Method not implemented.');
   
     this.pessoaService.atualizarPerfil(this.idUsuario, camposAlterados).subscribe({
       next: () => {
+        this.perfil = {
+          ...this.perfil,
+          ...this.perfilForm.value
+        };
+        
+        this.perfilOriginal = { ...this.perfil };
+        
         this.isEditing = false;
-        this.perfilForm.reset(this.perfilOriginal);
-        this.initForm();
+        this.perfilForm.disable();
 
         Swal.fire({
           title: 'Sucesso!',
@@ -159,10 +166,10 @@ throw new Error('Method not implemented.');
   
       let mensagem = ""
       if (camposInvalidos.length === 1) {
-        mensagem = `O campo ${camposInvalidos[0]} é obrigatório`
+        mensagem = `O campo ${camposInvalidos[0]} é obrigatório`;
       } else if (camposInvalidos.length > 1) {
         const ultimoCampo = camposInvalidos.pop()
-        mensagem = `Os campos ${camposInvalidos.join(", ")} e ${ultimoCampo} são obrigatórios`
+        mensagem = `Os campos ${camposInvalidos.join(", ")} e ${ultimoCampo} são obrigatórios`;
       }
   
       Swal.fire({
@@ -175,3 +182,4 @@ throw new Error('Method not implemented.');
       })
     }   
 }
+

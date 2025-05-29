@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EnderecoService } from '../../shared/service/endereco.service';
 import Swal from 'sweetalert2';
+import { skip } from 'rxjs';
 
 @Component({
   selector: 'app-modal-endereco',
@@ -69,25 +70,27 @@ export class ModalEnderecoComponent {
   salvar() {
     if (this.enderecoForm.valid) {
       const dados = this.enderecoForm.value;
-      dados.cep = Number(dados.cep);
-  
+      dados.cep = Number(String(dados.cep).replace(/\D/g, ''));
+
       if (this.enderecoEditando) {
         this.enderecoService.atualizarEndereco(this.enderecoEditando.id, dados).subscribe({
           next: () => {
             Swal.fire({
               icon: 'success',
-              title: 'Endereço atualizado com sucesso!',
+              title: 'Endereço editado com sucesso',
               showConfirmButton: false,
-              timer: 1500
+              timer: 2000
             });
             this.onEnderecoAdicionado.emit();
             this.fechar();
           },
-          error: (erro) => {
+          error: err => {
             Swal.fire({
               icon: 'error',
-              title: 'Erro ao atualizar endereço',
-              text: erro?.error?.mensagem || 'Ocorreu um erro ao tentar atualizar o endereço.',
+              title: 'Não foi possível editar endereço',
+              text: err.error?.message || err.message,
+              showConfirmButton: false,
+              timer: 2000
             });
           }
         });
@@ -96,34 +99,42 @@ export class ModalEnderecoComponent {
           next: () => {
             Swal.fire({
               icon: 'success',
-              title: 'Endereço salvo com sucesso!',
+              title: 'Endereço salvo com sucesso',
               showConfirmButton: false,
-              timer: 1500
+              timer: 2000
             });
             this.onEnderecoAdicionado.emit();
             this.fechar();
           },
-          error: (erro) => {
+          error: err => {
             Swal.fire({
               icon: 'error',
-              title: 'Erro ao salvar endereço',
-              text: erro?.error?.mensagem || 'Ocorreu um erro ao tentar salvar o endereço.',
+              title: 'Não foi possível salvar endereço',
+              text: err.error?.message || err.message,
+              showConfirmButton: false,
+              timer: 2000
             });
           }
         });
       }
     } else {
       this.enderecoForm.markAllAsTouched();
-      Swal.fire({
-        icon: 'warning',
-        title: 'Formulário inválido',
-        text: 'Por favor, preencha todos os campos obrigatórios corretamente.',
-      });
     }
   }
-  
-  
 
+  onCepInput(event: any) {
+    let value = event.target.value.replace(/\D/g, '');
+
+    if (value.length > 5) {
+      value = value.substring(0, 5) + '-' + value.substring(5, 7);
+    }
+
+    if (value.length > 8) {
+      value = value.substring(0, 8);
+    }
+
+    this.enderecoForm.get('cep')?.setValue(value, { emitEvent: false });
+  }
 
   fechar() {
     this.enderecoEditando = null;

@@ -5,97 +5,103 @@ import { EmailService } from '../../shared/service/emailService';
 import { SenhasDTO } from '../../shared/model/dto/SenhasDTO';
 
 @Component({
-  selector: 'app-modal-alterar-senha',
-  templateUrl: './modal-alterar-senha.component.html',
-  styleUrls: ['./modal-alterar-senha.component.scss']
+selector: 'app-modal-alterar-senha',
+templateUrl: './modal-alterar-senha.component.html',
+styleUrls:['./modal-alterar-senha.component.scss']
 })
 export class ModalAlterarSenhaComponent {
-  @Output() onClose = new EventEmitter<void>();  
-  @Output() onSenhaAlterada = new EventEmitter<void>(); 
-  
-  senhaForm: FormGroup;
-  dto: SenhasDTO;
-  formSubmitted = false; 
+@Output() onClose = new EventEmitter<void>();
+@Output() onSenhaAlterada = new EventEmitter<void>();
 
-  constructor(
-    private fb: FormBuilder,
-    private emailService: EmailService
-  ) {
-    this.senhaForm = this.fb.group({
-      senhaAtual: ['', [Validators.required]],
-      novaSenha: ['', [Validators.required, Validators.minLength(6)]],
-      confirmarSenha: ['', [Validators.required, Validators.minLength(6)]],
-    }, {
-      validators: this.matchPasswords
-    });
-  } 
+senhaForm: FormGroup;
+dto: SenhasDTO;
+formSubmitted = false;
 
-  get f() {
-    return this.senhaForm.controls
-  }
+constructor(
+private fb: FormBuilder,
+private emailService: EmailService
+) {
+this.senhaForm = this.fb.group({
+senhaAtual:['',[Validators.required]],
+novaSenha:['',[Validators.required, Validators.minLength(6)]],
+confirmarSenha:['',[Validators.required, Validators.minLength(6)]],
+}, {
+validators: this.matchPasswords
+});
+}
 
-  isFieldInvalid(fieldName: string): boolean {
-    return this.formSubmitted && this.f[fieldName].invalid
+get f() {
+return this.senhaForm.controls
+}
+
+isFieldInvalid(fieldName: string): boolean {
+  const field = this.senhaForm.get(fieldName);
+  return (field?.invalid && (field?.dirty || field?.touched || this.formSubmitted)) || false;
+}
+
+matchPasswords(group: FormGroup) {
+const novaSenha = group.get('novaSenha')?.value;
+const confirmarSenha = group.get('confirmarSenha')?.value;
+if (novaSenha.length < 6 || confirmarSenha.length < 6) {
+return null
+} else {
+return novaSenha === confirmarSenha ? null : { senhasDiferentes: true };
+}
+}
+
+salvarSenha() {
+this.formSubmitted = true;
+
+
+if (this.senhaForm.invalid) {
+  return;
+}
+
+if (this.senhaForm.valid) {
+  const dados = this.senhaForm.value;
+  this.dto = {
+    senhaAtual: dados.senhaAtual,
+    novaSenha: dados.novaSenha,
+    confirmarSenha: dados.confirmarSenha
+  };
+  console.log(this.dto);
+  this.emailService.alterarSenha(this.dto).subscribe({
+
     
-  }
-
-  matchPasswords(group: FormGroup) {
-    const novaSenha = group.get('novaSenha')?.value;
-    const confirmarSenha = group.get('confirmarSenha')?.value;
-    if (novaSenha.length < 6 || confirmarSenha.length < 6) {
-      return null 
-    } else {
-      return novaSenha === confirmarSenha ? null : { senhasDiferentes: true };
-    }
-  }
-
-  salvarSenha() {
-    this.formSubmitted = true;
-    console.log(this.senhaForm.value)
-    console.log(this.senhaForm.valid)
-    console.log(this.senhaForm.invalid)
-    if (this.senhaForm.invalid) {
-      return;
-    }
-
-    if (this.senhaForm.valid) {
-      const dados = this.senhaForm.value;
-      this.dto = {
-        senhaAtual: dados.senhaAtual,
-        novaSenha: dados.novaSenha,
-        confirmarSenha: dados.confirmarSenha
-      };
-      this.emailService.alterarSenha(this.dto).subscribe({
-         next: () => {
-           Swal.fire({
-             icon: 'success',
-             title: 'Senha alterada com sucesso!',
-             showConfirmButton: false,
-             timer: 1500
-           });
-           this.onSenhaAlterada.emit();
-           this.fecharModal();
-         },
-         error: (erro) => {
-           Swal.fire({
-             icon: 'error',
-             title: 'Erro ao alterar a senha',
-            text: erro?.error?.mensagem || 'Ocorreu um erro ao tentar alterar a senha.',
-           });
-         }
+     next: () => {
+       Swal.fire({
+         icon: 'success',
+         title: 'Senha alterada com sucesso!',
+         showConfirmButton: false,
+         timer: 1500
        });
-    }
-  }
+       this.onSenhaAlterada.emit();
+       this.fecharModal();
+     },
+     error: (erro) => {
+       Swal.fire({
+         icon: 'error',
+         title: 'Erro ao alterar a senha',
+        text: erro?.error?.mensagem || 'Ocorreu um erro ao tentar alterar a senha.',
+       });
+     }
+   });
+}
 
-  fecharModal() {
-    this.onClose.emit();
-    this.formSubmitted = false; // Zera estado de envio manual
-    this.senhaForm.reset({
-      senhaAtual: '',
-      novaSenha: '',
-      confirmarSenha: ''
-    });
-    
-  }
-  
+
+}
+
+fecharModal() {
+this.onClose.emit();
+this.formSubmitted = false; 
+this.senhaForm.reset({
+  senhaAtual: '',
+  novaSenha: '',
+  confirmarSenha: ''
+});
+this.senhaForm.markAsPristine(); 
+this.senhaForm.markAsUntouched(); 
+this.senhaForm.updateValueAndValidity(); 
+}
+
 }
