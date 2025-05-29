@@ -67,70 +67,93 @@ export class ModalAnunciosComponent {
     });
   }
 
-  salvar() {
-    if (this.produtoForm.valid) {
-      const produto: Produto = this.produtoForm.value;
-      produto.imagens = [...this.imagensExistentes];
+salvar() {
+  if (this.produtoForm.valid) {
+    const produto: Produto = this.produtoForm.value;
+    produto.imagens = [...this.imagensExistentes];
 
-      if (this.produtoEditando) {
-        this.produtoService
-          .atualizar(this.produtoEditando.id, produto, this.arquivosImagens)
-          .subscribe({
-            next: () => {
-              Swal.fire({
-                icon: 'success',
-                title: 'Anúncio editado com sucesso',
-                showConfirmButton: false,
-                timer: 2000
-              });
-              this.onProdutoAdicionado.emit();
-              this.fechar();
-            },
-            error: err => {
+    if (this.produtoEditando) {
+      this.produtoService
+        .atualizar(this.produtoEditando.id, produto, this.arquivosImagens)
+        .subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Anúncio editado com sucesso',
+              showConfirmButton: false,
+              timer: 2000
+            });
+            this.onProdutoAdicionado.emit();
+            this.fechar();
+          },
+          error: err => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Não foi possível editar anúncio',
+              text: err.error?.message || err.message,
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
+        });
+    } else {
+      if (this.arquivosImagens.length > 0) {
+        this.produtoService.salvar(produto, this.arquivosImagens).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Anúncio criado com sucesso',
+              showConfirmButton: false,
+              timer: 2000
+            });
+            this.onProdutoAdicionado.emit();
+            this.fechar();
+          },
+          error: (err) => {
+            console.log('Erro:', err);
+
+            const mensagem =
+              err.error?.detalhes ||
+              err.error?.erro ||
+              err.error?.message ||
+              err.message ||
+              'Erro desconhecido';
+
+            if (err.status === 422) {
               Swal.fire({
                 icon: 'error',
-                title: 'Não foi possível editar anúncio',
-                text: err.error?.message || err.message,
+                title: 'Conteúdo inválido, Evite SPAM ou linguagem ofensiva.',
                 showConfirmButton: false,
-                timer: 2000
+                timer: 3000,
+                timerProgressBar: true
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Não foi possível criar anúncio',
+                text: mensagem,
+                showConfirmButton: false,
+                timer: 3000
               });
             }
-          });
+          }
+        });
       } else {
-        if (this.arquivosImagens.length > 0) {
-          this.produtoService
-            .salvar(produto, this.arquivosImagens)
-            .subscribe({
-              next: () => {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Anúncio criado com sucesso',
-                  showConfirmButton: false,
-                  timer: 2000
-                });
-                this.onProdutoAdicionado.emit();
-                this.fechar();
-              },
-              error: err => {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Não foi possível criar anúncio',
-                  text: err.error?.message || err.message,
-                  showConfirmButton: false,
-                  timer: 2000
-                });
-              }
-            });
-        } else {
-          this.produtoForm.markAllAsTouched();
-          this.fechar();
-          return;
-        }
+        this.produtoForm.markAllAsTouched();
+        Swal.fire({
+          icon: 'error',
+          title: 'Selecione pelo menos uma imagem para o anúncio',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true
+        });
+        return;
       }
-    } else {
-      this.produtoForm.markAllAsTouched()
     }
+  } else {
+    this.produtoForm.markAllAsTouched();
   }
+}
 
   removerImagemExistente(index: number) {
     this.imagensExistentes.splice(index, 1);
