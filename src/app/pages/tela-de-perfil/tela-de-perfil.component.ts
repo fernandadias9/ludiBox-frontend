@@ -45,7 +45,6 @@ throw new Error('Method not implemented.');
       telefone: [this.perfil.telefone, Validators.required],
     });
     this.perfilForm.disable(); 
-
   
   }
 
@@ -64,14 +63,12 @@ throw new Error('Method not implemented.');
   fecharModal(){
     this.isModalOpen = false;
   }
-
   
   menuList: { label: string; route: string }[] = [
     { label: 'Perfil', route: '/tela-perfil' },
     { label: 'Endereços', route: '/enderecos' },
     { label: 'Anúncios', route: '/anuncios' },
     { label: 'Locações', route: '' },
-    { label: 'Sair', route: '/login' }
   ];
 
   usuarioLogado() {
