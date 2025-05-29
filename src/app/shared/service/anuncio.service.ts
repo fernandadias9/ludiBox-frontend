@@ -20,15 +20,13 @@ export class AnuncioService {
     return this.http.get<DetalheAnuncioDto>(`${this.API}/buscar/${idProduto}`);
   }
 
-  listarComFiltro(nome?: string, page: number = 0, size: number = 12): Observable<any> {
-  let params = new HttpParams()
-    .set('page', page)
-    .set('size', size);
+  listarComFiltro(nome = "", page = 0, size = 12): Observable<any> {
+    let params = new HttpParams().set("page", page.toString()).set("size", size.toString())
 
-  if (nome) {
-    params = params.set('nome', nome);
+    if (nome && nome.trim() !== "") {
+      params = params.set("nome", nome.trim())
+    }
+
+    return this.http.get(`${this.API}/listarComFiltro`, { params })
   }
-
-  return this.http.get(`${this.API}/listarComFiltro`, { params });
-}
 }

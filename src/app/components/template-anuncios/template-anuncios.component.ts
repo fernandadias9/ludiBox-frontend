@@ -35,9 +35,11 @@ export class TemplateAnunciosComponent implements OnInit {
   valorTotalLocacao: number = 0;
   hasLocacao: boolean = false;
   @ViewChild('cartContainer', { read: ElementRef }) cartContainer!: ElementRef;
+  @ViewChild("scrollContainer", { static: true }) scrollContainer!: ElementRef
 
   @Input() eTelaInicial: boolean = true;
 
+  @Output() scrollEvent = new EventEmitter<void>()
   @Output() searchTermChange = new EventEmitter<string>();
   searchTerm: string = '';
 
@@ -46,7 +48,7 @@ export class TemplateAnunciosComponent implements OnInit {
     private pessoaService: PessoaService,
     private router: Router,
     private locacaoService: LocacaoService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.usuarioLogado();
     this.carregarCarrinho();
@@ -60,8 +62,8 @@ export class TemplateAnunciosComponent implements OnInit {
   }
 
   onInputChange() {
-  this.searchTermChange.emit(this.searchTerm);
-}
+    this.searchTermChange.emit(this.searchTerm);
+  }
 
   usuarioLogado() {
     const token = localStorage.getItem('tokenUsuarioAutenticado');
@@ -205,5 +207,28 @@ export class TemplateAnunciosComponent implements OnInit {
     this.loginService.logout();
     this.router.navigate(['/']);
     this.perfil = null;
+  }
+
+  onScroll() {
+    const threshold = 300
+    const el = this.scrollContainer.nativeElement
+    const pos = el.scrollTop + el.clientHeight
+    const max = el.scrollHeight
+
+    if (max - pos < threshold) {
+      this.scrollEvent.emit()
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.scrollContainer?.nativeElement) {
+      this.scrollContainer.nativeElement.addEventListener("scroll", this.onScroll.bind(this))
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.scrollContainer?.nativeElement) {
+      this.scrollContainer.nativeElement.removeEventListener("scroll", this.onScroll.bind(this))
+    }
   }
 }

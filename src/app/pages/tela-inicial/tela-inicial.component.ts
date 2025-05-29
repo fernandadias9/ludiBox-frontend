@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LoginService } from '../../shared/service/LoginService';
-import { PessoaService } from '../../shared/service/PessoaService';
 import { Router } from '@angular/router';
 import { PerfilDTO } from '../../shared/model/dto/PerfilDTO';
 import { AnuncioLeituraDto } from '../../shared/model/dto/anuncioLeituraDto';
 import { AnuncioService } from '../../shared/service/anuncio.service';
 import Swal from 'sweetalert2';
 import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tela-inicial',
@@ -15,115 +14,86 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./tela-inicial.component.scss']
 })
 
-export class TelaInicialComponent implements OnInit{
-  isLoggedIn = false;
-  userName = 'Usuário Exemplo';
-  userImage = '';
-  menuOpen = false;
-  anuncios: AnuncioLeituraDto[] = [];
-  public perfil: PerfilDTO = new PerfilDTO();
-  public idUsuario: number;
-  private searchSubject = new Subject<string>();
+export class TelaInicialComponent implements OnInit {
+  isLoggedIn = false
+  userName = "Usuário Exemplo"
+  userImage = ""
+  menuOpen = false
+  anuncios: AnuncioLeituraDto[] = []
+  public perfil: PerfilDTO = new PerfilDTO()
+  public idUsuario: number
+  private searchSubject = new Subject<string>()
 
-  currentPage = 0;
-  loading = false;
-  allLoaded = false;
+  currentSearchTerm = ""
+  currentPage = 0
+  loading = false
+  allLoaded = false
 
   constructor(
     private loginService: LoginService,
-    private pessoaService: PessoaService,
     private anuncioService: AnuncioService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
-    // this.usuarioLogado();
-    this.carregarAnuncios();
-    this.searchSubject.pipe(debounceTime(500)).subscribe(term => {
-      this.filtrarAnuncios(term as string);
-    });
-    window.addEventListener('scroll', this.onScroll.bind(this));
-
-  }
-
-  carregarAnuncios(): void {
-    if (this.loading || this.allLoaded) return;
-
-    this.loading = true;
-
-    this.anuncioService.listarComFiltro('', this.currentPage, 12).subscribe(
-      (res: any) => {
-        const novos = res.content;
-        if (novos.length === 0) {
-          this.allLoaded = true;
-        } else {
-          this.anuncios = [...this.anuncios, ...novos];
-          this.currentPage++;
-        }
-        this.loading = false;
-      },
-      error => {
-        console.error('Erro ao carregar anúncios:', error);
-        this.loading = false;
-      }
-    );
-  }
-
-  onScroll() {
-    const threshold = 300; // px do fundo
-    const pos = window.innerHeight + window.scrollY;
-    const max = document.body.offsetHeight;
-
-    if (max - pos < threshold) {
-      this.carregarAnuncios();
-    }
+    this.carregarAnuncios()
+    this.searchSubject.pipe(debounceTime(500), distinctUntilChanged()).subscribe((term) => {
+      this.handleSearch(term as string)
+    })
   }
 
   ngOnDestroy() {
-    window.removeEventListener('scroll', this.onScroll.bind(this));
+    this.searchSubject.complete()
+  }
+
+  carregarAnuncios(): void {
+    if (this.loading || this.allLoaded) return
+
+    this.loading = true
+
+    this.anuncioService.listarComFiltro(this.currentSearchTerm, this.currentPage, 12).subscribe(
+      (res: any) => {
+        const novos = res.content
+        if (novos.length === 0) {
+          this.allLoaded = true
+        } else {
+          if (this.currentPage === 0) {
+            this.anuncios = novos
+          } else {
+            this.anuncios = [...this.anuncios, ...novos]
+          }
+          this.currentPage++
+        }
+        this.loading = false
+      },
+      (error) => {
+        console.error("Erro ao carregar anúncios:", error)
+        this.loading = false
+      },
+    )
+  }
+
+  private handleSearch(searchTerm: string): void {
+    this.resetPaginationState()
+    this.currentSearchTerm = searchTerm.trim()
+
+    this.carregarAnuncios()
+  }
+
+  private resetPaginationState(): void {
+    this.currentPage = 0
+    this.loading = false
+    this.allLoaded = false
+    this.anuncios = []
   }
 
   onSearch(term: string) {
-    this.searchSubject.next(term);
-  }
-
-  public filtrarAnuncios(nomeBusca: string = ''): void {
-    this.anuncioService.listarComFiltro(nomeBusca).subscribe(
-      resultado => {
-        this.anuncios = resultado.content;
-      },
-      error => {
-        console.error('Erro ao buscar anúncios:', error);
-      }
-    );
+    this.searchSubject.next(term)
   }
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
-
-//   usuarioLogado() {
-//   const token = localStorage.getItem('tokenUsuarioAutenticado');
-//   this.idUsuario = this.loginService.buscarIdUsuarioComToken();
-
-//   if (this.idUsuario == null) {
-//     return;
-//   }
-
-//   this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(
-//     resultado => {
-//       this.perfil = resultado;
-//       if (this.perfil && token) {
-//         this.isLoggedIn = true;
-//       }
-//     },
-//     error => {
-//       console.error('Erro ao buscar perfil:', error);
-//       this.isLoggedIn = false;
-//     }
-//   );
-// }
-
 
   logoutUser() {
     Swal.fire({

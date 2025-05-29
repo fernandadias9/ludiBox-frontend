@@ -1,7 +1,24 @@
-<app-template-anuncios (searchTermChange)="onSearch($event)">
+<app-template-anuncios (searchTermChange)="onSearch($event)" (scrollEvent)="carregarAnuncios()">
   <div class="flex flex-wrap justify-center gap-9 p-6 w-full h-full">
     <ng-container *ngFor="let anuncio of anuncios">
-      <app-card-anuncios [id]="anuncio.id" [imagem]="anuncio.imagem" [itemName]="anuncio.nome" [itemPrice]="anuncio.preco" [userName]="anuncio.nomeAnunciante"></app-card-anuncios>
+      <app-card-anuncios [id]="anuncio.id" [imagem]="anuncio.imagem" [itemName]="anuncio.nome"
+        [itemPrice]="anuncio.preco" [userName]="anuncio.nomeAnunciante">
+      </app-card-anuncios>
     </ng-container>
+
+    <div *ngIf="loading" class="w-full flex justify-center py-4">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
+
+    <div *ngIf="allLoaded && anuncios.length > 0" class="w-full text-center py-4 text-gray-500">
+      Todos os anúncios foram carregados
+    </div>
+
+    <div *ngIf="anuncios.length === 0 && !loading" class="w-full text-center py-8 text-gray-500">
+      <p class="text-lg">Nenhum anúncio encontrado</p>
+      <p *ngIf="currentSearchTerm" class="text-sm mt-2">
+        Tente buscar por outros termos
+      </p>
+    </div>
   </div>
 </app-template-anuncios>
