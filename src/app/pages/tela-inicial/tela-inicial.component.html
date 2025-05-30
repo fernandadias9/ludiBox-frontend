@@ -1,38 +1,24 @@
-<app-template-anuncios>
-  <div class="flex flex-wrap justify-center gap-9 p-6 w-full h-full mb-20">
+<app-template-anuncios (searchTermChange)="onSearch($event)" (scrollEvent)="carregarAnuncios()">
+  <div class="flex flex-wrap justify-center gap-9 p-6 w-full h-full">
     <ng-container *ngFor="let anuncio of anuncios">
-      <app-card-anuncios [id]="anuncio.id" [imagem]="anuncio.imagem" [itemName]="anuncio.nome" [itemPrice]="anuncio.preco" [userName]="anuncio.nomeAnunciante"></app-card-anuncios>
+      <app-card-anuncios [id]="anuncio.id" [imagem]="anuncio.imagem" [itemName]="anuncio.nome"
+        [itemPrice]="anuncio.preco" [userName]="anuncio.nomeAnunciante">
+      </app-card-anuncios>
     </ng-container>
 
-    <div *ngIf="pageNumbers.length > 1" class="w-full flex items-center justify-center mt-4 gap-2">
-      <button
-        *ngIf="currentPage !== 1"
-        (click)="changePage('prev')"
-        class="px-2 focus:outline-none">
-        <i class="bi bi-chevron-left text-2xl"></i>
-      </button>
+    <div *ngIf="loading" class="w-full flex justify-center py-4">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
 
-      <span *ngIf="pageNumbers[0] > 1" class="px-2">...</span>
+    <div *ngIf="allLoaded && anuncios.length > 0" class="w-full text-center py-4 text-gray-500">
+      Todos os anúncios foram carregados
+    </div>
 
-      <ng-container *ngFor="let page of pageNumbers">
-        <button
-          (click)="goToPage(page)"
-          [ngClass]="page === currentPage ? 'text-xl font-bold' : 'text-base font-normal'"
-          class="px-2 focus:outline-none">
-          {{ page }}
-        </button>
-      </ng-container>
-
-      <span *ngIf="pageNumbers[pageNumbers.length - 1] < totalPages" class="px-2">...</span>
-
-      <button
-        *ngIf="currentPage !== totalPages"
-        (click)="changePage('next')"
-        class="px-2 focus:outline-none">
-        <i class="bi bi-chevron-right text-2xl"></i>
-      </button>
+    <div *ngIf="anuncios.length === 0 && !loading" class="w-full text-center py-8 text-gray-500">
+      <p class="text-lg">Nenhum anúncio encontrado</p>
+      <p *ngIf="currentSearchTerm" class="text-sm mt-2">
+        Tente buscar por outros termos
+      </p>
     </div>
   </div>
 </app-template-anuncios>
-
-

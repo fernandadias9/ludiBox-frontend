@@ -1,6 +1,8 @@
 <app-template-telas-iniciais [withOverflow]="isPessoaJuridica || withOverflow">
-  <div class="{{ isPessoaJuridica ? 'grid justify-items-center w-full lg:pt-11' : 'grid justify-items-center w-full lg:pt-24'}}">
-    <header class="grid justify-items-center gap-1.5 mb-4 pt-5 lg:gap-3 lg:mb-6 lg:pt-10">
+  <div class="grid justify-items-center w-full lg:pt-24">
+    <header
+      class="grid justify-items-center gap-1.5 mb-4 pt-5 lg:gap-3 lg:mb-6 lg:pt-10"
+    >
       <h1 class="text-xl font-extrabold drop-shadow-lg lg:text-3xl">
         Cadastre-se
       </h1>
@@ -13,18 +15,21 @@
           (change)="togglePessoaJuridica($event)"
           value=""
           class="sr-only peer"
-        >
+        />
         <div
           class="relative w-12 h-7 bg-white border-primary border-2 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-primary peer-checked:after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
-        >
-        </div>
+        ></div>
         <span class="ms-3 text-base lg:text-lg font-semibold text-[#C6C2C2]">
           Pessoa jurídica
         </span>
       </label>
     </div>
 
-    <form [formGroup]="cadastroForm" (ngSubmit)="cadastrarUsuario()" class="grid gap-1.5 w-full sm:px-40 md:px-11 lg:px-0 xl:px-12 mb-2 lg:gap-3">
+    <form
+      [formGroup]="cadastroForm"
+      (ngSubmit)="cadastrarUsuario()"
+      class="grid gap-1.5 w-full sm:px-40 md:px-11 lg:px-0 xl:px-12 mb-2 lg:gap-3"
+    >
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
         <app-input
           formControlName="nome"
@@ -35,7 +40,22 @@
           placeholder="{{ isPessoaJuridica ? 'Razão Social *' : 'Nome Completo *' }}"
           [required]="true"
           class="w-full md:w-3/5"
-          [invalid]="isFieldInvalid('nome')"
+          [invalid]="
+            cadastroForm.get('nome')?.invalid &&
+            cadastroForm.get('nome')?.touched
+          "
+          [customErrorMsg]="
+            cadastroForm.get('nome')?.hasError('minlength')
+              ? 'Mínimo de 10 caracteres'
+              : cadastroForm.get('nome')?.hasError('maxlength')
+              ? 'Máximo de 50 caracteres'
+              : ''
+          "
+          [showCustomError]="
+            (cadastroForm.get('nome')?.hasError('minlength') ||
+              cadastroForm.get('nome')?.hasError('maxlength')) &&
+            cadastroForm.get('nome')?.touched
+          "
         />
 
         <app-input
@@ -48,6 +68,7 @@
           [required]="true"
           class="w-full md:w-2/5"
           [invalid]="isFieldInvalid('valorDocumento')"
+          [mask]="isPessoaJuridica ? '99.999.999/9999-99' : '999.999.999-99'"
         />
       </div>
 
@@ -61,7 +82,10 @@
           placeholder="Email *"
           [required]="true"
           class="w-full md:w-3/5"
-          [invalid]="isFieldInvalid('email')"
+          [invalid]="
+            cadastroForm.get('email')?.invalid &&
+            cadastroForm.get('email')?.touched
+          "
         />
 
         <app-input
@@ -73,7 +97,10 @@
           placeholder="Telefone *"
           [required]="true"
           class="w-full md:w-2/5"
-          [invalid]="isFieldInvalid('telefone')"
+          [invalid]="
+            cadastroForm.get('telefone')?.invalid &&
+            cadastroForm.get('telefone')?.touched"
+          mask="(99) 99999-9999"
         />
       </div>
 
@@ -86,8 +113,22 @@
           label="Senha"
           type="password"
           [required]="true"
-          placeholder="Senha *"
-          [invalid]="isFieldInvalid('senha')"
+          [invalid]="
+            cadastroForm.get('senha')?.invalid &&
+            cadastroForm.get('senha')?.touched
+          "
+          [customErrorMsg]="
+            cadastroForm.get('senha')?.hasError('minlength')
+              ? 'Mínimo de 6 caracteres'
+              : cadastroForm.get('senha')?.hasError('maxlength')
+              ? 'Máximo de 10 caracteres'
+              : ''
+          "
+          [showCustomError]="
+            (cadastroForm.get('senha')?.hasError('minlength') ||
+              cadastroForm.get('senha')?.hasError('maxlength')) &&
+            cadastroForm.get('senha')?.touched
+          "
         />
 
         <app-input
@@ -114,22 +155,34 @@
           required
         />
 
-        <label class="text-xs md:text-sm lg:text-base ml-2" [class.text-red-500]="isFieldInvalid('aceitaTermos')">
-          Eu concordo com os <a href="#" class="text-xs md:text-sm lg:text-base text-blue-600 underline">Termos de Serviço</a>,
-          <a href="#" class="text-xs md:text-sm lg:text-base text-blue-600 underline">Termos e Condições Gerais</a> e
-          <a href="#" class="text-xs md:text-sm lg:text-base text-blue-600 underline">Política de Privacidade</a>.
+        <label
+          class="text-xs md:text-sm lg:text-base ml-2"
+          [class.text-red-500]="isFieldInvalid('aceitaTermos')"
+        >
+          Eu concordo com os
+          <a
+            href="#"
+            class="text-xs md:text-sm lg:text-base text-blue-600 underline"
+            >Termos de Serviço</a
+          >,
+          <a
+            href="#"
+            class="text-xs md:text-sm lg:text-base text-blue-600 underline"
+            >Termos e Condições Gerais</a
+          >
+          e
+          <a
+            href="#"
+            class="text-xs md:text-sm lg:text-base text-blue-600 underline"
+            >Política de Privacidade</a
+          >.
         </label>
       </div>
 
       <div class="flex flex-col w-full items-center gap-3 pb-3">
-        <app-button-primary
-          title="Registrar"
-        />
+        <app-button-primary title="Registrar" />
 
-        <app-button-secondary
-          title="Voltar"
-          routerLink="/login"
-        />
+        <app-button-secondary title="Voltar" routerLink="/login" />
       </div>
     </form>
   </div>

@@ -12,23 +12,36 @@ import { CadastroAdministradorComponent } from './pages/cadastro-administrador/c
 import { TelaDeUsuariosAdministradoresComponent } from './pages/tela-de-usuarios-administradores/tela-de-usuarios-administradores.component';
 import { TelaDeDenunciasComponent } from './pages/tela-de-denuncias/tela-de-denuncias.component';
 import { AnunciosCrudComponent } from './pages/anuncios-crud/anuncios-crud.component';
+import { AuthGuard } from './auth/auth.guard';
+import { TelaAcessoNegadoComponent } from './pages/tela-acesso-negado/tela-acesso-negado.component';
+import { UsuarioGuard } from './auth/usuario.guard';
 import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
 
 const routes: Routes = [
+
+  // Rotas Públicas   
   { path: 'login', component: TelaDeLoginComponent },
   { path: 'cadastro', component: CadastroUsuarioComponent },
   { path: 'esqueci-minha_senha', component: RecuperacaoDeSenhaComponent },
-  { path: 'tela-perfil', component: TelaDePerfilComponent },
-  { path: '', component: TelaInicialComponent },
-  { path: 'produto/:id', component: DetalheProdutoComponent },
-  { path: "enderecos", component:EnderecosComponent},
-  { path: "dashboard", component:DashboardComponent},
-  { path: "cadastro-adm", component: CadastroAdministradorComponent},
-  { path: "administradores", component: TelaDeUsuariosAdministradoresComponent},
-  { path: "denuncias", component: TelaDeDenunciasComponent},
-  { path: "anuncios", component: AnunciosCrudComponent},
-  { path: "finalizar-locacao/:id", component: LocacaoFinalizarComponent}
+  { path: 'acesso-negado', component: TelaAcessoNegadoComponent},
+  
+  { path: '', component: TelaInicialComponent, canActivate: [UsuarioGuard] },
+  { path: 'produto/:id', component: DetalheProdutoComponent, canActivate: [UsuarioGuard] }, // Verificar como vai ser denuncia, pois se o adm puder ver tem que alterar
+
+  // Rotas Usuários
+  { path: 'tela-perfil', component: TelaDePerfilComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
+  { path: 'enderecos', component: EnderecosComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
+  { path: 'anuncios', component: AnunciosCrudComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
+  { path: "finalizar-locacao/:id", component: LocacaoFinalizarComponent , canActivate: [AuthGuard], data: { roles: ['USUARIO'] }},
+
+  // Rotas Administrativas
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
+  { path: 'cadastro-adm', component: CadastroAdministradorComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
+  { path: 'administradores', component: TelaDeUsuariosAdministradoresComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
+  { path: 'denuncias', component: TelaDeDenunciasComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
 ];
+
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

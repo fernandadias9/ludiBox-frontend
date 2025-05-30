@@ -21,11 +21,14 @@
         <li *ngFor="let item of menuItems" class="px-4 py-3 hover:bg-primary cursor-pointer rounded-md">
           <a [routerLink]="item.route">{{ item.label }}</a>
         </li>
+        <li class="px-4 py-3 hover:bg-primary cursor-pointer rounded-md">
+          <a (click)="logoutUser()">Sair</a>
+        </li>
       </strong>
     </ul>
   </nav>
-  <div class="min-h-screen pt-28 px-4 z-0 relative flex flex-col">
+  <div class="pt-28 px-4 z-0 relative flex flex-col ml-40 h-[calc(100vh-6rem)] overflow-y-auto">
     <ng-content></ng-content>
-  </div>  
+  </div>
 
 </main>

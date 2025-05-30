@@ -8,6 +8,7 @@ import { EmailService } from '../../shared/service/emailService';
   styleUrls: ['./recuperacao-de-senha.component.scss']
 })
 export class RecuperacaoDeSenhaComponent {
+  
   email: string = '';
 
   constructor(private emailService: EmailService) {}
