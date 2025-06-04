@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PerfilDTO } from '../../shared/model/dto/PerfilDTO';
 import { Router } from '@angular/router';
 import { PessoaService } from '../../shared/service/PessoaService';
@@ -15,6 +15,8 @@ export class TelaDePerfilComponent implements OnInit {
   onSenhaAlterada() {
     throw new Error('Method not implemented.');
   }
+
+  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef<HTMLInputElement>;
 
   arquivoFoto: File | null = null;
   public idUsuario: number;
@@ -216,5 +218,23 @@ export class TelaDePerfilComponent implements OnInit {
       }
     });
   }
+
+
+  isModalFotoOpen = false;
+
+abrirModalFoto() {
+  this.isModalFotoOpen = true;
+}
+
+fecharModalFoto() {
+  this.isModalFotoOpen = false;
+}
+
+confirmarTrocaFoto() {
+  this.fileInput.nativeElement.click(); 
+  console.log("Modal de foto aberto");
+  this.isModalFotoOpen = false;
+}
+
 }
 

@@ -27,7 +27,9 @@ export class PessoaService {
     formData.append('imagem', foto); 
     console.log(formData);
     console.log(`${this.API}/upload/${id}`);
-    return this.httpCliente.patch(`${this.API}/upload/${id}`, formData); 
+    return this.httpCliente.patch(`${this.API}/upload/${id}`, formData, {
+      responseType: 'text' as 'json'  
+    });
   }
 
     
