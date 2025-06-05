@@ -22,6 +22,10 @@ export class PessoaService {
       return this.httpCliente.patch(`${this.API}/atualizar/${id}`, dadosAtualizados);
     }
 
+    excluirPessoa(id: number):Observable<any> {
+      return this.httpCliente.put(`${this.API}/excluir/${id}`,{});
+    }
+
     atualizarFoto(id: number, foto: File): Observable<any> {  
     const formData = new FormData();
     formData.append('imagem', foto); 
