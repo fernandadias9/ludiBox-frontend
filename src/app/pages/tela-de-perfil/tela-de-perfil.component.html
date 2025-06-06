@@ -5,7 +5,7 @@
       <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full">
 
         <div class="relative">
-          <img [src]="'data:image/png;base64,' + perfil?.imagemUsuarioEmBase64" alt="Foto de perfil"
+          <img  [src]="perfil?.imagemUsuarioEmBase64 ? 'data:image/jpeg;base64,' + perfil.imagemUsuarioEmBase64 : 'images/shrek_colombiano.png'" alt="Foto de perfil"
             class="w-16 h-11 sm:w-20 sm:h-20 rounded-full border-4 border-primary object-contain cursor-pointer hover:opacity-80"
             (click)="abrirModalFoto()" role="button" aria-label="Alterar foto de perfil" />
 
