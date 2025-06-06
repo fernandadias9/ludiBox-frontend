@@ -16,15 +16,16 @@ import { AuthGuard } from './auth/auth.guard';
 import { TelaAcessoNegadoComponent } from './pages/tela-acesso-negado/tela-acesso-negado.component';
 import { UsuarioGuard } from './auth/usuario.guard';
 import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
+import { LocacaoListagemComponent } from './pages/locacao-listagem/locacao-listagem.component';
 
 const routes: Routes = [
 
-  // Rotas Públicas   
+  // Rotas Públicas
   { path: 'login', component: TelaDeLoginComponent },
   { path: 'cadastro', component: CadastroUsuarioComponent },
   { path: 'esqueci-minha_senha', component: RecuperacaoDeSenhaComponent },
   { path: 'acesso-negado', component: TelaAcessoNegadoComponent},
-  
+
   { path: '', component: TelaInicialComponent, canActivate: [UsuarioGuard] },
   { path: 'produto/:id', component: DetalheProdutoComponent, canActivate: [UsuarioGuard] }, // Verificar como vai ser denuncia, pois se o adm puder ver tem que alterar
 
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'enderecos', component: EnderecosComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
   { path: 'anuncios', component: AnunciosCrudComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
   { path: "finalizar-locacao/:id", component: LocacaoFinalizarComponent , canActivate: [AuthGuard], data: { roles: ['USUARIO'] }},
+  { path: "locacao-listagem", component: LocacaoListagemComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
 
   // Rotas Administrativas
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
@@ -40,8 +42,6 @@ const routes: Routes = [
   { path: 'administradores', component: TelaDeUsuariosAdministradoresComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
   { path: 'denuncias', component: TelaDeDenunciasComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
 ];
-
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

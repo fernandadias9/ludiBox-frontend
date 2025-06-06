@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Locacao } from '../model/entity/locacao';
+import { ProdutoLocacao } from '../model/entity/produtoLocacao';
 
 @Injectable({
   providedIn: 'root',
@@ -59,5 +60,13 @@ export class LocacaoService {
       `${this.API}/finalizar/${locacaoId}/${enderecoId}/${locadorId}`,
       null
     );
+  }
+
+  buscarLocacoesRecebidas(usuarioId: number): Observable<ProdutoLocacao[]> {
+  return this.http.get<ProdutoLocacao[]>(`${this.API}/recebidas/${usuarioId}`);
+}
+
+  buscarLocacoesEfetuadas(usuarioId: number): Observable<Locacao[]> {
+    return this.http.get<Locacao[]>(`${this.API}/efetuadas/${usuarioId}`);
   }
 }

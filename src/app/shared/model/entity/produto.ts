@@ -1,4 +1,5 @@
 import { StatusAnuncio } from "../enum/StatusAnuncio.enum";
+import { Pessoa } from "./pessoa";
 
 export class Produto {
   id: number;
@@ -12,4 +13,5 @@ export class Produto {
   imagens: string[];
   datasIndisponiveis: string[];
   status: StatusAnuncio;
+  anunciante: Pessoa;
 }
