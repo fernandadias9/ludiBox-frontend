@@ -10,7 +10,7 @@ export class TemplateTelasPerfilComponent {
     { label: 'Perfil', route: '/tela-perfil' },
     { label: 'Endereços', route: '/enderecos' },
     { label: 'Anúncios', route: '/anuncios' },
-    { label: 'Locações', route: '' },
+    { label: 'Locações', route: '/locacao-listagem' },
     { label: 'Tela inicial', route: '' },
   ];
 }
