@@ -204,7 +204,7 @@ export class TelaDePerfilComponent implements OnInit {
           timer: 2000,
           showConfirmButton: false
         });
-        this.usuarioLogado(); 
+        this.usuarioLogado();
       },
       error: (err) => {
         console.error(err);
@@ -222,61 +222,68 @@ export class TelaDePerfilComponent implements OnInit {
 
   isModalFotoOpen = false;
 
-abrirModalFoto() {
-  this.isModalFotoOpen = true;
-}
+  abrirModalFoto() {
+    this.isModalFotoOpen = true;
+  }
 
-fecharModalFoto() {
-  this.isModalFotoOpen = false;
-}
+  fecharModalFoto() {
+    this.isModalFotoOpen = false;
+  }
 
-confirmarTrocaFoto() {
-  this.fileInput.nativeElement.click(); 
-  console.log("Modal de foto aberto");
-  this.isModalFotoOpen = false;
-}
+  confirmarTrocaFoto() {
+    this.fileInput.nativeElement.click();
+    this.isModalFotoOpen = false;
+  }
 
-excluirPerfil() {
-  Swal.fire({
-    title: 'Tem certeza?',
-    text: 'Essa ação irá excluir seu perfil. Você não poderá mais acessar sua conta.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Sim, excluir!',
-    cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      this.pessoaService.excluirPessoa(this.idUsuario).subscribe({
-        next: () => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Perfil excluido!',
-            text: 'Seu perfil foi excluido com sucesso.',
-            timer: 3000,
-            showConfirmButton: false,
-            timerProgressBar: true
-          });
+  excluirPerfil() {
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Essa ação irá excluir seu perfil. Você não poderá mais acessar sua conta.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.pessoaService.excluirPessoa(this.idUsuario).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Perfil excluido!',
+              text: 'Seu perfil foi excluido com sucesso.',
+              timer: 3000,
+              showConfirmButton: false,
+              timerProgressBar: true
+            });
 
-          this.loginService.logout();
-          this.router.navigate(['/']);
-        },
-        error: (err) => {
-          console.error(err);
-          Swal.fire({
-            icon: 'error',
-            title: 'Erro!',
-            text: err.error?.message || 'Erro ao excluir o perfil. Tente novamente.',
-            timer: 3000,
-            showConfirmButton: false,
-            timerProgressBar: true
-          });
-        }
-      });
-    }
-  });
-}
+            this.loginService.logout();
+            this.router.navigate(['/']);
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro!',
+              text: err.error?.message || 'Erro ao excluir o perfil. Tente novamente.',
+              timer: 3000,
+              showConfirmButton: false,
+              timerProgressBar: true
+            });
+          }
+        });
+      }
+    });
+  }
+
+  mascaraDocumento(valor: string): string {
+    if (!valor) return '000.000.000-00';
+
+    const somenteNumeros = valor.replace(/\D/g, '');
+    return somenteNumeros.length > 11 ? '00.000.000/0000-00' : '000.000.000-00';
+  }
+
 
 
 }

@@ -46,7 +46,7 @@
 
       <div class="grid text-left">
         <label class="text-base sm:text-lg font-semibold">
-          {{ isEditing ? 'Nome*' : 'Nome' }}
+          {{ isEditing ? 'Nome/Razão Social*' : 'Nome/Razão Social' }}
         </label>
         <app-input formControlName="nome" id="name" name="name" [disabled]="!isEditing" placeholder="Nome Sobrenome"
           [required]="true" [invalid]="isFieldInvalid('nome')" class="w-full">
@@ -64,8 +64,14 @@
 
       <div class="grid text-left">
         <label class="text-base sm:text-lg font-semibold">CPF/CNPJ</label>
-        <app-input id="cpf" name="cpf" [value]="perfil?.valorDocumento" [disabled]="true"
-          placeholder="{{ perfil?.valorDocumento }}" mask="000.000.000-00" class="w-full">
+        <app-input
+          id="cpf"
+          name="cpf"
+          [value]="perfil?.valorDocumento"
+          [disabled]="true"
+          [placeholder]="perfil?.valorDocumento.toString()"
+          [mask]="mascaraDocumento(perfil?.valorDocumento)"
+          class="w-full">
         </app-input>
       </div>
 
