@@ -1,0 +1,48 @@
+<div class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 shadow-lg w-full max-w-lg">
+      <h2 class="text-center font-bold text-lg mb-6">Motivo da denúncia</h2>
+  
+      <form class="space-y-4">
+        <div class="w-full flex justify-center">
+          <div class="flex flex-col gap-3 w-60">
+            <div *ngFor="let opcao of opcoes" class="flex items-center gap-2">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="motivo"
+                [value]="opcao"
+                [(ngModel)]="motivoSelecionado"
+                ngModel
+              />
+              <label class="text-gray-700 font-medium">{{ opcao }}</label>
+            </div>
+  
+            <div class="flex items-center gap-2">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="motivo"
+                value="outro"
+                [(ngModel)]="motivoSelecionado"
+                ngModel
+              />
+              <label class="text-gray-700 font-medium">Outro</label>
+            </div>
+          </div>
+        </div>
+        <textarea
+          [(ngModel)]="outroMotivo"
+          name="outroMotivo"
+          class="form-control mt-2 w-full h-28 rounded shadow-sm border px-3 py-2 placeholder:text-gray-400"
+          placeholder="Descreva o motivo."
+        ></textarea>
+        <div class="flex justify-center">
+          <app-button-primary title="Salvar" (click)="onSalvar()"></app-button-primary>
+        </div>
+        <div class="flex justify-center mt-2">
+          <app-button-secondary title="Cancelar" (click)="fechaModal()"></app-button-secondary>
+        </div>
+      </form>
+    </div>
+  </div>
+  

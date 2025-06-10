@@ -5,7 +5,9 @@
       <div class="flex flex-wrap justify-center items-center gap-3">
         <app-input placeholder="Data Início"></app-input>
         <app-input placeholder="Data Fim"></app-input>
-        <app-input placeholder="Status"></app-input>
+        <app-select [options]="motivos" placeholder="Selecione uma opção"></app-select>
+        <app-select [options]="status" placeholder="Selecione uma opção"></app-select>
+
         <button class="bg-primary hover:bg-[#e68f32] text-white font-semibold px-4 py-2 rounded-md">
           Filtrar
         </button>
@@ -33,7 +35,8 @@
             <td class="px-4 py-2 border-2 border-gray-300">Preços Abusivos</td>
             <td class="px-4 py-2 border-2 border-gray-300">Valor muito acima do normal</td>
             <td class="px-4 py-2 border-2 border-gray-300">
-              <span class="bg-green-400 hover:bg-green-600 text-white text-sm font-semibold rounded px-3 py-1">Novo</span>
+              <span
+                class="bg-green-400 hover:bg-green-600 text-white text-sm font-semibold rounded px-3 py-1">Novo</span>
             </td>
             <td class="px-4 py-2 border-2 border-gray-300">
               <button type="button" class="btn btn-outline-secondary text-xl leading-none px-2 py-1">
@@ -42,8 +45,10 @@
             </td>
             <td class="px-4 py-2 border-2 border-gray-300">
               <div class="flex justify-center space-x-2">
-                <button class="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded px-3 py-1">Permitir</button>
-                <button class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded px-2.5 py-1">Bloquear</button>
+                <button
+                  class="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded px-3 py-1">Permitir</button>
+                <button
+                  class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded px-2.5 py-1">Bloquear</button>
               </div>
             </td>
           </tr>

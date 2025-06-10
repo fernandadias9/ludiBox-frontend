@@ -24,6 +24,8 @@ export class DetalheProdutoComponent implements OnInit {
   galleryItems: GalleryItem[] = [];
   dateFilter: (date: Date | null) => boolean;
   form: FormGroup;
+  menuAberto = false;
+  isModalOpen: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,7 +34,7 @@ export class DetalheProdutoComponent implements OnInit {
     private fb: FormBuilder,
     private locacaoService: LocacaoService,
     private loginService: LoginService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -161,5 +163,13 @@ export class DetalheProdutoComponent implements OnInit {
           });
         }
       });
+  }
+
+  abrirModal() {
+    this.isModalOpen = true;
+  }
+
+  fecharModal() {
+    this.isModalOpen = false;
   }
 }
