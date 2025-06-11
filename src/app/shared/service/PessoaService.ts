@@ -21,7 +21,4 @@ export class PessoaService {
     atualizarPerfil(id: number, dadosAtualizados: any): Observable<any> {
       return this.httpCliente.patch(`${this.API}/atualizar/${id}`, dadosAtualizados);
     }
-    
-
 }
-

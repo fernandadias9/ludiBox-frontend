@@ -88,10 +88,9 @@ export class TemplateAnunciosComponent implements OnInit {
   }
 
   carregarCarrinho() {
-    const uid = this.loginService.buscarIdUsuarioComToken();
-    if (!uid) return;
+    if (!this.idUsuario) return;
 
-    this.locacaoService.verificarLocacaoPendente(uid).subscribe(
+    this.locacaoService.verificarLocacaoPendente(this.idUsuario).subscribe(
       (loc) => {
         if (loc && loc.produtos && loc.produtos.length > 0) {
           this.cartItems = loc.produtos;

@@ -4,6 +4,8 @@ import { LocacaoService } from '../../shared/service/locacao.service';
 import { LoginService } from '../../shared/service/LoginService';
 import { StatusLocacao } from '../../shared/model/enum/StatusLocacao';
 import { ProdutoLocacao } from '../../shared/model/entity/produtoLocacao';
+import Swal from 'sweetalert2';
+import { PagamentoAnuncianteService } from '../../shared/service/pagamento-anunciante.service';
 
 @Component({
   selector: 'app-locacao-listagem',
@@ -20,6 +22,7 @@ export class LocacaoListagemComponent implements OnInit {
   constructor(
     private locacaoService: LocacaoService,
     private loginService: LoginService,
+    private pagamentoService: PagamentoAnuncianteService
   ) {}
 
   ngOnInit(): void {
@@ -64,11 +67,57 @@ export class LocacaoListagemComponent implements OnInit {
     return `${inicio.toLocaleDateString()} a ${fim.toLocaleDateString()}`
   }
 
-  getValorTotalProduto(produtoLocacao: ProdutoLocacao): number {
-    const dataInicio = new Date(produtoLocacao.dataInicio);
-    const dataFim = new Date(produtoLocacao.dataFim);
-    const diffTime = Math.abs(dataFim.getTime() - dataInicio.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return produtoLocacao.valorDiario * diffDays;
+  atualizarStatusLocacao(produtoLocacao: ProdutoLocacao): void {
+    const locacaoId = produtoLocacao.locacao.id;
+    this.locacaoService.atualizarStatus(locacaoId, 'FINALIZADO').subscribe(
+      () => {
+        this.carregarLocacoesRecebidas();
+      }
+    );
+  };
+
+  abrirSelectPix(produtoLocacao: ProdutoLocacao) {
+    Swal.fire({
+      title: 'Escolher Pix de recebimento',
+      input: 'select',
+      inputOptions: {
+        valorDocumento: `CPF/CNPJ - ${produtoLocacao.produto.anunciante?.valorDocumento}`,
+        telefone: `Telefone - ${produtoLocacao.produto.anunciante?.telefone}`,
+        email: `Email - ${produtoLocacao.produto.anunciante?.email}`,
+      },
+      inputPlaceholder: 'Selecione a chave Pix',
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed && result.value) {
+        var tipoChave = result.value;
+        const valorChave = produtoLocacao.produto.anunciante?.[tipoChave];
+        if (tipoChave === 'valorDocumento') {
+          tipoChave = 'CPF/CNPJ';
+        }
+
+        Swal.fire({
+          title: `A chave Pix escolhida foi ${valorChave}.`,
+          text: 'Confirma a escolha?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Sim',
+          cancelButtonText: 'Cancelar',
+        }).then(confirm => {
+          if (confirm.isConfirmed) {
+            const pagamento = {
+              dataLimiteLiberacao: produtoLocacao.dataInicio,
+              nomeAnunciante: produtoLocacao.produto.anunciante?.nome,
+              tipoChavePix: tipoChave,
+              valorChavePix: valorChave,
+              valor: produtoLocacao.totalProduto,
+            };
+            this.pagamentoService.salvarPagamento(pagamento).subscribe(() => {
+              Swal.fire('Sucesso', 'Pagamento registrado com sucesso!', 'success');
+            });
+            this.atualizarStatusLocacao(produtoLocacao);
+          }
+        });
+      }
+    });
   }
 }

@@ -4,7 +4,6 @@ import { Router } from "@angular/router";
 import { catchError, Observable, throwError } from "rxjs";
 import { LoginService } from "../shared/service/LoginService";
 
-
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
   constructor(private loginService: LoginService, private router: Router) {}
