@@ -238,12 +238,12 @@ export class TelaDePerfilComponent implements OnInit {
   excluirPerfil() {
     Swal.fire({
       title: 'Tem certeza?',
-      text: 'Essa ação irá excluir seu perfil. Você não poderá mais acessar sua conta.',
+      text: 'Essa ação irá desativar seu perfil. Você não poderá mais acessar sua conta. Para restaurar o acesso, entre em contato com o suporte pelo e-mail ludiboxnaoresponda@gmail.com.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sim, excluir!',
+      confirmButtonText: 'Sim, desativar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
