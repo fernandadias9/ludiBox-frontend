@@ -252,7 +252,7 @@ export class TelaDePerfilComponent implements OnInit {
             Swal.fire({
               icon: 'success',
               title: 'Perfil excluido!',
-              text: 'Seu perfil foi excluido com sucesso.',
+              text: 'Seu perfil foi desativado com sucesso.',
               timer: 3000,
               showConfirmButton: false,
               timerProgressBar: true
@@ -266,7 +266,7 @@ export class TelaDePerfilComponent implements OnInit {
             Swal.fire({
               icon: 'error',
               title: 'Erro!',
-              text: err.error?.message || 'Erro ao excluir o perfil. Tente novamente.',
+              text: err.error?.message || 'Erro ao desativar o perfil. Tente novamente.',
               timer: 3000,
               showConfirmButton: false,
               timerProgressBar: true
