@@ -5,9 +5,20 @@
       <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full">
 
         <div class="relative">
-          <img  [src]="perfil?.imagemUsuarioEmBase64 ? 'data:image/jpeg;base64,' + perfil.imagemUsuarioEmBase64 : 'images/shrek_colombiano.png'" alt="Foto de perfil"
-            class="w-16 h-11 sm:w-20 sm:h-20 rounded-full border-4 border-primary object-contain cursor-pointer hover:opacity-80"
-            (click)="abrirModalFoto()" role="button" aria-label="Alterar foto de perfil" />
+          <div
+            class="w-16 h-11 sm:w-20 sm:h-20 rounded-full border-4 border-primary bg-gray-500 flex items-center justify-center cursor-pointer hover:opacity-80 overflow-hidden"
+            (click)="abrirModalFoto()" role="button" aria-label="Alterar foto de perfil">
+            <ng-container *ngIf="perfil?.imagemUsuarioEmBase64; else iconeUsuario">
+              <img [src]="'data:image/jpeg;base64,' + perfil.imagemUsuarioEmBase64" alt="Foto do usuário"
+                class="w-full h-full object-cover" />
+            </ng-container>
+
+            <ng-template #iconeUsuario>
+              <img src="/images/person-circle.svg" alt="Ícone de usuário padrão" class="w-20 h-24 text-gray-500" />
+            </ng-template>
+          </div>
+
+
 
           <div class="absolute bottom-0 right-0 bg-primary rounded-full p-1">
             <i class="bi bi-pencil text-white text-xs rounded-full"></i>
@@ -64,13 +75,8 @@
 
       <div class="grid text-left">
         <label class="text-base sm:text-lg font-semibold">CPF/CNPJ</label>
-        <app-input
-          id="cpf"
-          name="cpf"
-          [value]="perfil?.valorDocumento"
-          [disabled]="true"
-          [placeholder]="perfil?.valorDocumento.toString()"
-          [mask]="mascaraDocumento(perfil?.valorDocumento)"
+        <app-input id="cpf" name="cpf" [value]="perfil?.valorDocumento" [disabled]="true"
+          [placeholder]="perfil?.valorDocumento.toString()" [mask]="mascaraDocumento(perfil?.valorDocumento)"
           class="w-full">
         </app-input>
       </div>
