@@ -23,6 +23,10 @@ export class EnderecoService {
     return this.http.patch(`${this.API}/atualizar-endereco/${id}`, endereco);
   }
 
+  buscarPorCep(cep: number) {
+    return this.http.get(`http://localhost:8080/endereco/buscar_por_cep/${cep}`);
+  }
+
   deletarEndereco(id: number) {
     return this.http.delete(`${this.API}/deletar-endereco/${id}`);
   }

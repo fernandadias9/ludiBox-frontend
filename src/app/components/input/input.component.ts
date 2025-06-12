@@ -1,20 +1,10 @@
-import { 
-  Component, 
-  EventEmitter, 
-  Input, 
-  Output, 
-  forwardRef, 
-  HostListener 
-} from "@angular/core";
-import { 
-  ControlValueAccessor, 
-  NG_VALUE_ACCESSOR 
-} from "@angular/forms";
+import { Component, EventEmitter, HostListener, Input, Output, forwardRef } from "@angular/core"
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms"
 
 @Component({
   selector: "app-input",
   templateUrl: "./input.component.html",
-  styleUrls: ["./input.component.scss"],
+  styleUrl: "./input.component.scss",
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -24,18 +14,17 @@ import {
   ],
 })
 export class InputComponent implements ControlValueAccessor {
-  @Input() label = "";
-  @Input() for = "";
-  @Input() id = "";
-  @Input() type = "text";
-  @Input() value: any;
-  @Input() disabled = false;
-  @Input() placeholder = "";
-  @Input() showLabel = false;
-  @Input() name = "";
-  @Input() required = false;
-  @Input() invalid = false;
-  @Input() mask?: string;
+  @Input() label = ""
+  @Input() for = ""
+  @Input() id = ""
+  @Input() type = "text"
+  @Input() value: any
+  @Input() disabled = false
+  @Input() placeholder = ""
+  @Input() name = ""
+  @Input() required = false
+  @Input() invalid = false 
+  @Input() mask?: string
   @Input() maxlength?: number;
   @Input() numericOnly = false;
   @Input() customErrorMsg = '';
@@ -43,37 +32,37 @@ export class InputComponent implements ControlValueAccessor {
   @Input() currencyFormat = false;
   @Input() integerMaxLength = 4;
 
-  @Output() valueChange = new EventEmitter<string>();
+  @Output() valueChange: EventEmitter<string> = new EventEmitter<string>()
   @Output() blur = new EventEmitter<FocusEvent>();
 
   private rawValue = "";
-  private onChange: any = () => {};
-  private onTouched: any = () => {};
+  private onChange: any = () => {}
+  private onTouched: any = () => {}
 
   onInput(event: any) {
-    this.value = event.target.value;
-    this.valueChange.emit(this.value);
-    this.onChange(this.value);
+    this.value = event.target.value
+    this.valueChange.emit(this.value)
+    this.onChange(this.value)
   }
 
   writeValue(value: any): void {
-    this.value = value;
+    this.value = value
   }
 
   registerOnChange(fn: any): void {
-    this.onChange = fn;
+    this.onChange = fn
   }
 
   registerOnTouched(fn: any): void {
-    this.onTouched = fn;
+    this.onTouched = fn
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.disabled = isDisabled
   }
 
   markAsTouched() {
-    this.onTouched();
+    this.onTouched()
   }
 
   @HostListener("focusout", ["$event"])
@@ -94,8 +83,9 @@ export class InputComponent implements ControlValueAccessor {
     if (!this.currencyFormat) return;
     event.preventDefault();
 
-    if (["Backspace", "Delete"].includes(event.key)) {
+    if (event.key === "Backspace" || event.key === "Delete") {
       this.rawValue = this.rawValue.slice(0, -1);
+
     } else if (/^[0-9]$/.test(event.key)) {
       const maxRaw = this.integerMaxLength + 2;
       if (this.rawValue.length < maxRaw) {

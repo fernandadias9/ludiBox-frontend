@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Endereco } from '../../shared/model/entity/endereco';
 import { EnderecoService } from '../../shared/service/endereco.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-enderecos',
@@ -42,7 +43,7 @@ export class EnderecosComponent implements OnInit {
   }
 
   abrirModalEdicao(endereco: Endereco) {
-    this.enderecoSendoEditado = endereco;
+    this.enderecoSendoEditado = { ...endereco };
     this.isOpen = true;
   }
 
@@ -55,8 +56,35 @@ export class EnderecosComponent implements OnInit {
   }
 
   deletarEndereco(id: number) {
-    this.enderecoService.deletarEndereco(id).subscribe(() => {
-      this.listarPorPessoa();
+    Swal.fire({
+      title: 'Tem certeza que deseja deletar este endereço?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, deletar',
+      cancelButtonText: 'Cancelar'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.enderecoService.deletarEndereco(id).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Endereço deletado com sucesso',
+              showConfirmButton: false,
+              timer: 2000
+            });
+            this.listarPorPessoa();
+          },
+          error: err => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro ao deletar endereço',
+              text: err.error?.message || err.message,
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
+        });
+      }
     });
   }
 }

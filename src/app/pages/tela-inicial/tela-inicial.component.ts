@@ -95,7 +95,13 @@ export class TelaInicialComponent implements OnInit {
     this.menuOpen = !this.menuOpen;
   }
 
-  logoutUser(){
+  logoutUser() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Logout realizado com sucesso',
+      showConfirmButton: false,
+      timer: 2000
+    });
     this.isLoggedIn = false;
     this.menuOpen = false;
     this.loginService.logout();

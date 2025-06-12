@@ -1,21 +1,20 @@
-<main class="overflow-hidden relative bg-background_light min-h-screen">
+<main class="overflow-hidden relative bg-background_light h-screen">
   <div class="w-full h-24 bg-primary flex items-center px-5 lg:px-10 shadow-md fixed top-0 left-0 z-50">
     <button
       (click)="toggleSidebar()"
-      aria-label="Abrir/Fechar menu lateral"
       class="p-2 rounded-md text-black">
       <i class="bi bi-layout-text-sidebar text-4xl"></i>
     </button>
 
     <div class="flex-grow"></div>
 
-    <img src="/images/logo.png" alt="Logomarca LudiBox" class="w-40 h-auto pt-2 cursor-pointer" routerLink="/" />
+    <img src="/images/logo.png" alt="Logomarca LudiBox" class="w-40 h-auto pt-2 cursor-pointer" routerLink="/">
   </div>
 
   <nav
     [ngClass]="{'translate-x-0': isOpen, '-translate-x-full': !isOpen}"
     class="w-40 h-screen bg-gray-300 text-black fixed top-0 left-0 shadow-lg transition-transform duration-300 flex flex-col z-40">
-    <div class="h-24"></div> <!-- altura ajustada para caber header -->
+    <div class="h-32"></div>
 
     <ul class="flex-1 mt-4 space-y-4">
       <strong>
@@ -28,10 +27,8 @@
       </strong>
     </ul>
   </nav>
-
-  <div [ngClass]="{'ml-40': isOpen, 'ml-0': !isOpen}"
-      class="pt-24 px-4 z-0 relative flex flex-col min-h-screen">
-
+  <div class="pt-28 px-4 z-0 relative flex flex-col ml-40 h-[calc(100vh-6rem)] overflow-y-auto">
     <ng-content></ng-content>
   </div>
+
 </main>
