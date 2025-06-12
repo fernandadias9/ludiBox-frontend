@@ -56,26 +56,6 @@
   <div class="flex gap-2">
     <app-input
       type="number"
-      formControlName="estoque"
-      label="Estoque *"
-      [required]="true"
-      [invalid]="produtoForm.get('estoque')?.invalid && produtoForm.get('estoque')?.touched"
-      [maxlength]="3"
-      [numericOnly]="true"
-      [customErrorMsg]="
-        produtoForm.get('estoque')?.hasError('maxlength')
-          ? 'Máximo de 3 caracteres'
-          : ''
-      "
-      [showCustomError]="
-        produtoForm.get('estoque')?.hasError('maxlength')
-        && produtoForm.get('estoque')?.touched
-      "
-      class="w-1/2">
-    </app-input>
-
-    <app-input
-      type="number"
       formControlName="preco"
       label="Preço *"
       type="text"

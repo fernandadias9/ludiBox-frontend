@@ -63,6 +63,7 @@ import { UploadImmagensComponent } from './components/upload-immagens/upload-imm
 import { CardAnunciosCrudComponent } from './components/card-anuncios-crud/card-anuncios-crud.component';
 import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.component';
 import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
+import { LocacaoListagemComponent } from './pages/locacao-listagem/locacao-listagem.component';
 import { SelectComponent } from './components/select/select.component';
 import { ModalDenunciaComponent } from './components/modal-denuncia/modal-denuncia.component';
 
@@ -110,6 +111,7 @@ export const MY_FORMATS = {
     UploadImmagensComponent,
     CardAnunciosCrudComponent,
     LocacaoFinalizarComponent,
+    LocacaoListagemComponent,
     SelectComponent,
     ModalDenunciaComponent,
   ],

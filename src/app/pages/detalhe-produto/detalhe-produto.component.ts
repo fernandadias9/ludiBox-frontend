@@ -135,7 +135,7 @@ export class DetalheProdutoComponent implements OnInit {
               next: () => {
                 Swal.fire({
                   icon: 'success',
-                  title: 'Produto adicionado à locação existente com sucesso!',
+                  title: 'Produto adicionado ao carrinho.',
                   showConfirmButton: false,
                   timer: 1500,
                 });
@@ -153,7 +153,7 @@ export class DetalheProdutoComponent implements OnInit {
             next: () => {
               Swal.fire({
                 icon: 'success',
-                title: 'Locação criada com sucesso!',
+                title: 'Produto adicionado ao carrinho.',
                 showConfirmButton: false,
                 timer: 1500,
               });

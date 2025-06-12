@@ -8,13 +8,13 @@
 
     <div class="w-full">
       <div class="grid mt-3">
-        <div class="text-xl font-semibold text-start">{{itemName}}</div>
+        <div class="text-xl font-semibold text-start">{{itemNameReduzido}}</div>
 
         <div class="text-lg font-bold text-gray-700">R$ {{itemPrice}}</div>
 
         <div class="flex items-center gap-2 mt-3 mb-2">
           <img [src]="userImage || '/images/person-circle.svg'" alt="Imagem de usuário" [class]="'rounded-full w-8 h-8 ' + (userImage ? 'object-cover' : 'bg-gray-500')" />
-          <span class="text-base font-medium">{{userName}}</span>
+          <span class="text-base font-medium">{{userNameReduzido}}</span>
         </div>
 
         <div class="flex items-start"><i class="bi bi-geo-alt mr-2"></i>

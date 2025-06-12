@@ -18,4 +18,12 @@ export class CardAnunciosComponent {
   abrirAnuncio() {
     this.router.navigate(['/produto', this.id]);
   }
+
+  get itemNameReduzido(): string {
+    return this.itemName.length > 22 ? this.itemName.slice(0, 22) + '...' : this.itemName;
+  }
+
+  get userNameReduzido(): string {
+    return this.userName.length > 22 ? this.userName.slice(0, 22) + '...' : this.userName;
+  }
 }

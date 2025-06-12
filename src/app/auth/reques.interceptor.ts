@@ -23,7 +23,7 @@ export class RequestInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401 || error.status === 403) {
           this.loginService.logout();
-          this.router.navigate(['/login']);
+          this.router.navigate(['/']);
         }
         return throwError(error);
       })
