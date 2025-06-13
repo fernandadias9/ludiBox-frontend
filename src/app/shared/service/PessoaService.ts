@@ -26,17 +26,16 @@ export class PessoaService {
       return this.httpCliente.put(`${this.API}/excluir/${id}`,{});
     }
 
-    atualizarFoto(id: number, foto: File): Observable<any> {  
+    atualizarFoto(id: number, foto: File): Observable<any> {
     const formData = new FormData();
-    formData.append('imagem', foto); 
+    formData.append('imagem', foto);
     console.log(formData);
     console.log(`${this.API}/upload/${id}`);
     return this.httpCliente.patch(`${this.API}/upload/${id}`, formData, {
-      responseType: 'text' as 'json'  
+      responseType: 'text' as 'json'
     });
   }
 
-    
+
 
 }
-
