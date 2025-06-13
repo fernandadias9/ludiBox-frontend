@@ -16,14 +16,16 @@ export class LocacaoListagemComponent implements OnInit {
   abaSelecionada: "recebidas" | "efetuadas" = "recebidas"
   locacoesRecebidas: ProdutoLocacao[] = []
   locacoesEfetuadas: Locacao[] = []
-  userId: number
+  userId: number;
+  menuAbertoId: number | null = null;
+  motivoCancelamento: string = '';
   public StatusLocacao = StatusLocacao;
 
   constructor(
     private locacaoService: LocacaoService,
     private loginService: LoginService,
     private pagamentoService: PagamentoAnuncianteService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userId = this.loginService.buscarIdUsuarioComToken()
@@ -117,6 +119,75 @@ export class LocacaoListagemComponent implements OnInit {
             this.atualizarStatusLocacao(produtoLocacao);
           }
         });
+      }
+    });
+  }
+
+  abrirMenu(id: number) {
+    this.menuAbertoId = this.menuAbertoId === id ? null : id;
+  }
+
+  abrirModalCancelamento(locacao: Locacao) {
+    Swal.fire({
+      title: 'Cancelar locação',
+      input: 'textarea',
+      inputLabel: 'Motivo do cancelamento',
+      inputPlaceholder: 'Digite o motivo...',
+      inputAttributes: {
+        'aria-label': 'Motivo',
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar',
+      inputValidator: (value) => {
+        if (!value) {
+          return 'O motivo é obrigatório';
+        }
+        return null;
+      }
+    }).then(result => {
+      if (result.isConfirmed) {
+        const motivo = result.value;
+        this.verificarMultaELancarCancelamento(locacao, motivo);
+      }
+    });
+  }
+
+  verificarMultaELancarCancelamento(locacao: Locacao, motivo: string) {
+    const hoje = new Date();
+    const dataInicio = new Date(locacao.produtos[0].dataInicio); // Assumindo um produto
+    const diffDias = Math.floor((dataInicio.getTime() - hoje.getTime()) / (1000 * 3600 * 24));
+
+    if (diffDias < 3) {
+      const multa = (locacao.valorTotal || 0) * 0.1;
+      Swal.fire({
+        title: 'Atenção!',
+        text: `Como a locação começa em menos de 3 dias, será cobrada uma multa de R$ ${multa.toFixed(2)} por cancelamento tardio. Efetue o pagamento da multa para que o estorno do valor da locação seja efetuado.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar e continuar',
+        cancelButtonText: 'Cancelar',
+      }).then(confirm => {
+        if (confirm.isConfirmed) {
+          this.finalizarCancelamento(locacao.id, motivo, true);
+        }
+      });
+    } else {
+      this.finalizarCancelamento(locacao.id, motivo, false);
+    }
+  }
+
+  finalizarCancelamento(id: number, motivo: string, abrirMercadoPago: boolean) {
+    this.locacaoService.cancelarLocacao(id, motivo).subscribe({
+      next: () => {
+        if (abrirMercadoPago) {
+          window.open('https://www.mercadopago.com.br/', '_blank');
+        }
+        Swal.fire('Cancelado!', 'A locação foi cancelada com sucesso.', 'success');
+        window.location.href = '/locacao-listagem';
+      },
+      error: (err) => {
+        Swal.fire('Erro', err.error || 'Erro ao cancelar locação', 'error');
       }
     });
   }
