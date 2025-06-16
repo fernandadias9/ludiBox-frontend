@@ -18,8 +18,13 @@ export class ModalDenunciaComponent {
   ];
 
   onSalvar() {
-    const motivo = this.motivoSelecionado === 'outro' ? this.outroMotivo : this.motivoSelecionado;
-    this.salvar.emit(motivo);
+    let motivoFinal = this.motivoSelecionado;
+
+    if (this.outroMotivo && this.outroMotivo.trim() !== '') {
+      motivoFinal += ' - ' + this.outroMotivo.trim();
+    }
+
+    this.salvar.emit(motivoFinal);
   }
 
   fechaModal() {
