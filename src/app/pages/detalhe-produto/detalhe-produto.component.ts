@@ -4,16 +4,18 @@ import { DetalheAnuncioDto } from '../../shared/model/dto/detalheAnuncioDto';
 import { AnuncioService } from '../../shared/service/anuncio.service';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
-import { startOfDay, isBefore, isToday } from 'date-fns';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { LocacaoService } from '../../shared/service/locacao.service';
 import { LoginService } from '../../shared/service/LoginService';
+import { DenunciaService } from '../../shared/service/denunciaService';
+import { DenunciaDTO } from '../../shared/model/dto/DenunciaDTO';
 import Swal from 'sweetalert2';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-detalhe-produto',
   templateUrl: './detalhe-produto.component.html',
-  styleUrl: './detalhe-produto.component.scss',
+  styleUrls: ['./detalhe-produto.component.scss'],
 })
 export class DetalheProdutoComponent implements OnInit {
   anuncio: DetalheAnuncioDto | null = null;
@@ -33,7 +35,8 @@ export class DetalheProdutoComponent implements OnInit {
     private gallery: Gallery,
     private fb: FormBuilder,
     private locacaoService: LocacaoService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private denunciaService: DenunciaService
   ) { }
 
   ngOnInit() {
@@ -167,9 +170,90 @@ export class DetalheProdutoComponent implements OnInit {
 
   abrirModal() {
     this.isModalOpen = true;
+    this.menuAberto = false;
   }
 
   fecharModal() {
     this.isModalOpen = false;
   }
+
+  enviarDenuncia(dados: { motivo: 'CONTEUDO_INDEVIDO' | 'PRECO_ABUSIVO' | 'PUBLICACAO_FALSA' | 'OUTRO'; descricao: string }) {
+    if (!this.anuncio) {
+      console.error('Anúncio não carregado.');
+      return;
+    }
+
+    const token = localStorage.getItem('tokenUsuarioAutenticado');
+
+    if (!token) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Usuário não autenticado',
+        text: 'Você precisa estar logado para denunciar.'
+      });
+      return;
+    }
+
+    let decoded: any;
+    try {
+      decoded = jwtDecode(token);
+    } catch (error) {
+      console.error('Erro ao decodificar o token:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Token inválido',
+        text: 'Por favor, faça login novamente.'
+      });
+      return;
+    }
+
+    const role = decoded.roles;
+    const idUsuario = this.loginService.buscarIdUsuarioComToken();
+
+    if (!idUsuario) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Usuário não autenticado',
+        text: 'Você precisa estar logado para denunciar.'
+      });
+      return;
+    }
+
+    if (role === 'ADMINISTRADOR') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Acesso negado',
+        text: 'Administradores não podem fazer denúncias.'
+      });
+      return;
+    }
+
+    const denunciaDto: DenunciaDTO = {
+      motivo: dados.motivo,
+      descricao: dados.descricao,
+      produtoId: this.anuncio.id,
+      denuncianteId: idUsuario
+    };
+
+    this.denunciaService.criar(denunciaDto).subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Denúncia enviada',
+          text: 'Sua denúncia foi registrada com sucesso.',
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        this.fecharModal();
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: 'Não foi possível enviar a denúncia. Tente novamente mais tarde.',
+        });
+      }
+    });
+  }
+
 }

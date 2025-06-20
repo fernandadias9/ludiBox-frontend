@@ -1,23 +1,18 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { DenunciaDTO } from '../model/dto/DenunciaDTO';
+import { Denuncia } from '../model/entity/denuncia';
 
-export interface Denuncia {
-  id?: number;
-  motivo: string;
-  descricao?: string;
-  status?: string;
-  produto: { id: number };
-  dataCriacao?: string;
-}
-
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class DenunciaService {
-  private readonly API = '/denuncias';
+  private readonly API = 'http://localhost:8080/denuncias';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  criar(denuncia: Denuncia): Observable<Denuncia> {
+  criar(denuncia: DenunciaDTO): Observable<Denuncia> {
     return this.http.post<Denuncia>(this.API, denuncia);
   }
 
@@ -28,6 +23,7 @@ export class DenunciaService {
     status?: string;
   }): Observable<Denuncia[]> {
     let params = new HttpParams();
+
     if (filtros.dataInicio) params = params.set('dataInicio', filtros.dataInicio);
     if (filtros.dataFim) params = params.set('dataFim', filtros.dataFim);
     if (filtros.motivo) params = params.set('motivo', filtros.motivo);
@@ -41,6 +37,6 @@ export class DenunciaService {
   }
 
   bloquear(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.API}/${id}/bloquear`);
+    return this.http.put<void>(`${this.API}/${id}/bloquear`, {});
   }
 }
