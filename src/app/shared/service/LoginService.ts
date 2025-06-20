@@ -15,19 +15,57 @@ import { Pessoa } from "../model/entity/pessoa";
 
     constructor(private httpCliente: HttpClient) { }
 
-    autenticar(dto: PessoaDTO): Observable<HttpResponse<string>> {
-      const authHeader = 'Basic ' + btoa(`${dto.login}:${dto.senha}`);
+    getQRCode(): Observable<Blob> {
+      const url = 'http://localhost:8080/two-factors/2fa/generate';
+      
+      const token = localStorage.getItem('token'); 
       const headers = new HttpHeaders({
-        'authorization': authHeader
+        'Authorization': `Bearer ${token || ''}`
       });
-
-      return this.httpCliente.post<string>(`${this.API}/authenticatePessoa`, dto, {
-        headers,
-        observe: 'response',
-        responseType: 'text' as 'json'
+    
+      return this.httpCliente.post(url, null, {
+        headers: headers,
+        responseType: 'blob'
       });
     }
+    
+    toggle2FA(enable: boolean): Observable<string> {
+      const url = 'http://localhost:8080/two-factors/2fa/toggle';
+      return this.httpCliente.post(url, enable, { responseType: 'text' });
+    }
+    
 
+    confirmar2FA(code: string): Observable<string> {
+      const url = `http://localhost:8080/two-factors/2fa/confirm?code=${code}`;
+      return this.httpCliente.post(
+        url,
+        {},
+        {
+          responseType: 'text' as const
+        }
+      );
+    }
+    
+    
+    autenticarComTotp(dto: PessoaDTO, code?: string): Observable<HttpResponse<string>> {
+      const authHeader = 'Basic ' + btoa(`${dto.login}:${dto.senha}`);
+      const headers = new HttpHeaders({ 'authorization': authHeader });
+    
+      const url = code
+        ? `${this.API}/authenticatePessoa?code=${encodeURIComponent(code)}`
+        : `${this.API}/authenticatePessoa`;
+    
+      return this.httpCliente.post<string>(
+        url,
+        dto,
+        {
+          headers,
+          observe: 'response',
+          responseType: 'text' as 'json'
+        }
+      );
+    }
+    
     cadastrar(pessoa: Pessoa): Observable<any>{
       return this.httpCliente.post<any>(this.API+"/nova-pessoa", pessoa);
     }
@@ -45,11 +83,47 @@ import { Pessoa } from "../model/entity/pessoa";
     return null;
     }
 
-  logout() {
-    localStorage.removeItem('tokenUsuarioAutenticado');
-    localStorage.removeItem('idUsuarioAutenticado');
-    localStorage.clear();
-  }
+    logout() {
+      localStorage.removeItem('tokenUsuarioAutenticado');
+      localStorage.removeItem('idUsuarioAutenticado');
+      localStorage.clear();
+    }
+
+
+    login(email: string, senha: string): Observable<any> {
+      const url = `${this.API}/login`;
+    
+      const params = new URLSearchParams();
+      params.set('email', email);
+      params.set('senha', senha);
+    
+      const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    
+      return this.httpCliente.post<any>(
+        url,
+        params.toString(),
+        { headers }
+      );
+    }
+
+    confirmarLoginComTotp(tempToken: string, code: string): Observable<any> {
+      const url = `${this.API}/2fa/confirm`;
+    
+      const params = new URLSearchParams();
+      params.set('tempToken', tempToken);
+      params.set('code', code);
+    
+      const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    
+      return this.httpCliente.post<any>(
+        url,
+        params.toString(),
+        { headers }
+      );
+    }
+    
+    
+
 }
 
 

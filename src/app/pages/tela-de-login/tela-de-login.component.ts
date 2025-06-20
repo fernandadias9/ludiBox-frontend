@@ -8,6 +8,8 @@ import Swal from "sweetalert2"
 import { jwtDecode } from "jwt-decode"
 import { PerfilDTO } from "../../shared/model/dto/PerfilDTO"
 import { PessoaService } from "../../shared/service/PessoaService"
+import { MatDialog } from "@angular/material/dialog"
+import { TotpModalComponent } from "../../components/totp-modal/totp-modal.component"
 
 @Component({
   selector: "app-tela-de-login",
@@ -30,6 +32,7 @@ export class TelaDeLoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private loginService: LoginService,
     private pessoaService: PessoaService,
+    private dialog: MatDialog,
   ) {
     this.initForm()
   }
@@ -45,12 +48,10 @@ export class TelaDeLoginComponent implements OnInit {
     })
   }
 
-  // Getters para facilitar o acesso aos campos do formulário
   get f() {
     return this.loginForm.controls
   }
 
-  // Método para verificar se um campo específico está inválido
   isFieldInvalid(fieldName: string): boolean {
     return this.formSubmitted && this.f[fieldName].invalid
   }
@@ -63,43 +64,77 @@ export class TelaDeLoginComponent implements OnInit {
       return;
     }
   
-    this.service.autenticar(this.dto).subscribe({
-      next: (jwt) => {
-        Swal.fire("Sucesso", "Usuário autenticado com sucesso", "success");
-        const token: string = jwt.body + "";
-        localStorage.setItem("tokenUsuarioAutenticado", token);
+    this.dto.login = this.loginForm.value.login;
+    this.dto.senha = this.loginForm.value.senha;
   
-        try {
-          const tokenDecodificado: any = jwtDecode(token);
-          const idUsuario = tokenDecodificado.id;
-          const perfil = tokenDecodificado.roles;
-  
-          localStorage.setItem("idUsuarioAutenticado", idUsuario.toString());
-
-          if (perfil === 'ADMINISTRADOR') {
-            this.router.navigate(['/dashboard']);
-          } else if (perfil === 'USUARIO') {
-            this.router.navigate(['']);
-          } else {
-            this.router.navigate(['/acesso-negado']);
-          }
-  
-        } catch (error) {
-          console.error("Erro ao decodificar o token:", error);
-          this.router.navigate(['/acesso-negado']);
+    this.service.login(this.dto.login, this.dto.senha).subscribe({
+      next: (res) => {
+        if (res.twoFactorRequired && res.tempToken) {
+          this.abrirModalTotp(res.tempToken);
+        } else if (res.jwt) {
+          this.processarJwt(res.jwt);
         }
       },
       error: (erro) => {
-        var mensagem: string;
-        if (erro.status != 200) {
-          mensagem = "Usuário ou senha inválidos, tente novamente";
-        } else {
-          mensagem = erro.error;
-        }
+        const mensagem = erro?.error?.mensagem || "Usuário ou senha inválidos, tente novamente";
         Swal.fire("Erro", mensagem, "error");
       }
     });
   }
+
+  abrirModalTotp(tempToken: string) {
+    const dialogRef = this.dialog.open(TotpModalComponent, {
+      width: '400px',
+      data: { email: this.dto.login }
+    });
+  
+    dialogRef.afterClosed().subscribe(codigoTotp => {
+      if (codigoTotp) {
+        this.confirmar2FA(tempToken, codigoTotp);
+      } else {
+        Swal.fire('Cancelado', 'Autenticação em duas etapas cancelada.', 'info');
+      }
+    });
+  }
+
+  confirmar2FA(tempToken: string, code: string) {
+    this.service.confirmarLoginComTotp(tempToken, code).subscribe({
+      next: (res) => {
+        this.processarJwt(res.jwt);
+      },
+      error: (err) => {
+        Swal.fire("Erro", "Código inválido ou expirado", "error");
+      }
+    });
+  }
+
+  processarJwt(jwt: string) {
+    Swal.fire("Sucesso", "Usuário autenticado com sucesso", "success");
+    localStorage.setItem("tokenUsuarioAutenticado", jwt);
+  
+    try {
+      const tokenDecodificado: any = jwtDecode(jwt);
+      const idUsuario = tokenDecodificado.id;
+      const perfil = tokenDecodificado.roles;
+  
+      localStorage.setItem("idUsuarioAutenticado", idUsuario.toString());
+  
+      if (perfil === 'ADMINISTRADOR') {
+        this.router.navigate(['/dashboard']);
+      } else if (perfil === 'USUARIO') {
+        this.router.navigate(['']);
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } catch (error) {
+      console.error("Erro ao decodificar o token:", error);
+      this.router.navigate(['/acesso-negado']);
+    }
+  }
+  
+  
+  
+  
 
   mostrarMensagemErroValidacao() {
     // Coleta os nomes dos campos inválidos

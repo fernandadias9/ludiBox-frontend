@@ -6,5 +6,7 @@ export class PerfilDTO{
     telefone: String;
     senha: String;
     valorDocumento: string;
+    twoFactorEnabled: boolean;
+    twoFactorConfirmed: boolean;
     
 }
