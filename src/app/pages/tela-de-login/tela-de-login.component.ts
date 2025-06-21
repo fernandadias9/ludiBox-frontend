@@ -45,35 +45,33 @@ export class TelaDeLoginComponent implements OnInit {
     })
   }
 
-  // Getters para facilitar o acesso aos campos do formulário
   get f() {
     return this.loginForm.controls
   }
 
-  // Método para verificar se um campo específico está inválido
   isFieldInvalid(fieldName: string): boolean {
     return this.formSubmitted && this.f[fieldName].invalid
   }
 
   public realizarLogin() {
     this.formSubmitted = true;
-  
+
     if (this.loginForm.invalid) {
       this.mostrarMensagemErroValidacao();
       return;
     }
-  
+
     this.service.autenticar(this.dto).subscribe({
       next: (jwt) => {
         Swal.fire("Sucesso", "Usuário autenticado com sucesso", "success");
         const token: string = jwt.body + "";
         localStorage.setItem("tokenUsuarioAutenticado", token);
-  
+
         try {
           const tokenDecodificado: any = jwtDecode(token);
           const idUsuario = tokenDecodificado.id;
           const perfil = tokenDecodificado.roles;
-  
+
           localStorage.setItem("idUsuarioAutenticado", idUsuario.toString());
 
           if (perfil === 'ADMINISTRADOR') {
@@ -83,7 +81,7 @@ export class TelaDeLoginComponent implements OnInit {
           } else {
             this.router.navigate(['/acesso-negado']);
           }
-  
+
         } catch (error) {
           console.error("Erro ao decodificar o token:", error);
           this.router.navigate(['/acesso-negado']);
@@ -102,12 +100,10 @@ export class TelaDeLoginComponent implements OnInit {
   }
 
   mostrarMensagemErroValidacao() {
-    // Coleta os nomes dos campos inválidos
     const camposInvalidos = []
     if (this.f["login"].invalid) camposInvalidos.push("E-mail")
     if (this.f["senha"].invalid) camposInvalidos.push("Senha")
 
-    // Constrói a mensagem de erro
     let mensagem = ""
     if (camposInvalidos.length === 1) {
       mensagem = `O campo ${camposInvalidos[0]} é obrigatório`
