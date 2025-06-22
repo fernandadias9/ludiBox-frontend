@@ -1,38 +1,112 @@
 <app-template-telas-adm>
-      <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-2xl">
-        <h2 class="text-2xl font-semibold text-center mb-6">Cadastro de novo Administrador</h2>
-        <form>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium mb-1">Nome *</label>
-              <app-input placeholder="Nome" type="text" class="form-control"></app-input>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">CPF *</label>
-              <app-input type="text" class="form-control" placeholder="CPF"></app-input>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">E-mail *</label>
-              <app-input type="email" class="form-control" placeholder="E-mail"></app-input>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Telefone *</label>
-              <app-input type="tel" class="form-control" placeholder="Telefone"></app-input>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Senha *</label>
-              <app-input type="password" class="form-control" placeholder="Senha"></app-input>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Confirmar Senha *</label>
-              <app-input type="password" class="form-control" placeholder="Confirmar Senha"></app-input>
-            </div>
-          </div>
-          <div class="flex justify-end mt-6 space-x-4">
-            <button type="button" class="px-4 py-2 bg-primary text-white rounded-md"><strong>Voltar</strong></button>
-            <button type="submit" class="px-4 py-2 bg-secondary text-black rounded-md"><strong>Cadastrar</strong></button>
-          </div>
-        </form>
+  <div class="bg-white px-16 py-8 rounded-2xl shadow-md w-full max-w-4xl">
+    <h2 class="text-2xl font-semibold text-center mb-6">Cadastro de novo Administrador</h2>
+    <form
+      [formGroup]="cadastroAdmForm"
+      (ngSubmit)="cadastrarAdm()"
+      class="grid gap-1.5 w-full sm:px-48 md:px-20 lg:px-6 xl:px-16 mb-2 lg:gap-3"
+    >
+      <div class="flex gap-4 mb-4 items-center">
+        <app-input
+          formControlName="nome"
+          id="nome"
+          name="nome"
+          label="Nome *"
+          placeholder="Nome"
+          [required]="true"
+          class="flex-1"
+          [invalid]="cadastroAdmForm.get('nome')?.invalid && cadastroAdmForm.get('nome')?.touched"
+          [customErrorMsg]="
+            cadastroAdmForm.get('nome')?.hasError('minlength')
+              ? 'Mínimo de 3 caracteres'
+              : ''
+          "
+          [showCustomError]="
+            cadastroAdmForm.get('nome')?.hasError('minlength') &&
+            cadastroAdmForm.get('nome')?.touched
+          "
+        ></app-input>
+
+        <app-input
+          formControlName="valorDocumento"
+          id="valorDocumento"
+          name="valorDocumento"
+          label="CPF *"
+          placeholder="Ex: 999.999.999-99"
+          [required]="true"
+          class="flex-1"
+          [invalid]="cadastroAdmForm.get('valorDocumento')?.invalid && cadastroAdmForm.get('valorDocumento')?.touched"
+          mask="999.999.999-99"
+        ></app-input>
       </div>
-  </app-template-telas-adm>
-  
+
+      <div class="flex gap-4 mb-4 items-center">
+        <app-input
+          formControlName="email"
+          id="email"
+          name="email"
+          label="Email *"
+          placeholder="exemplo@gmail.com"
+          [required]="true"
+          class="flex-1"
+          [invalid]="cadastroAdmForm.get('email')?.invalid && cadastroAdmForm.get('email')?.touched"
+        ></app-input>
+
+        <app-input
+          formControlName="telefone"
+          id="telefone"
+          name="telefone"
+          label="Telefone *"
+          placeholder="(99) 99999-9999"
+          [required]="true"
+          class="flex-1"
+          [invalid]="cadastroAdmForm.get('telefone')?.invalid && cadastroAdmForm.get('telefone')?.touched"
+          mask="(99) 99999-9999"
+        ></app-input>
+      </div>
+
+      <div class="flex gap-4 mb-4 items-center">
+        <app-input
+          formControlName="senha"
+          id="senha"
+          name="senha"
+          label="Senha *"
+          type="password"
+          placeholder="Senha"
+          [required]="true"
+          class="flex-1"
+          [invalid]="cadastroAdmForm.get('senha')?.invalid && cadastroAdmForm.get('senha')?.touched"
+          [customErrorMsg]="
+            cadastroAdmForm.get('senha')?.hasError('minlength')
+              ? 'Mínimo de 6 caracteres'
+              : cadastroAdmForm.get('senha')?.hasError('maxlength')
+              ? 'Máximo de 10 caracteres'
+              : ''
+          "
+          [showCustomError]="
+            (cadastroAdmForm.get('senha')?.hasError('minlength') ||
+              cadastroAdmForm.get('senha')?.hasError('maxlength')) &&
+            cadastroAdmForm.get('senha')?.touched
+          "
+        ></app-input>
+
+        <app-input
+          formControlName="confirmarSenha"
+          id="confirmarSenha"
+          name="confirmarSenha"
+          label="Confirmar Senha *"
+          type="password"
+          placeholder="Confirme a senha"
+          [required]="true"
+          class="flex-1"
+          [invalid]="cadastroAdmForm.get('confirmarSenha')?.invalid && cadastroAdmForm.get('confirmarSenha')?.touched"
+        ></app-input>
+      </div>
+
+      <div class="flex flex-col w-full items-center gap-3 pb-3 mt-4">
+        <app-button-primary title="Cadastrar" />
+        <app-button-secondary title="Voltar" routerLink="/administradores" />
+      </div>
+    </form>
+  </div>
+</app-template-telas-adm>

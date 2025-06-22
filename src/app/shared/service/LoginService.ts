@@ -32,6 +32,10 @@ import { Pessoa } from "../model/entity/pessoa";
       return this.httpCliente.post<any>(this.API+"/nova-pessoa", pessoa);
     }
 
+    cadastrarAdm(pessoa: Pessoa): Observable<any>{
+      return this.httpCliente.post<any>(this.API+"/cadastrar_adm", pessoa);
+    }
+    
     buscarIdUsuarioComToken(): number | null {
     try {
       const token = localStorage.getItem('tokenUsuarioAutenticado');
@@ -44,6 +48,8 @@ import { Pessoa } from "../model/entity/pessoa";
     }
     return null;
     }
+
+    
 
   logout() {
     localStorage.removeItem('tokenUsuarioAutenticado');
