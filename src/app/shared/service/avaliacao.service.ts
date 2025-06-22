@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Avaliacao } from '../model/entity/avaliacao';
+import { AvaliacaoRequestDTO } from '../model/dto/avaliacaoRequestDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,7 @@ export class AvaliacaoService {
 
   constructor(private http: HttpClient) { }
 
-  salvarAvaliacao(produtoLocacaoId: number, estrelas: number): Observable<Avaliacao> {
-    const params = new HttpParams()
-      .set('produtoLocacaoId', produtoLocacaoId.toString())
-      .set('estrelas', estrelas.toString());
-
-    return this.http.post<Avaliacao>(this.API, null, { params });
+  salvarAvaliacao(req: AvaliacaoRequestDTO): Observable<any> {
+    return this.http.post<any>(this.API, req);
   }
 }

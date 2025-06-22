@@ -9,6 +9,14 @@ import { jwtDecode } from "jwt-decode"
 import { PerfilDTO } from "../../shared/model/dto/PerfilDTO"
 import { PessoaService } from "../../shared/service/PessoaService"
 
+interface DecodedToken {
+  sub: string;
+  roles: string;
+  id: number;
+  iat: number;
+  exp: number;
+}
+
 @Component({
   selector: "app-tela-de-login",
   templateUrl: "./tela-de-login.component.html",
@@ -23,6 +31,9 @@ export class TelaDeLoginComponent implements OnInit {
   loginForm: FormGroup;
   formSubmitted = false;
   public idUsuario: number;
+  email = '';
+  senha = '';
+  errorMsg = '';
 
   constructor(
     private service: LoginService,
@@ -40,7 +51,7 @@ export class TelaDeLoginComponent implements OnInit {
 
   initForm(): void {
     this.loginForm = this.formBuilder.group({
-      login: ["", Validators.required],
+      email: ["", Validators.required],
       senha: ["", Validators.required],
     })
   }
@@ -61,18 +72,12 @@ export class TelaDeLoginComponent implements OnInit {
       return;
     }
 
-    this.service.autenticar(this.dto).subscribe({
-      next: (jwt) => {
-        Swal.fire("Sucesso", "Usuário autenticado com sucesso", "success");
-        const token: string = jwt.body + "";
-        localStorage.setItem("tokenUsuarioAutenticado", token);
-
-        try {
-          const tokenDecodificado: any = jwtDecode(token);
-          const idUsuario = tokenDecodificado.id;
-          const perfil = tokenDecodificado.roles;
-
-          localStorage.setItem("idUsuarioAutenticado", idUsuario.toString());
+    this.service.login(this.email, this.senha).subscribe({
+      next: () => {
+        const token = this.service.token;
+        if (token) {
+          const decoded = jwtDecode<DecodedToken>(token);
+          const perfil = decoded.roles;
 
           if (perfil === 'ADMINISTRADOR') {
             this.router.navigate(['/dashboard']);
@@ -81,10 +86,6 @@ export class TelaDeLoginComponent implements OnInit {
           } else {
             this.router.navigate(['/acesso-negado']);
           }
-
-        } catch (error) {
-          console.error("Erro ao decodificar o token:", error);
-          this.router.navigate(['/acesso-negado']);
         }
       },
       error: (erro) => {
@@ -94,14 +95,18 @@ export class TelaDeLoginComponent implements OnInit {
         } else {
           mensagem = erro.error;
         }
-        Swal.fire("Erro", mensagem, "error");
+        Swal.fire({
+          icon: "error",
+          title: "Erro",
+          text: mensagem
+        });
       }
     });
   }
 
   mostrarMensagemErroValidacao() {
     const camposInvalidos = []
-    if (this.f["login"].invalid) camposInvalidos.push("E-mail")
+    if (this.f["email"].invalid) camposInvalidos.push("E-mail")
     if (this.f["senha"].invalid) camposInvalidos.push("Senha")
 
     let mensagem = ""

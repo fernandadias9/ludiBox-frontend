@@ -21,12 +21,13 @@ export class LocacaoListagemComponent implements OnInit {
   menuAbertoId: number | null = null;
   motivoCancelamento: string = '';
   public StatusLocacao = StatusLocacao;
+  modalOpen = false;
+  selectedProdutoLocacaoId?: number;
 
   constructor(
     private locacaoService: LocacaoService,
     private loginService: LoginService,
-    private pagamentoService: PagamentoAnuncianteService,
-    private avaliacaoService: AvaliacaoService
+    private pagamentoService: PagamentoAnuncianteService
   ) { }
 
   ngOnInit(): void {
@@ -195,67 +196,27 @@ export class LocacaoListagemComponent implements OnInit {
   }
 
   podeAvaliar(produtoLocacao: ProdutoLocacao): boolean {
-  const hoje = new Date();
-  const dataFim = new Date(produtoLocacao.dataFim);
-  return produtoLocacao.locacao.status === this.StatusLocacao.PAGO && dataFim < hoje;
-}
-
-podeCancelar(produtoLocacao: ProdutoLocacao): boolean {
-  const hoje = new Date();
-  const dataInicio = new Date(produtoLocacao.dataInicio);
-  return produtoLocacao.locacao.status === this.StatusLocacao.PAGO && dataInicio > hoje;
-}
-
-avaliarProduto(produtoLocacao: ProdutoLocacao): void {
-    let estrelasSelecionadas = 0;
-
-    Swal.fire({
-      title: `Avaliar locação #${produtoLocacao.locacao.id}`,
-      html:
-        `<div id="rating-stars" style="font-size: 2rem;">
-           ${[1,2,3,4,5].map(i =>
-             `<span class="estrela" data-value="${i}" style="cursor:pointer;">☆</span>`
-           ).join('')}
-         </div>
-         <textarea id="rating-text" class="swal2-textarea" placeholder="Escreva sua avaliação..."></textarea>`,
-      showCancelButton: true,
-      confirmButtonText: 'Confirmar',
-      cancelButtonText: 'Cancelar',
-      didOpen: () => {
-        const stars = Swal.getPopup()!.querySelectorAll<HTMLElement>('.estrela');
-        stars.forEach(star => {
-          star.addEventListener('click', () => {
-            const val = parseInt(star.dataset['value']!, 10);
-            estrelasSelecionadas = val;
-            stars.forEach(s => {
-              const v = parseInt(s.dataset['value']!, 10);
-              s.textContent = v <= val ? '★' : '☆';
-            });
-          });
-        });
-      },
-      preConfirm: () => {
-        const texto = (Swal.getPopup()!.querySelector('#rating-text') as HTMLTextAreaElement).value;
-        if (estrelasSelecionadas < 1) {
-          Swal.showValidationMessage('Selecione pelo menos uma estrela');
-        }
-        return { estrelas: estrelasSelecionadas, comentario: texto };
-      }
-    }).then(result => {
-      if (result.isConfirmed) {
-        const { estrelas, comentario } = result.value!;
-        this.avaliacaoService.salvarAvaliacao(produtoLocacao.id!, estrelas)
-          .subscribe({
-            next: () => {
-              Swal.fire('Obrigado!', 'Sua avaliação foi enviada.', 'success');
-              this.menuAbertoId = null;
-            },
-            error: err => {
-              Swal.fire('Erro', err.error || 'Falha ao enviar avaliação', 'error');
-            }
-          });
-      }
-    });
+    const hoje = new Date();
+    const dataFim = new Date(produtoLocacao.dataFim);
+    return produtoLocacao.locacao.status === this.StatusLocacao.PAGO && dataFim < hoje;
   }
 
+  podeCancelar(produtoLocacao: ProdutoLocacao): boolean {
+    const hoje = new Date();
+    const dataInicio = new Date(produtoLocacao.dataInicio);
+    return produtoLocacao.locacao.status === this.StatusLocacao.PAGO && dataInicio > hoje;
+  }
+
+  openAvaliacao(id: number) {
+    this.selectedProdutoLocacaoId = id;
+    this.modalOpen = true;
+  }
+
+  onModalClose() {
+    this.modalOpen = false;
+  }
+
+  onModalSaved() {
+    this.modalOpen = false;
+  }
 }

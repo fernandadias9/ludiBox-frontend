@@ -65,6 +65,7 @@ import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.
 import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
 import { LocacaoListagemComponent } from './pages/locacao-listagem/locacao-listagem.component';
 import { ModalConfirmacaoComponent } from './components/modal-confirmacao/modal-confirmacao.component';
+import { AvaliacaoModalComponent } from './components/avaliacao-modal/avaliacao-modal.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -112,6 +113,7 @@ export const MY_FORMATS = {
     LocacaoFinalizarComponent,
     LocacaoListagemComponent,
     ModalConfirmacaoComponent,
+    AvaliacaoModalComponent,
   ],
   imports: [
     BrowserModule,
