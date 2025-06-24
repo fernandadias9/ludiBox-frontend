@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Endereco } from '../../shared/model/entity/endereco';
 import { EnderecoService } from '../../shared/service/endereco.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../shared/service/LoginService';
 
 @Component({
   selector: 'app-enderecos',
@@ -14,12 +15,11 @@ export class EnderecosComponent implements OnInit {
   enderecos: Endereco[] = [];
   enderecoSendoEditado: Endereco | null = null;
 
-  constructor(private enderecoService: EnderecoService) {}
+  constructor(private enderecoService: EnderecoService, private loginService: LoginService) {}
 
   ngOnInit(): void {
-    const id = localStorage.getItem('idUsuarioAutenticado');
-    if (id) {
-      this.idUsuario = parseInt(id);
+    this.idUsuario = this.loginService.buscarIdUsuarioComToken();
+    if (this.idUsuario) {
       this.listarPorPessoa();
     }
   }

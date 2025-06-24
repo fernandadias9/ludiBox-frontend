@@ -7,8 +7,7 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="realizarLogin()" class="grid gap-1.5 w-full px-4 sm:px-40 lg:px-16 xl:px-36 mb-2 lg:gap-3">
       <app-input
-        formControlName="login"
-        [(value)]="dto.login"
+        formControlName="email"
         for="email"
         label="E-mail"
         id="email"
@@ -16,12 +15,11 @@
         placeholder="E-mail *"
         aria-placeholder="digite seu e-mail"
         name="email"
-        [invalid]="isFieldInvalid('login')"
+        [invalid]="isFieldInvalid('email')"
       ></app-input>
 
       <app-input
         formControlName="senha"
-        [(value)]="dto.senha"
         for="password"
         label="Senha"
         id="password"

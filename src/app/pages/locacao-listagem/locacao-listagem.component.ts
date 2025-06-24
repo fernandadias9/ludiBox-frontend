@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Locacao } from '../../shared/model/entity/locacao';
 import { LocacaoService } from '../../shared/service/locacao.service';
 import { LoginService } from '../../shared/service/LoginService';
@@ -6,6 +6,7 @@ import { StatusLocacao } from '../../shared/model/enum/StatusLocacao';
 import { ProdutoLocacao } from '../../shared/model/entity/produtoLocacao';
 import Swal from 'sweetalert2';
 import { PagamentoAnuncianteService } from '../../shared/service/pagamento-anunciante.service';
+import { AvaliacaoService } from '../../shared/service/avaliacao.service';
 
 @Component({
   selector: 'app-locacao-listagem',
@@ -15,11 +16,13 @@ import { PagamentoAnuncianteService } from '../../shared/service/pagamento-anunc
 export class LocacaoListagemComponent implements OnInit {
   abaSelecionada: "recebidas" | "efetuadas" = "recebidas"
   locacoesRecebidas: ProdutoLocacao[] = []
-  locacoesEfetuadas: Locacao[] = []
+  locacoesEfetuadas: ProdutoLocacao[] = []
   userId: number;
   menuAbertoId: number | null = null;
   motivoCancelamento: string = '';
   public StatusLocacao = StatusLocacao;
+  modalOpen = false;
+  selectedProdutoLocacaoId?: number;
 
   constructor(
     private locacaoService: LocacaoService,
@@ -54,7 +57,7 @@ export class LocacaoListagemComponent implements OnInit {
     if (!this.userId) return;
 
     this.locacaoService.buscarLocacoesEfetuadas(this.userId).subscribe(
-      (res: Locacao[]) => {
+      (res: ProdutoLocacao[]) => {
         this.locacoesEfetuadas = res;
       },
       (error) => {
@@ -155,7 +158,7 @@ export class LocacaoListagemComponent implements OnInit {
 
   verificarMultaELancarCancelamento(locacao: Locacao, motivo: string) {
     const hoje = new Date();
-    const dataInicio = new Date(locacao.produtos[0].dataInicio); // Assumindo um produto
+    const dataInicio = new Date(locacao.produtos[0].dataInicio);
     const diffDias = Math.floor((dataInicio.getTime() - hoje.getTime()) / (1000 * 3600 * 24));
 
     if (diffDias < 3) {
@@ -190,5 +193,30 @@ export class LocacaoListagemComponent implements OnInit {
         Swal.fire('Erro', err.error || 'Erro ao cancelar locação', 'error');
       }
     });
+  }
+
+  podeAvaliar(produtoLocacao: ProdutoLocacao): boolean {
+    const hoje = new Date();
+    const dataFim = new Date(produtoLocacao.dataFim);
+    return produtoLocacao.locacao.status === this.StatusLocacao.PAGO && dataFim < hoje;
+  }
+
+  podeCancelar(produtoLocacao: ProdutoLocacao): boolean {
+    const hoje = new Date();
+    const dataInicio = new Date(produtoLocacao.dataInicio);
+    return produtoLocacao.locacao.status === this.StatusLocacao.PAGO && dataInicio > hoje;
+  }
+
+  openAvaliacao(id: number) {
+    this.selectedProdutoLocacaoId = id;
+    this.modalOpen = true;
+  }
+
+  onModalClose() {
+    this.modalOpen = false;
+  }
+
+  onModalSaved() {
+    this.modalOpen = false;
   }
 }
