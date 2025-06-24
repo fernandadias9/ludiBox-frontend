@@ -69,8 +69,8 @@ export class LocacaoService {
     );
   }
 
-  buscarLocacoesEfetuadas(usuarioId: number): Observable<Locacao[]> {
-    return this.http.get<Locacao[]>(`${this.API}/efetuadas/${usuarioId}`);
+  buscarLocacoesEfetuadas(usuarioId: number): Observable<ProdutoLocacao[]> {
+    return this.http.get<ProdutoLocacao[]>(`${this.API}/efetuadas/${usuarioId}`);
   }
 
   atualizarStatus(locacaoId: number, status: string): Observable<Locacao> {

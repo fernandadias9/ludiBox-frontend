@@ -26,9 +26,9 @@ const routes: Routes = [
   { path: 'cadastro', component: CadastroUsuarioComponent },
   { path: 'esqueci-minha_senha', component: RecuperacaoDeSenhaComponent },
   { path: 'acesso-negado', component: TelaAcessoNegadoComponent},
+  { path: 'produto/:id', component: DetalheProdutoComponent},
 
   { path: '', component: TelaInicialComponent, canActivate: [UsuarioGuard] },
-  { path: 'produto/:id', component: DetalheProdutoComponent, canActivate: [UsuarioGuard] }, // Verificar como vai ser denuncia, pois se o adm puder ver tem que alterar
 
   // Rotas Usuários
   { path: 'tela-perfil', component: TelaDePerfilComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },

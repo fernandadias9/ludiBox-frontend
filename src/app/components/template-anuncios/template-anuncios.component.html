@@ -1,6 +1,6 @@
 <main class="relative w-screen h-screen overflow-hidden">
   <div class="w-full h-24 bg-primary flex items-center justify-between px-5 lg:px-10 shadow-md fixed top-0 left-0 z-50">
-    <img src="/images/logo.png" alt="Logomarca LudiBox" routerLink="/" class="w-40 h-auto pt-2 cursor-pointer" />
+    <img src="/images/logo.png" alt="Logomarca LudiBox" (click)="voltarParaTelaInicial()" class="w-40 h-auto pt-2 cursor-pointer" />
 
     <div *ngIf="eTelaInicial" class="relative w-2/6 bg-background_light rounded-full">
       <input type="text" placeholder="Pesquisar" [(ngModel)]="searchTerm" (input)="onInputChange()"
