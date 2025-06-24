@@ -22,6 +22,10 @@ export class LoginService {
     return this.httpCliente.post<any>(this.API + "/nova-pessoa", pessoa);
   }
 
+    cadastrarAdm(pessoa: Pessoa): Observable<any>{
+      return this.httpCliente.post<any>(this.API+"/cadastrar_adm", pessoa);
+    }
+    
   buscarIdUsuarioComToken(): number | null {
     try {
       const token = localStorage.getItem('auth_token');
@@ -34,6 +38,8 @@ export class LoginService {
     }
     return null;
   }
+
+    
 
   logout() {
     localStorage.removeItem('auth_token');

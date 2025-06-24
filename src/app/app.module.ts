@@ -65,6 +65,7 @@ import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.
 import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
 import { SelectComponent } from './components/select/select.component';
 import { ModalConfirmacaoComponent } from './components/modal-confirmacao/modal-confirmacao.component';
+import { TelaAdmLocacoesComponent } from './pages/tela-adm-locacoes/tela-adm-locacoes.component';
 import { AvaliacaoModalComponent } from './components/avaliacao-modal/avaliacao-modal.component';
 
 export const MY_FORMATS = {
@@ -115,6 +116,7 @@ export const MY_FORMATS = {
     SelectComponent,
     ModalDenunciaComponent,
     ModalConfirmacaoComponent,
+    TelaAdmLocacoesComponent
   ],
   imports: [
     BrowserModule,
