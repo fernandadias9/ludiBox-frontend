@@ -51,6 +51,7 @@ export class TemplateAnunciosComponent implements OnInit {
     private locacaoService: LocacaoService
   ) { }
   ngOnInit(): void {
+    this.getIsLoggedIn();
     this.usuarioLogado();
     this.carregarCarrinho();
 
@@ -67,7 +68,7 @@ export class TemplateAnunciosComponent implements OnInit {
   }
 
   usuarioLogado() {
-    const token = localStorage.getItem('tokenUsuarioAutenticado');
+    const token = this.loginService.token;
     this.idUsuario = this.loginService.buscarIdUsuarioComToken();
 
     if (this.idUsuario == null) {
@@ -88,11 +89,14 @@ export class TemplateAnunciosComponent implements OnInit {
     );
   }
 
-  carregarCarrinho() {
-    const uid = this.loginService.buscarIdUsuarioComToken();
-    if (!uid) return;
+  getIsLoggedIn(): void {
+    this.isLoggedIn = this.loginService.isLoggedIn;
+  }
 
-    this.locacaoService.verificarLocacaoPendente(uid).subscribe(
+  carregarCarrinho() {
+    if (!this.idUsuario) return;
+
+    this.locacaoService.verificarLocacaoPendente(this.idUsuario).subscribe(
       (loc) => {
         if (loc && loc.produtos && loc.produtos.length > 0) {
           this.cartItems = loc.produtos;

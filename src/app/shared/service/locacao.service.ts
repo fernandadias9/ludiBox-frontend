@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Locacao } from '../model/entity/locacao';
 import { ProdutoLocacao } from '../model/entity/produtoLocacao';
+import { StatusLocacao } from '../model/enum/StatusLocacao';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +21,8 @@ export class LocacaoService {
     this.carrinhoAtualizado.next();
   }
 
-  verificarLocacaoPendente(usuarioId: number): Observable<Locacao | null> {
-    return this.http.get<Locacao | null>(`${this.API}/pendente/${usuarioId}`);
+  verificarLocacaoPendente(usuarioId: number): Observable<Locacao> {
+    return this.http.get<Locacao>(`${this.API}/pendente/${usuarioId}`);
   }
 
   abrirNovaLocacao(request: any): Observable<Locacao> {
@@ -63,10 +64,23 @@ export class LocacaoService {
   }
 
   buscarLocacoesRecebidas(usuarioId: number): Observable<ProdutoLocacao[]> {
-  return this.http.get<ProdutoLocacao[]>(`${this.API}/recebidas/${usuarioId}`);
-}
+    return this.http.get<ProdutoLocacao[]>(
+      `${this.API}/recebidas/${usuarioId}`
+    );
+  }
 
-  buscarLocacoesEfetuadas(usuarioId: number): Observable<Locacao[]> {
-    return this.http.get<Locacao[]>(`${this.API}/efetuadas/${usuarioId}`);
+  buscarLocacoesEfetuadas(usuarioId: number): Observable<ProdutoLocacao[]> {
+    return this.http.get<ProdutoLocacao[]>(`${this.API}/efetuadas/${usuarioId}`);
+  }
+
+  atualizarStatus(locacaoId: number, status: string): Observable<Locacao> {
+    return this.http.put<Locacao>(`${this.API}/status/${locacaoId}`, status);
+  }
+
+  cancelarLocacao(id: number, motivo: string): Observable<any> {
+    return this.http.post(`${this.API}/${id}/cancelar`, null, {
+      params: { motivoCancelamento: motivo },
+      responseType: 'text',
+    });
   }
 }

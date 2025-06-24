@@ -5,6 +5,6 @@ export class PerfilDTO{
     email: String;
     telefone: String;
     senha: String;
-    valorDocumento: String;
+    valorDocumento: string;
     
 }

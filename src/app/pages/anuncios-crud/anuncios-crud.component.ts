@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Produto } from '../../shared/model/entity/produto';
 import { ProdutoService } from '../../shared/service/produto.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../shared/service/LoginService';
 
 @Component({
   selector: 'app-anuncios-crud',
@@ -14,12 +15,11 @@ export class AnunciosCrudComponent {
   anuncios: Produto[] = [];
   produtoSendoEditado: Produto | null = null;
 
-  constructor(private produtoService: ProdutoService) {}
+  constructor(private produtoService: ProdutoService, private loginService: LoginService) { }
 
   ngOnInit(): void {
-    const id = localStorage.getItem('idUsuarioAutenticado');
-    if (id) {
-      this.idUsuario = parseInt(id);
+    this.idUsuario = this.loginService.buscarIdUsuarioComToken();
+    if (this.idUsuario) {
       this.listarPorPessoa();
     }
   }
@@ -58,34 +58,34 @@ export class AnunciosCrudComponent {
 
   deletarProduto(id: number) {
     Swal.fire({
-          title: 'Tem certeza que deseja deletar este endereço?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Sim, deletar',
-          cancelButtonText: 'Cancelar'
-        }).then(result => {
-          if(result.isConfirmed) {
-            this.produtoService.deletar(id).subscribe({
-              next: () => {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Anúncio deletado com sucesso',
-                  showConfirmButton: false,
-                  timer: 2000,
-                });
-                this.listarPorPessoa();
-              },
-              error: (err) => {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Erro ao deletar anúncio',
-                  text: err.error?.message || err.message,
-                  showConfirmButton: false,
-                  timer: 2000,
-                });
-              },
+      title: 'Tem certeza que deseja deletar este endereço?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, deletar',
+      cancelButtonText: 'Cancelar'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.produtoService.deletar(id).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Anúncio deletado com sucesso',
+              showConfirmButton: false,
+              timer: 2000,
             });
-          }
-        })
+            this.listarPorPessoa();
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro ao deletar anúncio',
+              text: err.error?.message || err.message,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          },
+        });
+      }
+    })
   }
 }

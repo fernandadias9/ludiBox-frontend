@@ -13,7 +13,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   templateUrl: './tela-inicial.component.html',
   styleUrls: ['./tela-inicial.component.scss']
 })
-
 export class TelaInicialComponent implements OnInit {
   isLoggedIn = false
   userName = "Usuário Exemplo"
