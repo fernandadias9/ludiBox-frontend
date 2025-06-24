@@ -70,6 +70,8 @@ import { AvaliacaoModalComponent } from './components/avaliacao-modal/avaliacao-
 import { QrCodeComponent } from './components/qr-code/qr-code.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TotpModalComponent } from './components/totp-modal/totp-modal.component';
+import { ModalDenunciaComponent } from './components/modal-denuncia/modal-denuncia.component';
+import { LocacaoListagemComponent } from './pages/locacao-listagem/locacao-listagem.component';
 
 export const MY_FORMATS = {
   parse: {
