@@ -63,8 +63,9 @@ import { UploadImmagensComponent } from './components/upload-immagens/upload-imm
 import { CardAnunciosCrudComponent } from './components/card-anuncios-crud/card-anuncios-crud.component';
 import { CardAnunciosComponent } from './components/card-anuncios/card-anuncios.component';
 import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
-import { LocacaoListagemComponent } from './pages/locacao-listagem/locacao-listagem.component';
+import { SelectComponent } from './components/select/select.component';
 import { ModalConfirmacaoComponent } from './components/modal-confirmacao/modal-confirmacao.component';
+import { TelaAdmLocacoesComponent } from './pages/tela-adm-locacoes/tela-adm-locacoes.component';
 import { AvaliacaoModalComponent } from './components/avaliacao-modal/avaliacao-modal.component';
 import { QrCodeComponent } from './components/qr-code/qr-code.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -115,10 +116,13 @@ export const MY_FORMATS = {
     CardAnunciosCrudComponent,
     LocacaoFinalizarComponent,
     LocacaoListagemComponent,
+    SelectComponent,
+    ModalDenunciaComponent,
     ModalConfirmacaoComponent,
     AvaliacaoModalComponent,
     QrCodeComponent,
     TotpModalComponent,
+    TelaAdmLocacoesComponent
   ],
   imports: [
     BrowserModule,

@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { LocacaoService } from '../../shared/service/locacao.service';
 import { ProdutoLocacao } from '../../shared/model/entity/produtoLocacao';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-template-anuncios',
@@ -235,4 +236,31 @@ export class TemplateAnunciosComponent implements OnInit {
       this.scrollContainer.nativeElement.removeEventListener("scroll", this.onScroll.bind(this))
     }
   }
+
+  voltarParaTelaInicial() {
+      const token = localStorage.getItem('tokenUsuarioAutenticado');
+  
+      if (token) {
+        try {
+          const decoded: any = jwtDecode(token);
+          const role = decoded.roles;
+  
+          if (role === 'USUARIO') {
+            this.router.navigate(['/']);
+            return;
+          }
+  
+          if (role === 'ADMINISTRADOR') {
+            this.router.navigate(['/dashboard']);
+            return;
+          }
+        } catch (e) {
+  
+          this.router.navigate(['/login']);
+          return;
+        }
+      }
+      
+      this.router.navigate(['/login']);
+    }
 }

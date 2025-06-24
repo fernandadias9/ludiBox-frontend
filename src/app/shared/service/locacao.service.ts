@@ -11,7 +11,7 @@ import { StatusLocacao } from '../model/enum/StatusLocacao';
 export class LocacaoService {
   private readonly API = 'http://localhost:8080/locacao';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private carrinhoAtualizado = new BehaviorSubject<void>(null);
 
@@ -82,5 +82,13 @@ export class LocacaoService {
       params: { motivoCancelamento: motivo },
       responseType: 'text',
     });
+  }
+
+  listarTodas(): Observable<Locacao[]> {
+    return this.http.get<Locacao[]>(`${this.API}/listarTodasLocacoes`);
+  }
+
+  filtrarTodasLocacoes(params: any): Observable<Locacao[]> {
+    return this.http.get<Locacao[]>(`${this.API}/filtrarTodasLocacoes`, { params });
   }
 }

@@ -1,0 +1,13 @@
+<div class="w-full">
+    <select
+      class="h-11 w-full border-[2px] rounded-lg text-sm font-primary font-semibold text-black focus:outline-none px-3
+             border-[#E7E3E3] focus:ring-1 focus:ring-[#D98027] focus:border-[#D98027] bg-white"
+      [disabled]="disabled"
+      [required]="required"
+      [value]="value"
+      (change)="onSelectChange($event)"
+    >
+      <option value="" disabled [selected]="!value">{{ placeholder }}</option>
+      <option *ngFor="let opt of options" [value]="opt.value">{{ opt.label }}</option>
+    </select>
+  </div>

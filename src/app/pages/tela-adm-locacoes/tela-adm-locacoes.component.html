@@ -1,0 +1,58 @@
+<app-template-telas-adm>
+  <div class="w-full mx-auto rounded-lg p-4">
+    <div class="p-4 rounded-md text-center mb-6">
+      <h2 class="text-2xl font-bold mb-4">Locações Realizadas</h2>
+      <div class="flex flex-wrap justify-center items-center gap-3 mb-4">
+        <app-input placeholder="Data Início" [(ngModel)]="filtro.dataInicio" type="date" name="dataInicio">
+        </app-input>
+
+        <app-input placeholder="Data Fim" [(ngModel)]="filtro.dataFim" type="date" name="dataFim">
+        </app-input>
+
+        <app-input placeholder="Valor Mínimo" [(ngModel)]="filtro.valorMin" name="valorMin" mask="separator.2"
+          thousandSeparator="." decimalMarker="," type="text"></app-input>
+
+        <app-input placeholder="Valor Máximo" [(ngModel)]="filtro.valorMax" name="valorMax" mask="separator.2"
+          thousandSeparator="." decimalMarker="," type="text"></app-input>
+
+        <button (click)="aplicarFiltro()"
+          class="bg-primary hover:bg-[#e68f32] text-white font-semibold px-4 py-2 rounded-md">
+          Filtrar
+        </button>
+        <button (click)="limparFiltros()"
+          class="bg-yellow-300 hover:bg-yellow-400 text-gray-800 font-semibold px-4 py-2 rounded-md">
+          Limpar filtros
+        </button>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table-auto w-full text-left border-collapse border border-gray-300">
+        <thead class="bg-[#f5a052] text-white font-semibold">
+          <tr>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">ID</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Data da Venda</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Valor Total</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white text-center">
+          <tr *ngFor="let locacao of locacoes" class="hover:bg-gray-100">
+            <td class="px-4 py-2 border-2 border-gray-300">#{{ locacao.id }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300">
+              {{ locacao.dataHoraEfetuada | date:'dd/MM/yyyy HH:mm' }}
+            </td>
+            <td class="px-4 py-2 border-2 border-gray-300">
+              R$ {{ locacao.valorTotal | number:'1.2-2' }}
+            </td>
+          </tr>
+
+          <tr *ngIf="locacoes.length === 0">
+            <td colspan="3" class="py-4 text-center text-gray-500">Nenhuma locação encontrada.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-right font-semibold mt-4" *ngIf="locacoes.length > 0">
+      Total do Período: R$ {{ totalPeriodo | number:'1.2-2' }}
+    </div>
+  </div>
+</app-template-telas-adm>

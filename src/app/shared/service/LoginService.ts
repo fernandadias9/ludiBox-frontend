@@ -77,6 +77,10 @@ export class LoginService {
     return this.httpCliente.post<any>(this.API + "/nova-pessoa", pessoa);
   }
 
+  cadastrarAdm(pessoa: Pessoa): Observable<any>{
+    return this.httpCliente.post<any>(this.API+"/cadastrar_adm", pessoa);
+  }
+    
   logout(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('idUsuarioAutenticado');

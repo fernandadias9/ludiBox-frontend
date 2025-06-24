@@ -17,6 +17,7 @@ import { TelaAcessoNegadoComponent } from './pages/tela-acesso-negado/tela-acess
 import { UsuarioGuard } from './auth/usuario.guard';
 import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
 import { LocacaoListagemComponent } from './pages/locacao-listagem/locacao-listagem.component';
+import { TelaAdmLocacoesComponent } from './pages/tela-adm-locacoes/tela-adm-locacoes.component';
 
 const routes: Routes = [
 
@@ -25,9 +26,9 @@ const routes: Routes = [
   { path: 'cadastro', component: CadastroUsuarioComponent },
   { path: 'esqueci-minha_senha', component: RecuperacaoDeSenhaComponent },
   { path: 'acesso-negado', component: TelaAcessoNegadoComponent},
+  { path: 'produto/:id', component: DetalheProdutoComponent},
 
   { path: '', component: TelaInicialComponent, canActivate: [UsuarioGuard] },
-  { path: 'produto/:id', component: DetalheProdutoComponent, canActivate: [UsuarioGuard] }, // Verificar como vai ser denuncia, pois se o adm puder ver tem que alterar
 
   // Rotas Usuários
   { path: 'tela-perfil', component: TelaDePerfilComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
@@ -40,7 +41,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
   { path: 'cadastro-adm', component: CadastroAdministradorComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
   { path: 'administradores', component: TelaDeUsuariosAdministradoresComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
-  { path: 'denuncias', component: TelaDeDenunciasComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
+  { path: 'denuncias', component: TelaDeDenunciasComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },  
+  { path: 'locacoes-realizadas', component: TelaAdmLocacoesComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },  
 ];
 
 @NgModule({

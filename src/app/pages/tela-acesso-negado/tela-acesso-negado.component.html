@@ -1,11 +1,11 @@
 <main class="overflow-hidden relative bg-background_light h-screen">
   <div class="w-full h-24 bg-primary flex items-center px-5 lg:px-10 shadow-md fixed top-0 left-0 z-50">
     <div class="flex-grow"></div>
-    <img src="/images/logo.png" alt="Logomarca LudiBox" class="w-40 h-auto pt-2 cursor-pointer" routerLink="/" />
+    <img src="/images/logo.png" alt="Logomarca LudiBox" class="w-40 h-auto pt-2 cursor-pointer" (click)="voltarParaTelaInicial()"/>
   </div>
   <div class="min-h-screen pt-28 px-4 z-0 relative flex flex-col justify-center items-center text-center">
     <h1 class="text-2xl font-semibold mb-4">Você não possui acesso a esta página.</h1>
-    <button (click)="voltarPaginaAnterior()" class="bg-primary text-white px-6 py-2 rounded transition">
+    <button (click)="voltarParaTelaInicial()" class="bg-primary text-white px-6 py-2 rounded transition">
       <strong>Voltar</strong>
     </button>
   </div>

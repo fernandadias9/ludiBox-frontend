@@ -10,23 +10,23 @@ import { PerfilDTO } from "../model/dto/PerfilDTO";
 })
 export class PessoaService {
 
-    private readonly API = 'http://localhost:8080/pessoa';
+  private readonly API = 'http://localhost:8080/pessoa';
 
-    constructor(private httpCliente: HttpClient) { }
+  constructor(private httpCliente: HttpClient) { }
 
-    buscarPerfilPorId(id: number): Observable<PerfilDTO>{
-        return this.httpCliente.get<PerfilDTO>(`${this.API}/buscar_perfil/${id}`);
-    }
+  buscarPerfilPorId(id: number): Observable<PerfilDTO> {
+    return this.httpCliente.get<PerfilDTO>(`${this.API}/buscar_perfil/${id}`);
+  }
 
-    atualizarPerfil(id: number, dadosAtualizados: any): Observable<any> {
-      return this.httpCliente.patch(`${this.API}/atualizar/${id}`, dadosAtualizados);
-    }
+  atualizarPerfil(id: number, dadosAtualizados: any): Observable<any> {
+    return this.httpCliente.patch(`${this.API}/atualizar/${id}`, dadosAtualizados);
+  }
 
-    excluirPessoa(id: number):Observable<any> {
-      return this.httpCliente.put(`${this.API}/excluir/${id}`,{});
-    }
+  excluirPessoa(id: number): Observable<any> {
+    return this.httpCliente.put(`${this.API}/excluir/${id}`, {});
+  }
 
-    atualizarFoto(id: number, foto: File): Observable<any> {
+  atualizarFoto(id: number, foto: File): Observable<any> {
     const formData = new FormData();
     formData.append('imagem', foto);
     console.log(formData);
@@ -36,6 +36,8 @@ export class PessoaService {
     });
   }
 
-
+  buscarAdministradores(): Observable<Pessoa[]> {
+    return this.httpCliente.get<Pessoa[]>(`${this.API}/buscarAdministradores`);
+  }
 
 }
