@@ -238,7 +238,7 @@ export class TemplateAnunciosComponent implements OnInit {
   }
 
   voltarParaTelaInicial() {
-      const token = localStorage.getItem('tokenUsuarioAutenticado');
+      const token = localStorage.getItem('auth_token');
   
       if (token) {
         try {

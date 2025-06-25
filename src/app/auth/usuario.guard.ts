@@ -7,7 +7,7 @@ export class UsuarioGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(): boolean {
-    const token = localStorage.getItem('tokenUsuarioAutenticado');
+    const token = localStorage.getItem('auth_token');
 
     if (!token) return true;
 

@@ -13,7 +13,7 @@ export class TelaAcessoNegadoComponent {
   constructor(private location: Location, private router: Router) {}
 
   voltarParaTelaInicial() {
-    const token = localStorage.getItem('tokenUsuarioAutenticado');
+    const token = localStorage.getItem('auth_token');
 
     if (token) {
       try {

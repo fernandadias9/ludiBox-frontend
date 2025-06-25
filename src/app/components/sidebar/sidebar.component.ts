@@ -36,8 +36,9 @@ export class SidebarComponent {
       this.loginService.logout();
     });
   }
+  
   voltarParaTelaInicial() {
-      const token = localStorage.getItem('tokenUsuarioAutenticado');
+      const token = localStorage.getItem('auth_token');
   
       if (token) {
         try {
