@@ -1,43 +1,41 @@
 <main class="overflow-hidden relative bg-background_light min-h-screen">
-  <div class="w-full h-20 bg-primary flex items-center px-4 lg:px-6 shadow-lg fixed top-0 left-0 z-50 transition-all duration-300">
-    <button
-      (click)="toggleSidebar()"
+  <div
+    class="w-full h-20 bg-primary flex items-center px-4 lg:px-6 shadow-lg fixed top-0 left-0 z-50 transition-all duration-300">
+    <button (click)="toggleSidebar()"
       class="p-2 rounded-md text-black hover:bg-black/10 transition-colors duration-300">
       <i class="bi bi-layout-text-sidebar text-3xl"></i>
     </button>
 
     <div class="flex-grow"></div>
 
-    <img src="/images/logo.png" alt="Logomarca LudiBox" 
-      class="w-32 sm:w-40 h-auto pt-2 cursor-pointer hover:opacity-80 transition-opacity duration-300" 
+    <img src="/images/logo.png" alt="Logomarca LudiBox"
+      class="w-32 sm:w-40 h-auto pt-2 cursor-pointer hover:opacity-80 transition-opacity duration-300"
       (click)="voltarParaTelaInicial()">
   </div>
-  <nav
-    [ngClass]="{
+  <nav [ngClass]="{
       'translate-x-0': isOpen, 
       '-translate-x-full': !isOpen,
-      'lg:translate-x-0': true
+      'lg:translate-x-0': false
     }"
     class="w-64 h-screen bg-white border-r border-gray-200 text-gray-800 fixed top-0 left-0 shadow-xl transition-transform duration-300 flex flex-col z-40 lg:z-30">
-    
+
     <div class="h-20 bg-primary/5 border-b border-gray-200"></div>
 
     <div class="flex-1 overflow-y-auto py-4">
       <ul class="space-y-2 px-3">
-        <li *ngFor="let item of menuItems" 
-          class="group">
-          <a [routerLink]="item.route" 
+        <li *ngFor="let item of menuItems" class="group">
+          <a [routerLink]="item.route"
             class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-primary hover:text-white transition-all duration-300 group-hover:translate-x-1">
             <span class="font-medium">{{ item.label }}</span>
           </a>
         </li>
-        
+
         <li class="my-4">
           <hr class="border-gray-200">
         </li>
-        
+
         <li class="group">
-          <button (click)="logoutUser()" 
+          <button (click)="logoutUser()"
             class="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all duration-300 group-hover:translate-x-1">
             <i class="bi bi-box-arrow-right text-lg"></i>
             <span class="font-medium">Sair</span>
@@ -47,14 +45,11 @@
     </div>
   </nav>
 
-  <div *ngIf="isOpen" 
-    class="fixed inset-0 bg-black/50 z-30 lg:hidden transition-opacity duration-300"
+  <div *ngIf="isOpen" class="fixed inset-0 bg-black/50 z-30 lg:hidden transition-opacity duration-300"
     (click)="toggleSidebar()"></div>
 
-  <div class="transition-all duration-300 pt-20"
-    [ngClass]="{
-      'lg:ml-64': true,
-      'ml-0': true
+  <div class="transition-all duration-300 pt-20" [ngClass]="{
+      'ml-64': isOpen
     }">
     <div class="p-4 sm:p-6 lg:p-8 min-h-[calc(100vh-5rem)]">
       <ng-content></ng-content>

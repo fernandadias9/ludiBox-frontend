@@ -14,12 +14,12 @@ export class SidebarComponent {
   constructor(
     private loginService: LoginService,
     private router: Router
-  ) {}
+  ) { }
   @Input() withOverflow: boolean = false;
   @Input() menuItems: {
-[x: string]: any; label: string; route: string
-}[] = [];
-  isOpen: boolean = false; 
+    [x: string]: any; label: string; route: string
+  }[] = [];
+  isOpen: boolean = false;
 
   toggleSidebar() {
     this.isOpen = !this.isOpen;
@@ -32,35 +32,35 @@ export class SidebarComponent {
       showConfirmButton: false,
       timer: 2000
     }).then(() => {
-      this.router.navigate(['/']); 
+      this.router.navigate(['/']);
       this.loginService.logout();
     });
   }
-  
+
   voltarParaTelaInicial() {
-      const token = localStorage.getItem('auth_token');
-  
-      if (token) {
-        try {
-          const decoded: any = jwtDecode(token);
-          const role = decoded.roles;
-  
-          if (role === 'USUARIO') {
-            this.router.navigate(['/']);
-            return;
-          }
-  
-          if (role === 'ADMINISTRADOR') {
-            this.router.navigate(['/dashboard']);
-            return;
-          }
-        } catch (e) {
-  
-          this.router.navigate(['/login']);
+    const token = localStorage.getItem('auth_token');
+
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        const role = decoded.roles;
+
+        if (role === 'USUARIO') {
+          this.router.navigate(['/']);
           return;
         }
+
+        if (role === 'ADMINISTRADOR') {
+          this.router.navigate(['/dashboard']);
+          return;
+        }
+      } catch (e) {
+
+        this.router.navigate(['/login']);
+        return;
       }
-      
-      this.router.navigate(['/login']);
     }
+
+    this.router.navigate(['/login']);
+  }
 }
