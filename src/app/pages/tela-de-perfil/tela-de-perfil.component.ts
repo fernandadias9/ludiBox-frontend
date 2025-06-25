@@ -5,6 +5,8 @@ import { PessoaService } from '../../shared/service/PessoaService';
 import { LoginService } from '../../shared/service/LoginService';
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { TotpModalComponent } from '../../components/totp-modal/totp-modal.component';
 
 @Component({
   selector: 'app-tela-de-perfil',
@@ -29,17 +31,26 @@ export class TelaDePerfilComponent implements OnInit {
   isModalOpen: boolean = false;
 
   constructor(
-    private router: Router,
-    private pessoaService: PessoaService,
-    private loginService: LoginService,
-    private formBuilder: FormBuilder,
-  ) { }
+      private router: Router,
+      private pessoaService: PessoaService,
+      private loginService: LoginService,
+      private formBuilder: FormBuilder,
+      private dialog: MatDialog,
+
+    ) { }
+  
+  public showQrCodeComponent: boolean = false;
+  public is2FAEnabled: boolean = false;
+  qrCodeUrl: string | null = null;
+  showTotpModal = false;
+  totpCode = '';
 
   ngOnInit() {
     this.usuarioLogado();
     this.formSubmitted = true;
+   }
 
-  }
+  
 
   initForm(): void {
     this.perfilForm = this.formBuilder.group({
@@ -285,6 +296,81 @@ export class TelaDePerfilComponent implements OnInit {
   }
 
 
+  toggle2FAStatus(): void {
+    const novoStatus = !this.perfil.twoFactorEnabled;
+  
+    this.loginService.toggle2FA(novoStatus).subscribe({
+      next: (mensagem: string) => {
+        this.perfil.twoFactorEnabled = novoStatus;
+        this.perfil.twoFactorConfirmed = false;
+  
+      
+      },
+      error: (err) => {
+        console.error(err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro ao atualizar 2FA',
+          text: err.error?.message || err.message,
+          timer: 3000,
+          showConfirmButton: false
+        });
+      }
+    });
+  }
+
+  gerarQRCode() {
+    if (!this.perfil?.twoFactorEnabled) {
+      Swal.fire({
+        icon: 'warning',
+        title: '2FA inativo',
+        text: 'Ative a autenticação em duas etapas antes de gerar o QR Code.',
+        timer: 3000,
+        showConfirmButton: false
+      });
+      return;
+    }
+
+    this.showQrCodeComponent = true;
+  }
+  
+  abrirTotpModal() {
+    const dialogRef = this.dialog.open(TotpModalComponent, {
+      width: '400px',
+      data: { email: this.perfil.email }
+    });
+  
+    dialogRef.afterClosed().subscribe((code: string | null) => {
+      if (!code || code.trim() === '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: 'Você precisa informar o código para confirmar o 2FA.',
+        });
+        return;
+      }
+  
+      this.loginService.confirmar2FA(code).subscribe({
+        next: (res) => {
+          console.log('Resposta:', res); 
+          Swal.fire({
+            icon: 'success',
+            title: '2FA confirmado com sucesso!'
+          });
+        },
+        error: (err) => {
+          console.error('Erro real:', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Código inválido ou expirado.'
+          });
+        }
+      });      
+    });
+  }
+  
+  
 
 }
 

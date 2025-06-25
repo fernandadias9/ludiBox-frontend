@@ -16,7 +16,9 @@ export class SidebarComponent {
     private router: Router
   ) {}
   @Input() withOverflow: boolean = false;
-  @Input() menuItems: { label: string; route: string}[] = [];
+  @Input() menuItems: {
+[x: string]: any; label: string; route: string
+}[] = [];
   isOpen: boolean = false; 
 
   toggleSidebar() {
