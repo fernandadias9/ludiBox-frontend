@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Locacao } from '../model/entity/locacao';
 import { ProdutoLocacao } from '../model/entity/produtoLocacao';
-import { StatusLocacao } from '../model/enum/StatusLocacao';
+import { ValorBrutoMesDTO } from '../model/dto/ValorBrutoMesDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -90,6 +90,11 @@ export class LocacaoService {
 
   filtrarTodasLocacoes(params: any): Observable<Locacao[]> {
     return this.http.get<Locacao[]>(`${this.API}/filtrarTodasLocacoes`, { params });
+  }
+
+  listarValorBrutoMensal(dataInicio: string, dataFim: string): Observable<ValorBrutoMesDTO[]> {
+    const params = { dataInicio, dataFim };
+    return this.http.get<ValorBrutoMesDTO[]>(`${this.API}/listarValorBruto`, { params });
   }
 
   quantidadeNoMesAtual(): Observable<number> {

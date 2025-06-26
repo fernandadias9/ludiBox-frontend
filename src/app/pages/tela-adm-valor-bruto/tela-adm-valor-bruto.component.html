@@ -1,0 +1,55 @@
+<app-template-telas-adm>
+  <div class="w-full mx-auto rounded-lg p-4">
+    <div class="p-4 rounded-md text-center mb-6">
+      <h2 class="text-2xl font-bold mb-4">Valor Bruto</h2>
+      <div class="flex flex-wrap justify-center items-center gap-3 mb-4">
+        <app-input
+          placeholder="Data Início"
+          [(ngModel)]="filtro.dataInicio"
+          type="month"
+          name="dataInicio"
+        ></app-input>
+
+        <app-input
+          placeholder="Data Fim"
+          [(ngModel)]="filtro.dataFim"
+          type="month"
+          name="dataFim"
+        ></app-input>
+
+        <button
+          (click)="buscarComFiltroMensal()"
+          class="bg-primary hover:bg-[#e68f32] text-white font-semibold px-4 py-2 rounded-md"
+        >
+          Filtrar
+        </button>
+        <button (click)="limparFiltros()"
+          class="bg-yellow-300 hover:bg-yellow-400 text-gray-800 font-semibold px-4 py-2 rounded-md">
+          Limpar filtros
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto flex justify-center">
+      <div class="w-[900px]">
+        <table class="table-auto w-full text-left border-collapse border border-gray-300">
+          <thead class="bg-[#f5a052] text-white font-semibold">
+            <tr>
+              <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Mês/Ano</th>
+              <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Valor Bruto/Mês</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white text-center">
+            <tr *ngFor="let item of valorBrutoMes">
+              <td class="px-4 py-2 border-2 border-gray-300">{{ item.mesAno }}</td>
+              <td class="px-4 py-2 border-2 border-gray-300">R$ {{ item.valor | number:'1.2-2' }}</td>
+            </tr>
+            <tr *ngIf="valorBrutoMes.length === 0">
+              <td colspan="2" class="py-4 text-center text-gray-500">Nenhum valor encontrado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</app-template-telas-adm>
