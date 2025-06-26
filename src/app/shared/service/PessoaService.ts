@@ -2,7 +2,6 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Pessoa } from "../model/entity/pessoa";
-import { PessoaDTO } from "../model/dto/PessoaDTO";
 import { PerfilDTO } from "../model/dto/PerfilDTO";
 
 @Injectable({
@@ -40,4 +39,7 @@ export class PessoaService {
     return this.httpCliente.get<Pessoa[]>(`${this.API}/buscarAdministradores`);
   }
 
+  buscarUsuariosAtivos(): Observable<Pessoa[]> {
+    return this.httpCliente.get<Pessoa[]>(`${this.API}/quantidade-ativos`);
+  }
 }

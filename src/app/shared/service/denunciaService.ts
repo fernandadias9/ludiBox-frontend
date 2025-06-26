@@ -39,4 +39,8 @@ export class DenunciaService {
   bloquear(id: number): Observable<void> {
     return this.http.put<void>(`${this.API}/${id}/bloquear`, {});
   }
+
+  quantidadeNoMesAtual(): Observable<number> {
+    return this.http.get<number>(`${this.API}/quantidade-denuncias`);
+  }
 }

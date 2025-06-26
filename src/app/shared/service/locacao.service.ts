@@ -91,4 +91,12 @@ export class LocacaoService {
   filtrarTodasLocacoes(params: any): Observable<Locacao[]> {
     return this.http.get<Locacao[]>(`${this.API}/filtrarTodasLocacoes`, { params });
   }
+
+  quantidadeNoMesAtual(): Observable<number> {
+    return this.http.get<number>(`${this.API}/quantidade-locacoes`);
+  }
+
+  valorBrutoNoMesAtual(): Observable<number> {
+    return this.http.get<number>(`${this.API}/valor-bruto-mes-atual`);
+  }
 }
