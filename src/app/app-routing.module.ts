@@ -18,6 +18,7 @@ import { UsuarioGuard } from './auth/usuario.guard';
 import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
 import { LocacaoListagemComponent } from './pages/locacao-listagem/locacao-listagem.component';
 import { TelaAdmLocacoesComponent } from './pages/tela-adm-locacoes/tela-adm-locacoes.component';
+import { TelaAdmValorBrutoComponent } from './pages/tela-adm-valor-bruto/tela-adm-valor-bruto.component';
 
 const routes: Routes = [
 
@@ -43,6 +44,7 @@ const routes: Routes = [
   { path: 'administradores', component: TelaDeUsuariosAdministradoresComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
   { path: 'denuncias', component: TelaDeDenunciasComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },  
   { path: 'locacoes-realizadas', component: TelaAdmLocacoesComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },  
+  { path: 'valor-bruto', component: TelaAdmValorBrutoComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },  
 ];
 
 @NgModule({

@@ -67,11 +67,11 @@ import { SelectComponent } from './components/select/select.component';
 import { ModalConfirmacaoComponent } from './components/modal-confirmacao/modal-confirmacao.component';
 import { TelaAdmLocacoesComponent } from './pages/tela-adm-locacoes/tela-adm-locacoes.component';
 import { AvaliacaoModalComponent } from './components/avaliacao-modal/avaliacao-modal.component';
-import { QrCodeComponent } from './components/qr-code/qr-code.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { TotpModalComponent } from './components/totp-modal/totp-modal.component';
-import { ModalDenunciaComponent } from './components/modal-denuncia/modal-denuncia.component';
 import { LocacaoListagemComponent } from './pages/locacao-listagem/locacao-listagem.component';
+import { ModalDenunciaComponent } from './components/modal-denuncia/modal-denuncia.component';
+import { QrCodeComponent } from './components/qr-code/qr-code.component';
+import { TelaAdmValorBrutoComponent } from './pages/tela-adm-valor-bruto/tela-adm-valor-bruto.component';
+import { TotpModalComponent } from './components/totp-modal/totp-modal.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -121,10 +121,11 @@ export const MY_FORMATS = {
     SelectComponent,
     ModalDenunciaComponent,
     ModalConfirmacaoComponent,
+    TelaAdmLocacoesComponent,
     AvaliacaoModalComponent,
     QrCodeComponent,
-    TotpModalComponent,
-    TelaAdmLocacoesComponent
+    TelaAdmValorBrutoComponent,
+    TotpModalComponent
   ],
   imports: [
     BrowserModule,
@@ -142,7 +143,6 @@ export const MY_FORMATS = {
     MatInputModule,
     MatIconModule,
     NgxMaskDirective,
-    MatDialogModule,
   ],
   providers: [
     provideAnimationsAsync(),
