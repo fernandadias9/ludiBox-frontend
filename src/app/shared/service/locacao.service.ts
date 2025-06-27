@@ -93,7 +93,15 @@ export class LocacaoService {
   }
 
   listarValorBrutoMensal(dataInicio: string, dataFim: string): Observable<ValorBrutoMesDTO[]> {
-  const params = { dataInicio, dataFim };
-  return this.http.get<ValorBrutoMesDTO[]>(`${this.API}/listarValorBruto`, { params });
-}
+    const params = { dataInicio, dataFim };
+    return this.http.get<ValorBrutoMesDTO[]>(`${this.API}/listarValorBruto`, { params });
+  }
+
+  quantidadeNoMesAtual(): Observable<number> {
+    return this.http.get<number>(`${this.API}/quantidade-locacoes`);
+  }
+
+  valorBrutoNoMesAtual(): Observable<number> {
+    return this.http.get<number>(`${this.API}/valor-bruto-mes-atual`);
+  }
 }
