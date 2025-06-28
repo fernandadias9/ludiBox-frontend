@@ -17,12 +17,12 @@ interface AuthResponse {
 })
 export class LoginService {
 
-  private readonly API = `${environment.apiURL}/auth`;
+  private readonly API = `${environment.apiURL}`;
 
   constructor(private httpCliente: HttpClient) { }
 
   login(email: string, senha: string): Observable<AuthResponse> {
-    const url = `${this.API}/login`;
+    const url = `${this.API}/auth/login`;
 
     const body = {
       username: email,
@@ -35,7 +35,7 @@ export class LoginService {
   }
 
   confirmarLoginComTotp(tempToken: string, code: string): Observable<AuthResponse> {
-    const url = `${this.API}/2fa/confirm`;
+    const url = `${this.API}/auth/2fa/confirm`;
 
     const params = new URLSearchParams();
     params.set('tempToken', tempToken);
@@ -75,11 +75,11 @@ export class LoginService {
   }
 
   cadastrar(pessoa: Pessoa): Observable<any> {
-    return this.httpCliente.post<any>(this.API + "/nova-pessoa", pessoa);
+    return this.httpCliente.post<any>(this.API + "/auth/nova-pessoa", pessoa);
   }
 
   cadastrarAdm(pessoa: Pessoa): Observable<any>{
-    return this.httpCliente.post<any>(this.API+"/cadastrar_adm", pessoa);
+    return this.httpCliente.post<any>(this.API+"/auth/cadastrar_adm", pessoa);
   }
 
   logout(): void {
