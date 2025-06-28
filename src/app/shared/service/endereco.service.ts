@@ -25,7 +25,7 @@ export class EnderecoService {
   }
 
   buscarPorCep(cep: number) {
-    return this.http.get(`${this.API}/endereco/buscar_por_cep/${cep}`);
+    return this.http.get(`${this.API}/buscar_por_cep/${cep}`);
   }
 
   deletarEndereco(id: number) {
