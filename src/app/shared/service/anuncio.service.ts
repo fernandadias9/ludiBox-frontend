@@ -3,12 +3,13 @@ import { Observable } from 'rxjs';
 import { AnuncioLeituraDto } from '../model/dto/anuncioLeituraDto';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { DetalheAnuncioDto } from '../model/dto/detalheAnuncioDto';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnuncioService {
-  private readonly API = 'http://localhost:8080/produto';
+  private readonly API = `${environment.apiURL}/produto`;
 
   constructor(private http: HttpClient) { }
 

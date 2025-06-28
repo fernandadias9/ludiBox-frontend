@@ -4,12 +4,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Locacao } from '../model/entity/locacao';
 import { ProdutoLocacao } from '../model/entity/produtoLocacao';
 import { ValorBrutoMesDTO } from '../model/dto/ValorBrutoMesDTO';
+import { StatusLocacao } from '../model/enum/StatusLocacao';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocacaoService {
-  private readonly API = 'http://localhost:8080/locacao';
+  private readonly API = `${environment.apiURL}/locacao`;
 
   constructor(private http: HttpClient) { }
 

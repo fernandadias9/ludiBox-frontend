@@ -58,7 +58,7 @@ export class AnunciosCrudComponent {
 
   deletarProduto(id: number) {
     Swal.fire({
-      title: 'Tem certeza que deseja deletar este endereço?',
+      title: 'Tem certeza que deseja deletar este anúncio?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sim, deletar',

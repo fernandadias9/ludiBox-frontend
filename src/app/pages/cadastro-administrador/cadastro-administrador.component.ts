@@ -28,7 +28,7 @@ export class CadastroAdministradorComponent implements OnInit {
   initForm(): void {
     this.cadastroAdmForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
-      valorDocumento: ['', Validators.required],  
+      valorDocumento: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', Validators.required],
       senha: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(10)]],

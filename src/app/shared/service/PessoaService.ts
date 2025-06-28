@@ -3,13 +3,14 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Pessoa } from "../model/entity/pessoa";
 import { PerfilDTO } from "../model/dto/PerfilDTO";
+import { environment } from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PessoaService {
 
-  private readonly API = 'http://localhost:8080/pessoa';
+  private readonly API = `${environment.apiURL}/pessoa`;
 
   constructor(private httpCliente: HttpClient) { }
 

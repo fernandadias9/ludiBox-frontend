@@ -238,29 +238,31 @@ export class TemplateAnunciosComponent implements OnInit {
   }
 
   voltarParaTelaInicial() {
+      const token = localStorage.getItem('tokenUsuarioAutenticado');
+
       const token = localStorage.getItem('auth_token');
-  
+
       if (token) {
         try {
           const decoded: any = jwtDecode(token);
           const role = decoded.roles;
-  
+
           if (role === 'USUARIO') {
             this.router.navigate(['/']);
             return;
           }
-  
+
           if (role === 'ADMINISTRADOR') {
             this.router.navigate(['/dashboard']);
             return;
           }
         } catch (e) {
-  
+
           this.router.navigate(['/login']);
           return;
         }
       }
-      
+
       this.router.navigate(['/login']);
     }
 }

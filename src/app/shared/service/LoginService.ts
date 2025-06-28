@@ -4,6 +4,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from 'rxjs/operators';
 import { Pessoa } from "../model/entity/pessoa";
+import { environment } from '../../../environments/environment';
 
 interface AuthResponse {
   tempToken: string;
@@ -16,7 +17,7 @@ interface AuthResponse {
 })
 export class LoginService {
 
-  private readonly API = 'http://localhost:8080/auth';
+  private readonly API = `${environment.apiURL}/auth`;
 
   constructor(private httpCliente: HttpClient) { }
 
@@ -80,7 +81,7 @@ export class LoginService {
   cadastrarAdm(pessoa: Pessoa): Observable<any>{
     return this.httpCliente.post<any>(this.API+"/cadastrar_adm", pessoa);
   }
-    
+
   logout(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('idUsuarioAutenticado');
