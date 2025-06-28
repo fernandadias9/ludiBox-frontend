@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiURL: 'http://localhost:8080' 
+  apiURL: 'https://ludibox-backend-1.onrender.com'
 };
