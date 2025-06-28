@@ -51,7 +51,7 @@ export class LoginService {
   }
 
   getQRCode(): Observable<Blob> {
-    const url = 'http://localhost:8080/two-factors/2fa/generate';
+    const url = `${this.API}/two-factors/2fa/generate`;
 
     const token = localStorage.getItem('auth_token');
     const headers = new HttpHeaders({
@@ -65,12 +65,12 @@ export class LoginService {
   }
 
   toggle2FA(enable: boolean): Observable<string> {
-    const url = 'http://localhost:8080/two-factors/2fa/toggle';
+    const url = `${this.API}/two-factors/2fa/toggle`;
     return this.httpCliente.post(url, enable, { responseType: 'text' });
   }
 
   confirmar2FA(code: string): Observable<string> {
-    const url = `http://localhost:8080/two-factors/2fa/confirm?code=${code}`;
+    const url = `${this.API}/two-factors/2fa/confirm?code=${code}`;
     return this.httpCliente.post(url, {}, { responseType: 'text' as const });
   }
 
