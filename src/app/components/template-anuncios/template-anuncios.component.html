@@ -1,38 +1,88 @@
 <main class="relative w-screen h-screen overflow-hidden">
   <div class="w-full h-24 bg-primary flex items-center justify-between px-5 lg:px-10 shadow-md fixed top-0 left-0 z-50">
-    <img src="/images/logo.png" alt="Logomarca LudiBox" class="w-40 h-auto pt-2">
+    <img src="/images/logo.png" alt="Logomarca LudiBox" (click)="voltarParaTelaInicial()" class="w-40 h-auto pt-2 cursor-pointer" />
 
     <div *ngIf="eTelaInicial" class="relative w-2/6 bg-background_light rounded-full">
-      <input type="text" placeholder="Pesquisar"
-        class="w-full pl-4 pr-10 py-2 rounded-full bg-background_light border-transparent focus:outline-none focus:border-primary border-2">
+      <input type="text" placeholder="Pesquisar" [(ngModel)]="searchTerm" (input)="onInputChange()"
+        class="w-full pl-4 pr-10 py-2 rounded-full bg-background_light border-transparent focus:outline-none focus:border-primary border-2" />
       <i class="bi bi-search absolute right-5 top-1/2 transform -translate-y-1/2 text-primary"></i>
     </div>
 
     <div class="flex items-center gap-5">
-      <i class="bi bi-cart3 bi-cart-responsive text-2xl"></i>
+      <div class="relative" #cartContainer *ngIf="isLoggedIn">
+        <i class="bi bi-cart3 bi-cart-responsive text-2xl cursor-pointer"
+          (click)="hasLocacao ? toggleCartMenu() : null"></i>
+
+        <span *ngIf="cartCount && cartCount > 0"
+          class="absolute -top-1 -right-2 w-4 h-4 flex items-center justify-center bg-black text-white text-xs font-semibold rounded-full">
+          {{ cartCount }}
+        </span>
+
+        <div *ngIf="showCartMenu" class="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg z-50">
+          <div *ngFor="let item of cartItems" class="flex items-center justify-between px-4 py-2 hover:bg-gray-100">
+            <div>
+              <p class="font-medium">{{ item.produto.nome }}</p>
+              <p class="text-sm">
+                R$ {{ item.valorDiario | number : "1.2-2" }} / dia
+              </p>
+            </div>
+            <i class="bi bi-trash text-red-500 cursor-pointer" (click)="removerItem(item)"></i>
+          </div>
+          <hr />
+          <div class="px-4 py-2 flex justify-between">
+            <span class="font-semibold">Total:</span>
+            <span class="font-semibold">R$ {{ valorTotalLocacao | number : "1.2-2" }}</span>
+          </div>
+          <div class="px-4 py-3 flex gap-2">
+            <button class="flex-1 py-1 rounded-lg border border-red-500 text-red-500" (click)="cancelarLocacao()">
+              Cancelar
+            </button>
+            <button class="flex-1 py-1 rounded-lg bg-primary text-white" (click)="finalizar()">
+              Finalizar
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="relative">
-        <img [src]="userImage || '/images/person-circle.svg'" alt="Usuário" class="w-[40px] h-auto md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full bg-gray-500 cursor-pointer" (click)="toggleMenu()">
-        <div *ngIf="menuOpen" class="absolute right-0 mt-1 min-w-max bg-white shadow-md rounded-md px-2 md:px-3 py-1 md:py-2">
+        <img [src]="userImage || '/images/person-circle.svg'" alt="Usuário"
+          class="w-[40px] h-auto md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full bg-gray-500 cursor-pointer"
+          (click)="toggleMenu()" />
+        <div *ngIf="menuOpen"
+          class="absolute right-0 mt-1 min-w-max bg-white shadow-md rounded-md px-2 md:px-3 py-1 md:py-2">
           <ng-container *ngIf="isLoggedIn; else guestMenu">
-            <p class="px-4 py-2">{{ userName }}</p>
-            <hr>
+            <p class="px-4 py-2">{{ perfil?.nome }}</p>
+            <hr />
             <ul>
-              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Perfil</li>
-              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Endereços</li>
-              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Anúncios</li>
-              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Locações</li>
-              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500">Sair</li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" routerLink="tela-perfil">
+                Perfil
+              </li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" routerLink="enderecos">
+                Endereços
+              </li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" routerLink="anuncios">
+                Anúncios
+              </li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" routerLink="locacao-listagem">
+                Locações
+              </li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500" (click)="logoutUser()">
+                Sair
+              </li>
             </ul>
           </ng-container>
 
           <ng-template #guestMenu>
             <div class="flex items-center gap-2 mb-2 hover:bg-gray-100">
-              <p class="cursor-pointer text-base md:text-lg" routerLink="login">Entrar</p>
+              <p class="cursor-pointer text-base md:text-lg" routerLink="/login">
+                Entrar
+              </p>
               <i class="bi bi-box-arrow-in-right"></i>
             </div>
 
             <div class="flex items-center gap-2 hover:bg-gray-100">
-              <p class="cursor-pointer text-base md:text-lg" routerLink="cadastro">Cadastre-se</p>
+              <p class="cursor-pointer text-base md:text-lg" routerLink="/cadastro">
+                Cadastre-se
+              </p>
               <i class="bi bi-person-plus"></i>
             </div>
           </ng-template>
@@ -41,11 +91,14 @@
     </div>
   </div>
 
-  <div class="mt-24 bg-background_light flex flex-wrap justify-center gap-9 p-6 overflow-auto h-[calc(100vh-160px)]">
+  <div #scrollContainer (scroll)="onScroll()"
+    class="mt-24 bg-background_light flex flex-wrap justify-center gap-9 p-6 overflow-auto h-[calc(100vh-160px)]">
     <ng-content></ng-content>
   </div>
 
   <footer class="w-full h-16 bg-primary fixed bottom-0 flex items-center justify-center">
-    <p class="text-white text-center lg:text-lg">&copy; 2025 LudiBox - Todos os direitos reservados</p>
+    <p class="text-white text-center lg:text-lg">
+      &copy; 2025 LudiBox - Todos os direitos reservados
+    </p>
   </footer>
 </main>

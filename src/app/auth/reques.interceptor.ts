@@ -1,36 +1,39 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { catchError, Observable, throwError } from "rxjs";
+import { Observable } from "rxjs";
 import { LoginService } from "../shared/service/LoginService";
-
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
-  router: any;
-  constructor(private loginService: LoginService, router: Router) {}
+  private PUBLIC_PATHS = [
+    '/produto/listar',
+    '/produto/listarComFiltro',
+    '/produto/buscar',
+    '/auth/authenticatePessoa',
+    '/auth/cadastrar_adm',
+    '/auth/nova-pessoa',
+    '/api/password/reset'
+  ];
+
+  constructor(private loginService: LoginService, private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const tokenUsuarioAutenticado = localStorage.getItem('tokenUsuarioAutenticado');
-    let authReq = req;
 
-    if (tokenUsuarioAutenticado) {
-      authReq = req.clone({
-          setHeaders: { Authorization: `Bearer ${tokenUsuarioAutenticado}` }
-      });
+    if (req.method === 'OPTIONS') {
+      return next.handle(req);
     }
 
-    return next.handle(authReq).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401 || error.status === 403) {
-          this.loginService.logout();
-          this.router.navigate(['/login']);
-        }
-        return throwError(error);
-      })
-    );
-
+    if (this.PUBLIC_PATHS.some(path => req.url.includes(path))) {
+      return next.handle(req);
+    }
+    const token = this.loginService.token;
+    if (token) {
+      const cloned = req.clone({
+        headers: req.headers.set('Authorization', `Bearer ${token}`)
+      });
+      return next.handle(cloned);
+    }
+    return next.handle(req);
   }
-
-
 }

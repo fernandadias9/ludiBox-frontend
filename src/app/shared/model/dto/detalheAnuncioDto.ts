@@ -1,4 +1,5 @@
 export class DetalheAnuncioDto {
+  id: number;
   nome: string;
   dataCadastro: Date;
   altura?: number;
@@ -6,7 +7,6 @@ export class DetalheAnuncioDto {
   comprimento?: number;
   pesoSuportado?: number;
   descricao: string;
-  estoque: number;
   preco: number;
   datasIndisponiveis: Date[];
   idAnunciante: number;

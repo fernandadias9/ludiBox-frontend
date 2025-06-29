@@ -6,9 +6,9 @@
     </button>
   </div>
 
-  <p class="text-sm text-gray-600">Rua: {{ endereco.rua }}, {{ endereco.numero }} - {{ endereco.complemento }}</p>
+  <p class="text-sm text-gray-600">{{ endereco.rua }}, {{ endereco.numero }} - {{ endereco.complemento }}</p>
   <p class="text-sm text-gray-600">
-    {{ endereco.bairro }} - {{ endereco.cidade }} - {{ endereco.estado }} | CEP: {{ formatarCep(endereco.cep) }}
+    {{ endereco.bairro }} - {{ endereco.cidade }} - {{ obterSigla(endereco.estado) }} <br /> CEP: {{ formatarCep(endereco.cep) }}
   </p>
 
   <div class="absolute top-2 right-2">

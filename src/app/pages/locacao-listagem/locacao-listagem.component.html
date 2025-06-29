@@ -1,0 +1,152 @@
+<app-template-telas-perfil>
+  <div class="bg-background_light flex flex-col p-6 overflow-auto h-full">
+    <ul class="flex border-b mb-4">
+      <li class="-mb-px mr-1">
+        <a class="inline-block py-2 px-4 font-semibold cursor-pointer" [ngClass]="{'bg-white border-l border-t border-r rounded-t text-blue-700': abaSelecionada === 'recebidas',
+                      'text-blue-500 hover:text-blue-800': abaSelecionada !== 'recebidas'}"
+          (click)="selecionarAba('recebidas')">Locações Recebidas</a>
+      </li>
+      <li class="mr-1">
+        <a class="inline-block py-2 px-4 font-semibold cursor-pointer" [ngClass]="{'bg-white border-l border-t border-r rounded-t text-blue-700': abaSelecionada === 'efetuadas',
+                      'text-blue-500 hover:text-blue-800': abaSelecionada !== 'efetuadas'}"
+          (click)="selecionarAba('efetuadas')">Locações Efetuadas</a>
+      </li>
+    </ul>
+
+    <div id="recebidas" *ngIf="abaSelecionada === 'recebidas'">
+      <div *ngIf="locacoesRecebidas.length === 0" class="p-4 text-center text-gray-500">
+        Nenhuma locação recebida encontrada.
+      </div>
+
+      <div *ngFor="let produtoLocacao of locacoesRecebidas" class="p-4 border rounded-lg mb-4 bg-white shadow-sm">
+        <div class="flex justify-between">
+          <div class="grid justify-start items-start mb-3">
+            <h3 class="text-lg font-bold">Locação #{{ produtoLocacao.locacao?.id }}</h3>
+            <p>{{ produtoLocacao.locacao.status }}</p>
+          </div>
+
+          <div class="flex justify-end" *ngIf="produtoLocacao.locacao?.status === StatusLocacao.PAGO">
+            <button class="text-gray-600 hover:text-gray-800" title="Escolher como receber"
+              (click)="abrirSelectPix(produtoLocacao)">
+              ⋮
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h4 class="font-semibold mb-2">Dados do Locador</h4>
+          <p><strong>Nome:</strong> {{ produtoLocacao.locacao.locador?.nome }}</p>
+          <p><strong>Email:</strong> {{ produtoLocacao.locacao.locador?.email }}</p>
+          <p><strong>Telefone:</strong> {{ produtoLocacao.locacao.locador?.telefone }}</p>
+        </div>
+
+        <div class="mb-4">
+          <h4 class="font-semibold mb-2">Endereço de Entrega</h4>
+          <p *ngIf="produtoLocacao.locacao.enderecoEntrega">
+            {{ produtoLocacao.locacao.enderecoEntrega.rua }}, {{ produtoLocacao.locacao.enderecoEntrega.numero }} -
+            {{ produtoLocacao.locacao.enderecoEntrega.bairro }}, {{ produtoLocacao.locacao.enderecoEntrega.cidade }}/{{
+            produtoLocacao.locacao.enderecoEntrega.estado }}
+          </p>
+          <p *ngIf="!produtoLocacao.locacao.enderecoEntrega" class="text-gray-500">Endereço não definido</p>
+        </div>
+
+        <div class="mb-4">
+          <h4 class="font-semibold mb-2">Produtos</h4>
+          <div class="border-b py-2 last:border-b-0">
+            <div class="flex justify-between">
+              <div>
+                <p class="font-medium">{{ produtoLocacao.produto.nome }}</p>
+                <p class="text-sm text-gray-600">Período: {{ formatarPeriodo(produtoLocacao.dataInicio?.toString(),
+                  produtoLocacao.dataFim?.toString()) }}</p>
+              </div>
+              <div class="text-right">
+                <p>R$ {{ produtoLocacao.valorDiario | number:'1.2-2' }}/dia</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-right font-bold text-lg">
+          Valor Total: R$ {{ produtoLocacao.totalProduto| number:'1.2-2' }}
+        </div>
+      </div>
+    </div>
+
+    <div id="efetuadas" *ngIf="abaSelecionada === 'efetuadas'">
+      <div *ngIf="locacoesEfetuadas.length === 0" class="p-4 text-center text-gray-500">
+        Nenhuma locação efetuada encontrada.
+      </div>
+
+      <div *ngFor="let locacao of locacoesEfetuadas" class="p-4 border rounded-lg mb-4 bg-white shadow-sm">
+        <div class="flex justify-between items-start mb-3">
+          <h3 class="text-lg font-bold">Locação #{{ locacao.locacao.id }}</h3>
+
+          <div class="flex justify-end" *ngIf="podeAvaliar(locacao) || podeCancelar(locacao)">
+            <button class="text-gray-600 hover:text-gray-800" title="Cancelar/Avaliar" (click)="abrirMenu(locacao.id)"
+              #menuContainer>
+              ⋮
+            </button>
+
+            <div *ngIf="menuAbertoId === locacao.id" class="menu-opcoes">
+
+              <button class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100" *ngIf="podeAvaliar(locacao)"
+                (click)="openAvaliacao(locacao.id)">
+                Avaliar
+              </button>
+
+              <button class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100" *ngIf="podeCancelar(locacao)"
+                (click)="abrirModalCancelamento(locacao.locacao)">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full bg-red-500" *ngIf="locacao?.locacao?.status === StatusLocacao.CANCELADO">
+          <p class="font-semibold">Locação cancelada</p>
+        </div>
+
+        <div class="w-full bg-green-500" *ngIf="locacao?.locacao?.status === StatusLocacao.PAGO">
+          <p class="font-semibold">Pago</p>
+        </div>
+
+        <div class="w-full bg-yellow-400" *ngIf="locacao?.locacao?.status === StatusLocacao.PENDENTE">
+          <p class="font-semibold">Pendente</p>
+        </div>
+
+        <div class="mb-4 flex gap-2">
+          <h4 class="font-semibold mb-2">Endereço de entrega:</h4>
+          <p *ngIf="locacao?.locacao?.enderecoEntrega">
+            {{ locacao?.locacao?.enderecoEntrega.nome }}
+          </p>
+          <p *ngIf="!locacao?.locacao?.enderecoEntrega" class="text-gray-500">Endereço não definido</p>
+        </div>
+
+        <div class="mb-4">
+          <h4 class="font-semibold mb-2">Produtos</h4>
+          <div class="flex justify-between">
+            <div>
+              <p class="font-medium">{{ locacao.produto.nome }}</p>
+              <p class="text-sm text-gray-600">
+                <span>Anunciante: {{ locacao.produto.anunciante?.nome }}</span>
+              </p>
+              <p class="text-sm text-gray-600 italic">{{ locacao.produto.anunciante?.email }}</p>
+              <p class="text-sm text-gray-600">Período: {{ formatarPeriodo(locacao.dataInicio?.toString(),
+                locacao.dataFim?.toString()) }}</p>
+            </div>
+            <div class="text-right">
+              <p>R$ {{ locacao.valorDiario | number:'1.2-2' }}/dia</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-avaliacao-modal
+  *ngIf="modalOpen && selectedProdutoLocacaoId"
+  [produtoLocacaoId]="selectedProdutoLocacaoId"
+  (closed)="onModalClose()"
+  (saved)="onModalSaved()"
+></app-avaliacao-modal>
+  </div>
+</app-template-telas-perfil>

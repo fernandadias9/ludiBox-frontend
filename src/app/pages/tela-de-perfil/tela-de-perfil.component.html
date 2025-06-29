@@ -1,54 +1,243 @@
-<app-sidebar [withOverflow]="true" [menuItems]="menuList">
-  <div class="flex justify-center items-start min-h-screen mt-5">
-    <div class="bg-white p-4 rounded-lg shadow-lg w-full lg:w-4/5 max-w-4xl text-center">
-      <div class="flex items-center justify-between gap-4 top-0 pb-6">
-        <div class="flex items-center gap-4">
-          <img src="images/shrek_colombiano.png" 
-            alt="Foto" 
-            class="w-20 h-20 rounded-full ml-0 border-4 border-primary object-contain">
-          <label class="text-2xl font-semibold">Informações da conta</label>
-        </div>
-        
-        <div class="relative">
-          <i (click)="isOpen = !isOpen" class="text-3xl bi bi-list cursor-pointer text-xl hover:text-gray-600"></i>
-          <div *ngIf="isOpen" class="absolute right-0 mt-2 w-auto bg-white border rounded-lg shadow-lg z-10">
-            <div class="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer" routerLink="login">
-              <p class="text-base md:text-lg">Editar</p>
+<app-template-telas-perfil>
+  <div class="w-full min-h-screen transition-all duration-300">
+
+    <div class="bg-gradient-to-r from-primary/10 to-primary/5 p-4 sm:p-6 lg:p-8 rounded-lg mb-6 shadow-sm">
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 w-full lg:w-auto">
+
+          <div class="relative group">
+            <div
+              class="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-full border-4 border-primary bg-gray-500 flex items-center justify-center cursor-pointer overflow-hidden transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg"
+              (click)="abrirModalFoto()" role="button" aria-label="Alterar foto de perfil">
+
+              <ng-container *ngIf="perfil?.imagemUsuarioEmBase64; else iconeUsuario">
+                <img [src]="'data:image/jpeg;base64,' + perfil.imagemUsuarioEmBase64" alt="Foto do usuário"
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+              </ng-container>
+
+              <ng-template #iconeUsuario>
+                <img src="/images/person-circle.svg" alt="Ícone de usuário padrão"
+                  class="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity duration-300" />
+              </ng-template>
+
+              <div
+                class="absolute inset-0 bg-black/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <i class="bi bi-camera text-white text-xl"></i>
+              </div>
             </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer" routerLink="cadastro">
-              <p class="text-base md:text-lg text-red-500"><strong>Excluir</strong></p>
+
+            <div
+              class="absolute -bottom-1 -right-1 bg-primary rounded-full p-2 shadow-lg transform transition-transform duration-300 group-hover:scale-110">
+              <i class="bi bi-pencil text-white text-sm"></i>
+            </div>
+
+            <input type="file" accept="image/*" hidden #fileInput (change)="onFileSelected($event)" />
+          </div>
+
+          <div class="text-center sm:text-left flex-1">
+            <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-1">
+              {{ perfil?.nome || 'Nome do Usuário' }}
+            </h1>
+            <p class="text-sm sm:text-base text-gray-600 mb-2">{{ perfil?.email }}</p>
+          </div>
+        </div>
+
+        <div class="relative">
+          <button (click)="isOpen = !isOpen"
+            class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:bg-gray-50">
+            <i class="bi bi-three-dots text-lg"></i>
+            <span class="hidden sm:inline text-sm font-medium">Ações</span>
+          </button>
+
+          <div *ngIf="isOpen"
+            class="absolute right-0 ml-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-20 animate-in slide-in-from-top-2 duration-200">
+            <div class="py-1">
+              <button
+                class="flex items-center gap-3 w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-200"
+                (click)="toggleEdit()">
+                <i class="bi bi-pencil text-primary"></i>
+                <span class="text-sm font-medium">Editar Perfil</span>
+              </button>
+              <hr class="my-1">
+              <button
+                class="flex items-center gap-3 w-full px-4 py-3 text-left hover:bg-red-50 transition-colors duration-200"
+                (click)="excluirPerfil()">
+                <i class="bi bi-trash text-red-500"></i>
+                <span class="text-sm font-medium text-red-500">Desativar Conta</span>
+              </button>
             </div>
           </div>
         </div>
       </div>
-
-      <form class="grid gap-4 w-full">
-        <div class="grid w-full text-left">
-          <label class="text-lg font-semibold">Nome</label>
-          <app-input id="name" name="name" label="Nome Completo"
-            placeholder="{{ 'Shrek Colombiano' }}" class="input-field w-full"></app-input>
-        </div>
-        <div class="grid w-full text-left">
-          <label class="text-lg font-semibold">Email</label>
-          <app-input id="email" name="email" label="Email"
-            placeholder="{{ 'ShrekColombiano@gmail.com' }}" class="input-field w-full"></app-input>
-        </div>
-        <div class="grid w-full text-left">
-          <label class="text-lg font-semibold">Documento</label>
-          <app-input id="cpf" name="cpf" label="CPF"
-            placeholder="{{ '000.000.000-00' }}" class="input-field w-full"></app-input>
-        </div>
-        <div class="grid w-full text-left">
-          <label class="text-lg font-semibold">Telefone</label>
-          <app-input id="phone" name="phone" label="Telefone"
-            placeholder="{{ '+55 (48) 99176-2810' }}" class="input-field w-full"></app-input>
-        </div>
-        <div class="grid w-full text-left">
-          <label class="text-lg font-semibold">Senha</label>
-          <app-input id="password" name="password" label="Senha"
-            placeholder="{{ 'senha' }}" class="input-field w-full"></app-input>
-        </div>
-      </form>
     </div>
+    <app-modal-confirmacao *ngIf="isModalFotoOpen" titulo="Alterar foto de perfil"
+      mensagem="Tem certeza que deseja alterar sua foto de perfil?" (onConfirmar)="confirmarTrocaFoto()"
+      (onCancelar)="fecharModalFoto()">
+    </app-modal-confirmacao>
+    <app-modal-alterar-senha *ngIf="isModalOpen" (onClose)="fecharModal()" (onSenhaAlterada)="onSenhaAlterada()">
+    </app-modal-alterar-senha>
+    <form [formGroup]="perfilForm" (ngSubmit)="salvarPerfil()" *ngIf="perfil?.id"
+      class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
+      <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+        <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+          <i class="bi bi-person text-primary"></i>
+        </div>
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-800">
+          {{ isEditing ? 'Editando Informações Pessoais' : 'Informações Pessoais' }}
+        </h2>
+        <div *ngIf="isEditing" class="ml-auto">
+          <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full animate-pulse">
+            Modo Edição
+          </span>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+            <i class="bi bi-person-badge text-primary"></i>
+            {{ isEditing ? 'Nome/Razão Social*' : 'Nome/Razão Social' }}
+          </label>
+          <app-input formControlName="nome" id="name" name="name" [disabled]="!isEditing"
+            placeholder="Digite seu nome completo" [required]="true" [invalid]="isFieldInvalid('nome')"
+            class="w-full transition-all duration-300" [ngClass]="{'ring-2 ring-primary/20': isEditing}" />
+        </div>
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+            <i class="bi bi-envelope text-primary"></i>
+            {{ isEditing ? 'Email*' : 'Email' }}
+          </label>
+          <app-input formControlName="email" id="email" name="email" [disabled]="!isEditing" placeholder="seu@email.com"
+            [required]="true" [invalid]="isFieldInvalid('email')" class="w-full transition-all duration-300"
+            [ngClass]="{'ring-2 ring-primary/20': isEditing}" />
+        </div>
+
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+            <i class="bi bi-card-text text-gray-400"></i>
+            CPF/CNPJ
+          </label>
+          <app-input id="cpf" name="cpf" [value]="perfil?.valorDocumento" [disabled]="true"
+            [placeholder]="perfil?.valorDocumento?.toString()" [mask]="mascaraDocumento(perfil?.valorDocumento)"
+            class="w-full bg-gray-50" />
+          <p class="text-xs text-gray-500">Este campo não pode ser alterado</p>
+        </div>
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+            <i class="bi bi-telephone text-primary"></i>
+            {{ isEditing ? 'Telefone*' : 'Telefone' }}
+          </label>
+          <app-input formControlName="telefone" id="phone" name="phone" [disabled]="!isEditing" mask="(00) 0000-0000"
+            placeholder="(00) 0000-0000" [required]="true" [invalid]="isFieldInvalid('telefone')"
+            class="w-full transition-all duration-300" [ngClass]="{'ring-2 ring-primary/20': isEditing}" />
+        </div>
+      </div>
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+            <i class="bi bi-shield-check text-green-600"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-800">Segurança da Conta</h3>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <h4 class="font-semibold text-gray-800">Autenticação em Duas Etapas (2FA)</h4>
+                <div class="group relative">
+                  <i class="bi bi-info-circle text-gray-400 cursor-help"></i>
+                  <div
+                    class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
+                    Use um app como Google Authenticator para maior segurança
+                  </div>
+                </div>
+              </div>
+              <p class="text-sm text-gray-600">
+                Adicione uma camada extra de segurança à sua conta
+              </p>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <span class="text-sm font-medium text-gray-700">
+                Status:
+                <span [ngClass]="perfil?.twoFactorEnabled ? 'text-green-600' : 'text-red-600'">
+                  {{ perfil?.twoFactorEnabled ? 'Ativo' : 'Inativo' }}
+                </span>
+              </span>
+
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer" [checked]="perfil?.twoFactorEnabled"
+                  (change)="toggle2FAStatus()" />
+                <div
+                  class="w-11 h-6 bg-gray-300 peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:bg-primary transition-all duration-300 relative">
+                  <div
+                    class="absolute top-1 w-4 h-4 bg-white rounded-full shadow-md transition-all duration-300 left-1 peer-checked:left-auto peer-checked:right-1">
+                  </div>
+
+                </div>
+              </label>
+
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-200" *ngIf="perfil?.twoFactorEnabled">
+            <button type="button"
+              class="px-4 py-2 bg-primary text-sm rounded-lg text-white hover:bg-primary/80 transition-all duration-300 flex items-center gap-2"
+              (click)="gerarQRCode()" [disabled]="!perfil?.email || !perfil?.twoFactorEnabled">
+              <i class="bi bi-qr-code"></i>
+              Gerar QR Code
+            </button>
+          </div>
+
+          <div *ngIf="showQrCodeComponent && perfil?.twoFactorEnabled"
+            class="mt-4 p-4 border rounded bg-white shadow-md">
+            <app-qr-code></app-qr-code>
+            <div class="mt-4 flex justify-between items-center">
+              <button type="button" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                (click)="showQrCodeComponent = false">
+                <i class="bi bi-x-circle mr-2"></i>
+                Fechar QR Code
+              </button>
+            
+              <button type="button" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                (click)="abrirTotpModal()">
+                <i class="bi bi-check-circle mr-2"></i>
+                Confirmar Autenticação
+              </button>
+            </div>
+            
+          </div>
+
+        </div>
+        <div class="bg-blue-50 rounded-lg p-4 sm:p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-1">Senha da Conta</h4>
+            </div>
+            <button type="button"
+              class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-orangeHover active:bg-orangeActive transition-all duration-300 transform hover:scale-105"
+              (click)="abrirModal()">
+              <i class="bi bi-key mr-2"></i>
+              Alterar Senha
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <div class="flex flex-col sm:flex-row justify-end gap-3">
+          <button type="button" *ngIf="isEditing"
+            class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-300 transform hover:scale-105"
+            (click)="toggleEdit()">
+            <i class="bi bi-x-circle mr-2"></i>
+            Cancelar
+          </button>
+          <button type="submit"
+            class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-orangeHover active:bg-orangeActive transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            [disabled]="!isEditing">
+            <i class="bi bi-check-circle mr-2"></i>
+            {{ isEditing ? 'Salvar Alterações' : 'Editar Perfil' }}
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
-</app-sidebar>
+</app-template-telas-perfil>

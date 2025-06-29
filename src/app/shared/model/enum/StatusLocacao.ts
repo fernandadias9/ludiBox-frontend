@@ -1,0 +1,7 @@
+export enum StatusLocacao {
+    PENDENTE = 'PENDENTE',
+    PAGO = 'PAGO',
+    EM_ANDAMENTO = 'EM_ANDAMENTO',
+    CANCELADO = 'CANCELADO',
+    FINALIZADO = 'FINALIZADO',
+}

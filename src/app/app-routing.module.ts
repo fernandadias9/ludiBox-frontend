@@ -7,15 +7,44 @@ import { TelaDePerfilComponent } from './pages/tela-de-perfil/tela-de-perfil.com
 import { TelaInicialComponent } from './pages/tela-inicial/tela-inicial.component';
 import { DetalheProdutoComponent } from './pages/detalhe-produto/detalhe-produto.component';
 import { EnderecosComponent } from './pages/enderecos/enderecos.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { CadastroAdministradorComponent } from './pages/cadastro-administrador/cadastro-administrador.component';
+import { TelaDeUsuariosAdministradoresComponent } from './pages/tela-de-usuarios-administradores/tela-de-usuarios-administradores.component';
+import { TelaDeDenunciasComponent } from './pages/tela-de-denuncias/tela-de-denuncias.component';
+import { AnunciosCrudComponent } from './pages/anuncios-crud/anuncios-crud.component';
+import { AuthGuard } from './auth/auth.guard';
+import { TelaAcessoNegadoComponent } from './pages/tela-acesso-negado/tela-acesso-negado.component';
+import { UsuarioGuard } from './auth/usuario.guard';
+import { LocacaoFinalizarComponent } from './pages/locacao-finalizar/locacao-finalizar.component';
+import { LocacaoListagemComponent } from './pages/locacao-listagem/locacao-listagem.component';
+import { TelaAdmLocacoesComponent } from './pages/tela-adm-locacoes/tela-adm-locacoes.component';
+import { TelaAdmValorBrutoComponent } from './pages/tela-adm-valor-bruto/tela-adm-valor-bruto.component';
 
 const routes: Routes = [
+
+  // Rotas Públicas
   { path: 'login', component: TelaDeLoginComponent },
   { path: 'cadastro', component: CadastroUsuarioComponent },
   { path: 'esqueci-minha_senha', component: RecuperacaoDeSenhaComponent },
-  { path: 'tela-perfil', component: TelaDePerfilComponent },
-  { path: '', component: TelaInicialComponent },
-  { path: 'produto/:id', component: DetalheProdutoComponent },
-  { path: "enderecos", component:EnderecosComponent}
+  { path: 'acesso-negado', component: TelaAcessoNegadoComponent},
+  { path: 'produto/:id', component: DetalheProdutoComponent},
+
+  { path: '', component: TelaInicialComponent, canActivate: [UsuarioGuard] },
+
+  // Rotas Usuários
+  { path: 'tela-perfil', component: TelaDePerfilComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
+  { path: 'enderecos', component: EnderecosComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
+  { path: 'anuncios', component: AnunciosCrudComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
+  { path: "finalizar-locacao/:id", component: LocacaoFinalizarComponent , canActivate: [AuthGuard], data: { roles: ['USUARIO'] }},
+  { path: "locacao-listagem", component: LocacaoListagemComponent, canActivate: [AuthGuard], data: { roles: ['USUARIO'] } },
+
+  // Rotas Administrativas
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
+  { path: 'cadastro-adm', component: CadastroAdministradorComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
+  { path: 'administradores', component: TelaDeUsuariosAdministradoresComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },
+  { path: 'denuncias', component: TelaDeDenunciasComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },  
+  { path: 'locacoes-realizadas', component: TelaAdmLocacoesComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },  
+  { path: 'valor-bruto', component: TelaAdmValorBrutoComponent, canActivate: [AuthGuard], data: { roles: ['ADMINISTRADOR'] } },  
 ];
 
 @NgModule({

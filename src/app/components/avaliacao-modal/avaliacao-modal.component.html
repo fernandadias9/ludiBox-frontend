@@ -1,0 +1,31 @@
+<div class="modal-backdrop" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5>Avaliar produto</h5>
+      <button class="close-btn" (click)="onCancel()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="star-rating mb-3">
+        <span
+          *ngFor="let s of [1,2,3,4,5]; let i = index"
+          (click)="setRating(i+1)"
+          [class.selected]="i < estrelas"
+        >★</span>
+      </div>
+
+      <textarea
+        [(ngModel)]="comentario"
+        placeholder="Comentário (opcional)"
+        maxlength="300"
+      ></textarea>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="onCancel()">Cancelar</button>
+      <button class="btn-confirm" [disabled]="estrelas===0" (click)="onConfirm()">
+        Confirmar
+      </button>
+    </div>
+  </div>
+</div>

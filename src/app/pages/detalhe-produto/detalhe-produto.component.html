@@ -1,107 +1,105 @@
 <app-template-anuncios [eTelaInicial]="false">
   <div class="rounded-md bg-white w-full">
     <div class="grid md:grid-cols-2 gap-6 md:gap-3">
-      <gallery
-        class="mt-4 mx-4 h-40 md:h-56 lg:h-64 xl:h-96 rounded-lg shadow-md object-cover"
-        [items]="this.galleryItems"
-      ></gallery>
+      <gallery class="mt-4 mx-4 h-40 md:h-56 lg:h-64 xl:h-96 rounded-lg shadow-md object-cover" [items]="galleryItems">
+      </gallery>
+      <div class="grid mx-4 h-full md:mt-4 md:h-fit relative">
+        <div class="flex items-center justify-between">
+          <h1 class="text-xl xl:text-2xl font-bold">{{ anuncio?.nome }}</h1>
+          <div class="relative">
+            <button (click)="menuAberto = !menuAberto" class="text-gray-500 hover:text-black text-xl px-2">
+              &#8942;
+            </button>
+            <div *ngIf="menuAberto" class="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-50">
+              <button class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100" (click)="abrirModal()">
+                <i class="bi bi-exclamation-triangle mr-2"></i> Denunciar
+              </button>
+            </div>
+          </div>
+        </div>
 
-      <div class="grid mx-4 h-full md:mt-4 md:h-fit">
-        <h1 class="text-xl xl:text-2xl font-bold">{{ anuncio?.nome }}</h1>
         <p class="text-base xl:text-lg text-gray-700 font-semibold">
-          R$ {{ anuncio?.preco | number : "1.2-2" }} / diária
+          R$ {{ anuncio?.preco | number: '1.2-2' }} / diária
         </p>
 
         <div class="mt-4 mb-4">
           <h2 class="text-lg xl:text-xl font-semibold">Descrição</h2>
           <p>{{ anuncio?.descricao }}</p>
         </div>
+      </div>
 
-        <div
-          class="bg-gray-50 rounded-lg shadow-sm"
-          *ngIf="
-            anuncio.altura ||
-            anuncio.largura ||
-            anuncio.comprimento ||
-            anuncio.pesoSuportado
-          "
-        >
-          <h2 class="text-lg xl:text-xl font-semibold text-gray-700">Características</h2>
-          <div class="grid grid-cols-2 gap-2 lg:w-2/3">
-            <div *ngIf="anuncio.altura" class="text-gray-600">
-              <span class="font-base text-gray-700">Altura:</span>
-              {{ anuncio?.altura }} cm
-            </div>
-            <div *ngIf="anuncio.largura" class="text-gray-600">
-              <span class="font-base text-gray-700">Largura:</span>
-              {{ anuncio?.largura }} cm
-            </div>
-            <div *ngIf="anuncio.comprimento" class="text-gray-600">
-              <span class="font-base text-gray-700">Comprimento:</span>
-              {{ anuncio?.comprimento }} cm
-            </div>
-            <div *ngIf="anuncio.pesoSuportado" class="text-gray-600">
-              <span class="font-base text-gray-700">Peso Suportado:</span>
-              {{ anuncio?.pesoSuportado }} kg
-            </div>
+      <div class="bg-gray-50 rounded-lg shadow-sm" *ngIf="
+          anuncio?.altura ||
+          anuncio?.largura ||
+          anuncio?.comprimento ||
+          anuncio?.pesoSuportado
+        ">
+        <h2 class="text-lg xl:text-xl font-semibold text-gray-700">
+          Características
+        </h2>
+        <div class="grid grid-cols-2 gap-2 lg:w-2/3">
+          <div *ngIf="anuncio.altura" class="text-gray-600">
+            <span class="font-base text-gray-700">Altura:</span>
+            {{ anuncio?.altura }} cm
+          </div>
+          <div *ngIf="anuncio.largura" class="text-gray-600">
+            <span class="font-base text-gray-700">Largura:</span>
+            {{ anuncio?.largura }} cm
+          </div>
+          <div *ngIf="anuncio.comprimento" class="text-gray-600">
+            <span class="font-base text-gray-700">Comprimento:</span>
+            {{ anuncio?.comprimento }} cm
+          </div>
+          <div *ngIf="anuncio.pesoSuportado" class="text-gray-600">
+            <span class="font-base text-gray-700">Peso Suportado:</span>
+            {{ anuncio?.pesoSuportado }} kg
           </div>
         </div>
       </div>
-
-      <div class="grid mx-4 mb-5">
-        <p class="text-sm italic text-gray-700">Anunciado por</p>
-        <div class="flex items-center mb-1">
-          <img
-            [src]="anuncio?.imagemAnunciante"
-            alt="Foto do anunciante"
-            class="w-12 h-12 rounded-full mr-3 shadow-sm border border-gray-200"
-          />
-          <span class="font-base text-gray-700">{{
-            anuncio?.nomeAnunciante
-          }}</span>
-        </div>
-        <p>Florianópolis/SC</p>
-      </div>
     </div>
 
-    <div class="mx-4">
-      <h2 class="text-base font-semibold mb-3">Selecione os dias da locação:</h2>
-      <form [formGroup]="form">
-        <mat-form-field class="w-full md:w-1/3 xl:w-1/5">
-          <mat-date-range-input
-            [rangePicker]="selecionarPeriodo"
-            formGroupName="periodoLocacao"
-            [separator]="''"
-            [dateFilter]="dateFilter"
-            (click)="selecionarPeriodo.open()"
-          >
-            <input matStartDate placeholder="Selecione" formControlName="inicio" />
-            <input matEndDate placeholder="o período" formControlName="final" />
-          </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="selecionarPeriodo"></mat-datepicker-toggle>
-          <mat-date-range-picker
-            #selecionarPeriodo
-            class="custom-datepicker-panel"
-            panelClass="datepicker-above"
-          >
-          </mat-date-range-picker>
-        </mat-form-field>
-      </form>
-
-      <div class="flex justify-between items-center">
-        <button
-          (click)="alugar()"
-          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-200 shadow-sm"
-        >
-          Alugar
-        </button>
+    <div class="grid mx-4 mb-5">
+      <p class="text-sm italic text-gray-700">Anunciado por</p>
+      <div class="flex items-center mb-1">
+        <img [src]="anuncio?.imagemAnunciante" alt="Foto do anunciante"
+          class="w-12 h-12 rounded-full mr-3 shadow-sm border border-gray-200" />
+        <span class="font-base text-gray-700">{{ anuncio?.nomeAnunciante }}</span>
       </div>
-    </div>
-
-    <div class="m-4 border-t pt-4">
-      <p class="text-sm italic text-gray-700">
-        Anunciado em {{ anuncio?.dataCadastro | date : "dd/MM/yyyy" }}
-      </p>
+      <p>Florianópolis/SC</p>
     </div>
   </div>
+
+  <div class="mx-4">
+    <h2 class="text-base font-semibold mb-3">Selecione os dias da locação:</h2>
+    <form [formGroup]="form">
+      <mat-form-field class="w-full md:w-1/3 xl:w-1/5">
+        <mat-date-range-input [rangePicker]="selecionarPeriodo" formGroupName="periodoLocacao" [separator]="''"
+          [dateFilter]="dateFilter" (click)="selecionarPeriodo.open()">
+          <input matStartDate placeholder="Selecione" formControlName="inicio" />
+          <input matEndDate placeholder="o período" formControlName="final" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="selecionarPeriodo"></mat-datepicker-toggle>
+        <mat-date-range-picker #selecionarPeriodo class="custom-datepicker-panel" panelClass="datepicker-above">
+        </mat-date-range-picker>
+      </mat-form-field>
+    </form>
+
+    <div class="flex justify-between items-center">
+      <button (click)="alugar()"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-200 shadow-sm">
+        Alugar
+      </button>
+
+      <app-button-secondary title="Voltar para página inicial" [routerLink]="['/']"></app-button-secondary>
+    </div>
+  </div>
+
+  <div class="m-4 border-t pt-4">
+    <p class="text-sm italic text-gray-700">
+      Anunciado em {{ anuncio?.dataCadastro | date: 'dd/MM/yyyy' }}
+    </p>
+  </div>
+
+  <app-modal-denuncia *ngIf="isModalOpen" (fechar)="fecharModal()" (salvar)="enviarDenuncia($event)">
+  </app-modal-denuncia>
 </app-template-anuncios>

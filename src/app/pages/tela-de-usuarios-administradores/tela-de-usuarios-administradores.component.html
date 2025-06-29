@@ -1,0 +1,32 @@
+<app-template-telas-adm>
+  <div class="flex flex-col items-center mt-8 px-4">
+    <a routerLink="/cadastro-adm" class="self-start mb-4 ml-4 font-semibold hover:underline">
+      + Adicionar Administrador
+    </a>
+
+    <div class="w-full max-w-4xl overflow-x-auto">
+      <table class="table-auto w-full text-left border border-gray-300">
+        <thead class="bg-primary text-gray-900">
+          <tr>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Nome</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">E-mail</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">CPF/CNPJ</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Telefone</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Editar</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Deletar</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <tr *ngFor="let adm of administradores" class="hover:border border-gray-300">
+            <td class="px-4 py-2 border-2 border-gray-300 text-center">{{ adm.nome }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300 text-center">{{ adm.email }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300 text-center">{{ adm.valorDocumento }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300 text-center">{{ adm.telefone }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300 text-center">✏️</td>
+            <td class="px-4 py-2 border-2 border-gray-300 text-center">🗑️</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-template-telas-adm>

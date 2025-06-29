@@ -1,0 +1,84 @@
+<div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 p-4">
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-auto">
+
+    <div class="px-6 py-5 border-b border-gray-100">
+      <h2 class="text-2xl font-bold text-gray-800 text-center">Alterar Senha</h2>
+    </div>
+
+ 
+    <div class="px-6 py-6">
+      <form [formGroup]="senhaForm" (ngSubmit)="salvarSenha()" class="space-y-6">
+  
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700">
+            Senha atual <span class="text-red-500">*</span>
+          </label>
+          <app-input
+            formControlName="senhaAtual"
+            id="senhaAtual"
+            name="senhaAtual"
+            placeholder="Digite sua senha atual"
+            [required]="true"
+            for="senhaAtual"
+            [type]="'password'"
+          ></app-input>
+          <div *ngIf="isFieldInvalid('senhaAtual')" class="text-red-500 text-xs font-medium">
+            Este campo é obrigatório
+          </div>
+        </div>
+
+
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700">
+            Nova senha <span class="text-red-500">*</span>
+          </label>
+          <app-input
+            formControlName="novaSenha"
+            id="novaSenha"
+            name="novaSenha"
+            placeholder="Digite sua nova senha"
+            [required]="true"
+            for="novaSenha"
+            [type]="'password'"
+          ></app-input>
+          <div *ngIf="isFieldInvalid('novaSenha')" class="text-red-500 text-xs font-medium space-y-1">
+            <div *ngIf="f['novaSenha'].errors?.['required']">Este campo é obrigatório</div>
+            <div *ngIf="f['novaSenha'].errors?.['minlength']">A senha deve ter no mínimo 6 caracteres</div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-semibold text-gray-700">
+            Confirmar senha <span class="text-red-500">*</span>
+          </label>
+          <app-input
+            formControlName="confirmarSenha"
+            id="confirmarSenha"
+            name="confirmarSenha"
+            placeholder="Confirme a nova senha"
+            [required]="true"
+            for="confirmarSenha"
+            [type]="'password'"
+          ></app-input>
+          <div *ngIf="isFieldInvalid('confirmarSenha')" class="text-red-500 text-xs font-medium space-y-1">
+            <div *ngIf="f['confirmarSenha'].errors?.['required']">Este campo é obrigatório</div>
+            <div *ngIf="f['confirmarSenha'].errors?.['minlength']">A senha deve ter no mínimo 6 caracteres</div>
+          </div>
+          <div *ngIf="senhaForm.errors?.['senhasDiferentes'] && 
+                     f['novaSenha'].valid && 
+                     f['confirmarSenha'].valid" 
+               class="text-red-500 text-xs font-medium">
+            As senhas não coincidem
+          </div>
+        </div>
+      </form>
+    </div>
+    
+    <div class="px-6 py-4 bg-gray-50 rounded-b-xl border-t border-gray-100">
+      <div class="flex justify-end gap-3">
+        <app-button-secondary title="Cancelar" (click)="fecharModal()"></app-button-secondary>
+        <app-button-primary title="Salvar" [disabled]="senhaForm.invalid" (click)="salvarSenha()"></app-button-primary>
+      </div>
+    </div>
+  </div>
+</div>

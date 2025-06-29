@@ -1,0 +1,98 @@
+<app-template-telas-adm>
+  <div class="w-full mx-auto rounded-lg p-4">
+    <div class="p-4 rounded-md text-center mb-6">
+      <h2 class="text-2xl font-bold mb-4">Denúncias</h2>
+
+      <div class="flex flex-wrap justify-center items-center gap-3 mb-4">
+        <app-input placeholder="Data Início" [(ngModel)]="filtro.dataInicio" type="date" name="dataInicio"></app-input>
+        <app-input placeholder="Data Fim" [(ngModel)]="filtro.dataFim" type="date" name="dataFim"></app-input>
+        <app-select [options]="motivos" placeholder="Selecione um motivo" [(ngModel)]="filtro.motivo"
+          name="motivo"></app-select>
+        <app-select [options]="status" placeholder="Selecione um status" [(ngModel)]="filtro.status"
+          name="status"></app-select>
+
+        <button (click)="buscarDenuncias()"
+          class="bg-primary hover:bg-[#e68f32] text-white font-semibold px-4 py-2 rounded-md">
+          Filtrar
+        </button>
+
+        <button (click)="limparFiltros()"
+          class="bg-yellow-300 hover:bg-yellow-400 text-gray-800 font-semibold px-4 py-2 rounded-md">
+          Limpar filtros
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <table class="table-auto w-full text-left border-collapse border border-gray-300">
+        <thead class="bg-[#f5a052] text-white font-semibold">
+          <tr>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Denunciado</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Denunciante</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Data</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Motivo</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Descrição do Motivo</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Status</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Publicação</th>
+            <th class="px-4 py-2 border-2 border-[#e68f32] text-center">Ação</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white text-center">
+          <tr *ngFor="let denuncia of denuncias" class="hover:bg-gray-100">
+            <td class="px-4 py-2 border-2 border-gray-300">{{ denuncia.nomeDenunciado }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300">{{ denuncia.denunciante?.nome || '---' }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300">{{ denuncia.dataCriacao | date:'dd/MM/yyyy' }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300">{{ getMotivoLabel(denuncia.motivo) }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300">
+              {{ denuncia.descricao ? denuncia.descricao : 'Nenhuma descrição fornecida.' }}
+            </td>
+            <td class="px-4 py-2 border-2 border-gray-300 text-center">
+              <span class="inline-block text-gray font-semibold rounded px-3 py-1" [ngClass]="{
+                 'bg-green-400': denuncia.status === 'NOVO',
+                 'bg-yellow-400': denuncia.status === 'ANALISADO',
+                 'bg-gray-400': denuncia.status && denuncia.status !== 'NOVO' && denuncia.status !== 'ANALISADO'
+                  }">
+                {{ denuncia.status }}
+              </span>
+            </td>
+            <td class="px-4 py-2 border-2 border-gray-300">
+              <button type="button" class="btn btn-outline-secondary text-xl leading-none px-2 py-1"
+                (click)="verPublicacao(denuncia.produtoId)">
+                👁️
+              </button>
+            </td>
+            <td class="px-4 py-2 border-2 border-gray-300">
+              <div class="flex justify-center space-x-2 items-center">
+                <span *ngIf="denuncia.statusProdutoDenunciado === EnumStatusProdutoDenunciado.BLOQUEADO"
+                  class="text-red-600 font-semibold">
+                  🚫 Anúncio Bloqueado
+                </span>
+
+                <span *ngIf="denuncia.statusProdutoDenunciado === EnumStatusProdutoDenunciado.PERMITIDO"
+                  class="text-green-600 font-semibold">
+                  ✅ Anúncio Permitido
+                </span>
+
+                <ng-container *ngIf="denuncia.statusProdutoDenunciado === EnumStatusProdutoDenunciado.PENDENTE">
+                  <button class="bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded px-3 py-1"
+                    (click)="permitir(denuncia.id)">
+                    Permitir
+                  </button>
+
+                  <button class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded px-2.5 py-1"
+                    (click)="bloquear(denuncia.id)">
+                    Bloquear
+                  </button>
+                </ng-container>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="denuncias.length === 0">
+            <td colspan="8" class="py-4 text-center text-gray-500">Nenhuma denúncia encontrada.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</app-template-telas-adm>

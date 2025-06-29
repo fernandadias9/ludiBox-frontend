@@ -1,99 +1,154 @@
-import { Router } from "@angular/router"
-import { PessoaDTO } from "../../shared/model/dto/PessoaDTO"
-import { Pessoa } from "../../shared/model/entity/pessoa"
-import { LoginService } from "../../shared/service/LoginService"
-import { Component } from "@angular/core"
-import { FormBuilder, type FormGroup, Validators } from "@angular/forms"
-import Swal from "sweetalert2"
-import { jwtDecode } from "jwt-decode"
+import { Router } from "@angular/router";
+import { PessoaDTO } from "../../shared/model/dto/PessoaDTO";
+import { Pessoa } from "../../shared/model/entity/pessoa";
+import { LoginService } from "../../shared/service/LoginService";
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import Swal from "sweetalert2";
+import { jwtDecode } from "jwt-decode";
+import { PerfilDTO } from "../../shared/model/dto/PerfilDTO";
+import { PessoaService } from "../../shared/service/PessoaService";
+import { MatDialog } from "@angular/material/dialog";
+import { TotpModalComponent } from "../../components/totp-modal/totp-modal.component";
+
+interface DecodedToken {
+  sub: string;
+  roles: string;
+  iat: number;
+  exp: number;
+}
 
 @Component({
   selector: "app-tela-de-login",
   templateUrl: "./tela-de-login.component.html",
   styleUrl: "./tela-de-login.component.scss",
 })
-export class TelaDeLoginComponent {
-  public pessoa: Pessoa = new Pessoa()
-  public id: number
-  public dto: PessoaDTO = new PessoaDTO()
-  loginForm: FormGroup
-  formSubmitted = false
+export class TelaDeLoginComponent implements OnInit {
+  isLoggedIn = false;
+  public pessoa: Pessoa = new Pessoa();
+  public perfil: PerfilDTO = new PerfilDTO();
+  loginForm: FormGroup;
+  formSubmitted = false;
+  public idUsuario: number;
 
   constructor(
     private service: LoginService,
     private router: Router,
     private formBuilder: FormBuilder,
+    private pessoaService: PessoaService,
+    private dialog: MatDialog,
   ) {
-    this.initForm()
+    this.initForm();
+  }
+
+  ngOnInit() {
+    this.usuarioLogado();
   }
 
   initForm(): void {
     this.loginForm = this.formBuilder.group({
-      login: ["", Validators.required],
+      email: ["", Validators.required],
       senha: ["", Validators.required],
-    })
+    });
   }
 
-  // Getters para facilitar o acesso aos campos do formulário
   get f() {
-    return this.loginForm.controls
+    return this.loginForm.controls;
   }
 
-  // Método para verificar se um campo específico está inválido
   isFieldInvalid(fieldName: string): boolean {
-    return this.formSubmitted && this.f[fieldName].invalid
+    return this.formSubmitted && this.f[fieldName].invalid;
   }
 
-  public realizarLogin() {
-    this.formSubmitted = true
+  realizarLogin() {
+    this.formSubmitted = true;
 
     if (this.loginForm.invalid) {
-      this.mostrarMensagemErroValidacao()
-      return
+      this.mostrarMensagemErroValidacao();
+      return;
     }
 
-    this.service.autenticar(this.dto).subscribe({
-      next: (jwt) => {
-        Swal.fire("Sucesso", "Usuário autenticado com sucesso", "success");
-        const token: string = jwt.body + "";
-        localStorage.setItem("tokenUsuarioAutenticado", token);
+    const email = this.loginForm.value.email;
+    const senha = this.loginForm.value.senha;
 
-        // Decodifica o token para obter o ID do usuário
-        try {
-          const tokenDecodificado: any = jwtDecode(token);
-          const idUsuario = tokenDecodificado.id;
-          localStorage.setItem("idUsuarioAutenticado", idUsuario.toString());
-        } catch (error) {
-          console.error("Erro ao decodificar o token:", error);
+    this.service.login(email, senha).subscribe({
+      next: (res) => {
+        if (res.twoFactorRequired && res.tempToken) {
+          this.abrirModalTotp(res.tempToken);
+        } else if (res.token) {
+          this.processarJwt(res.token);
+        } else {
+          Swal.fire("Erro", "Resposta inesperada do servidor", "error");
         }
-
-        this.router.navigate(["/"]);
       },
       error: (erro) => {
-        var mensagem: string;
-        if (erro.status != 200) {
-          mensagem = "Usuário ou senha inválidos, tente novamente";
-        } else {
-          mensagem = erro.error;
-        }
+        const mensagem = erro?.error?.mensagem || "Usuário ou senha inválidos, tente novamente";
         Swal.fire("Erro", mensagem, "error");
       }
-    })
+    });
+  }
+
+  abrirModalTotp(tempToken: string) {
+    const dialogRef = this.dialog.open(TotpModalComponent, {
+      width: '400px',
+      data: { tempToken }
+    });
+
+    dialogRef.afterClosed().subscribe(codigoTotp => {
+      if (codigoTotp) {
+        this.confirmar2FA(tempToken, codigoTotp);
+      } else {
+        Swal.fire('Cancelado', 'Autenticação em duas etapas cancelada.', 'info');
+      }
+    });
+  }
+
+  confirmar2FA(tempToken: string, code: string) {
+    this.service.confirmarLoginComTotp(tempToken, code).subscribe({
+      next: (res) => {
+        this.processarJwt(res.token);
+      },
+      error: () => {
+        Swal.fire("Erro", "Código inválido ou expirado", "error");
+      }
+    });
+  }
+
+  processarJwt(jwt: string) {
+    Swal.fire("Sucesso", "Usuário autenticado com sucesso", "success");
+    localStorage.setItem("auth_token", jwt);
+
+    try {
+      const decoded = jwtDecode<DecodedToken>(jwt);
+      const idUsuario = Number(decoded.sub);
+      const perfil = decoded.roles;
+
+      localStorage.setItem("idUsuarioAutenticado", idUsuario.toString());
+
+      if (perfil === 'ADMINISTRADOR') {
+        this.router.navigate(['/dashboard']);
+      } else if (perfil === 'USUARIO') {
+        this.router.navigate(['']);
+      } else {
+        this.router.navigate(['/acesso-negado']);
+      }
+    } catch (error) {
+      console.error("Erro ao decodificar o token:", error);
+      this.router.navigate(['/acesso-negado']);
+    }
   }
 
   mostrarMensagemErroValidacao() {
-    // Coleta os nomes dos campos inválidos
-    const camposInvalidos = []
-    if (this.f["login"].invalid) camposInvalidos.push("E-mail")
-    if (this.f["senha"].invalid) camposInvalidos.push("Senha")
+    const camposInvalidos = [];
+    if (this.f["email"].invalid) camposInvalidos.push("E-mail");
+    if (this.f["senha"].invalid) camposInvalidos.push("Senha");
 
-    // Constrói a mensagem de erro
-    let mensagem = ""
+    let mensagem = "";
     if (camposInvalidos.length === 1) {
-      mensagem = `O campo ${camposInvalidos[0]} é obrigatório`
+      mensagem = `O campo ${camposInvalidos[0]} é obrigatório`;
     } else if (camposInvalidos.length > 1) {
-      const ultimoCampo = camposInvalidos.pop()
-      mensagem = `Os campos ${camposInvalidos.join(", ")} e ${ultimoCampo} são obrigatórios`
+      const ultimoCampo = camposInvalidos.pop();
+      mensagem = `Os campos ${camposInvalidos.join(", ")} e ${ultimoCampo} são obrigatórios`;
     }
 
     Swal.fire({
@@ -103,10 +158,25 @@ export class TelaDeLoginComponent {
       timer: 3000,
       timerProgressBar: true,
       showConfirmButton: false,
-    })
+    });
+  }
+
+  usuarioLogado() {
+    this.idUsuario = this.service.buscarIdUsuarioComToken();
+
+    if (this.idUsuario == null) {
+      return;
+    }
+
+    this.pessoaService.buscarPerfilPorId(this.idUsuario).subscribe(
+      resultado => {
+        this.perfil = resultado;
+        this.isLoggedIn = true;
+      }
+    );
   }
 
   voltar() {
-    this.router.navigate([""])
+    this.router.navigate([""]);
   }
 }

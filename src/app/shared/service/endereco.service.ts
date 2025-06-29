@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Endereco } from '../model/entity/endereco';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnderecoService {
-  private readonly API = 'http://localhost:8080/endereco';
+  private readonly API = `${environment.apiURL}/endereco`;
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +24,15 @@ export class EnderecoService {
     return this.http.patch(`${this.API}/atualizar-endereco/${id}`, endereco);
   }
 
+  buscarPorCep(cep: number) {
+    return this.http.get(`${this.API}/buscar_por_cep/${cep}`);
+  }
+
   deletarEndereco(id: number) {
     return this.http.delete(`${this.API}/deletar-endereco/${id}`);
   }
+
+  buscarPorId(id: number): Observable<Endereco> {
+  return this.http.get<Endereco>(`${this.API}/${id}`);
+}
 }
