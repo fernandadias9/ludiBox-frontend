@@ -17,4 +17,12 @@ export class AvaliacaoService {
   salvarAvaliacao(req: AvaliacaoRequestDTO): Observable<any> {
     return this.http.post<any>(this.API, req);
   }
+
+  listarPorProduto(produtoId: number): Observable<Avaliacao[]> {
+    return this.http.get<Avaliacao[]>(`${this.API}/produto/${produtoId}`);
+  }
+
+  obterMediaPorProduto(produtoId: number): Observable<number> {
+    return this.http.get<number>(`${this.API}/produto/${produtoId}/media`);
+  }
 }

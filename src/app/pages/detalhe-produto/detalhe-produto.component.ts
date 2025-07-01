@@ -11,6 +11,8 @@ import { DenunciaService } from '../../shared/service/denunciaService';
 import { DenunciaDTO } from '../../shared/model/dto/DenunciaDTO';
 import Swal from 'sweetalert2';
 import { jwtDecode } from 'jwt-decode';
+import { Avaliacao } from '../../shared/model/entity/avaliacao';
+import { AvaliacaoService } from '../../shared/service/avaliacao.service';
 
 @Component({
   selector: 'app-detalhe-produto',
@@ -28,6 +30,9 @@ export class DetalheProdutoComponent implements OnInit {
   form: FormGroup;
   menuAberto = false;
   isModalOpen: boolean = false;
+  usuarioId: number;
+  avaliacoes: Avaliacao[] = [];
+  mediaAvaliacoes: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,13 +41,16 @@ export class DetalheProdutoComponent implements OnInit {
     private fb: FormBuilder,
     private locacaoService: LocacaoService,
     private loginService: LoginService,
-    private denunciaService: DenunciaService
+    private denunciaService: DenunciaService,
+    private avaliacaoService: AvaliacaoService
   ) { }
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
       this.carregarAnuncio(id);
+      this.carregarAvaliacoes(id);
+      this.carregarMedia(id);
     }
 
     this.form = this.fb.group({
@@ -53,6 +61,8 @@ export class DetalheProdutoComponent implements OnInit {
     });
 
     this.dateFilter = this.criarFiltroData();
+
+    this.usuarioId = this.loginService.buscarIdUsuarioComToken() || null;
   }
 
   carregarAnuncio(id: number) {
@@ -122,14 +132,13 @@ export class DetalheProdutoComponent implements OnInit {
       valorDiario: this.anuncio.preco,
     };
 
-    const usuarioId = this.loginService.buscarIdUsuarioComToken();
-    if (!usuarioId) {
+    if (!this.usuarioId) {
       alert('Usuário não autenticado!');
       return;
     }
 
     this.locacaoService
-      .verificarLocacaoPendente(usuarioId)
+      .verificarLocacaoPendente(this.usuarioId)
       .subscribe((locacaoExistente) => {
         if (locacaoExistente) {
           this.locacaoService
@@ -148,7 +157,7 @@ export class DetalheProdutoComponent implements OnInit {
             });
         } else {
           const novaLocacao = {
-            locador: { id: usuarioId },
+            locador: { id: this.usuarioId },
             produtos: [produtoLocacao],
           };
 
@@ -208,9 +217,8 @@ export class DetalheProdutoComponent implements OnInit {
     }
 
     const role = decoded.roles;
-    const idUsuario = this.loginService.buscarIdUsuarioComToken();
 
-    if (!idUsuario) {
+    if (!this.usuarioId) {
       Swal.fire({
         icon: 'error',
         title: 'Usuário não autenticado',
@@ -232,7 +240,7 @@ export class DetalheProdutoComponent implements OnInit {
       motivo: dados.motivo,
       descricao: dados.descricao,
       produtoId: this.anuncio.id,
-      denuncianteId: idUsuario
+      denuncianteId: this.usuarioId
     };
 
     this.denunciaService.criar(denunciaDto).subscribe({
@@ -256,4 +264,17 @@ export class DetalheProdutoComponent implements OnInit {
     });
   }
 
+  private carregarAvaliacoes(produtoId: number): void {
+    this.avaliacaoService
+      .listarPorProduto(produtoId)
+      .subscribe(
+        avs => this.avaliacoes = avs,
+        _err => this.avaliacoes = []
+      );
+  }
+
+  private carregarMedia(produtoId: number): void {
+    this.avaliacaoService.obterMediaPorProduto(produtoId)
+      .subscribe(m => this.mediaAvaliacoes = m, _ => this.mediaAvaliacoes = null);
+  }
 }
