@@ -62,8 +62,8 @@
       <div class="grid mx-4 mb-5">
         <p class="text-sm italic text-gray-700">Anunciado por</p>
         <div class="flex items-center mb-1">
-          <img [src]="anuncio?.imagemAnunciante" alt="Foto do anunciante"
-            class="w-12 h-12 rounded-full mr-3 shadow-sm border border-gray-200" />
+          <img [src]="'data:image/jpeg;base64,' + anuncio?.imagemAnunciante" alt="Foto do anunciante"
+            class="w-12 h-12 rounded-full mr-3 shadow-sm border border-gray-200 object-cover" />
           <span class="font-base text-gray-700">{{
             anuncio?.nomeAnunciante
             }}</span>
