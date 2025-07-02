@@ -1,3 +1,5 @@
+import { Endereco } from "../entity/endereco";
+
 export class DetalheAnuncioDto {
   id: number;
   nome: string;
@@ -9,6 +11,7 @@ export class DetalheAnuncioDto {
   descricao: string;
   preco: number;
   datasIndisponiveis: Date[];
+  endereco?: Endereco;
   idAnunciante: number;
   nomeAnunciante: string;
   imagemAnunciante: string;

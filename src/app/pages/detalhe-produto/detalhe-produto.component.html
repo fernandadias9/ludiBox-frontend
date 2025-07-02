@@ -68,7 +68,7 @@
             anuncio?.nomeAnunciante
             }}</span>
         </div>
-        <p>Florianópolis/SC</p>
+        <p>{{ anuncio?.endereco?.cidade }}/{{ anuncio?.endereco?.estado | stateAbbr }}</p>
       </div>
     </div>
 
@@ -93,7 +93,7 @@
           Alugar
         </button>
 
-        <app-button-secondary title="Voltar para página inicial" [routerLink]="['/']"></app-button-secondary>
+        <app-button-secondary title="Voltar para página inicial" routerLink="/"></app-button-secondary>
       </div>
     </div>
 

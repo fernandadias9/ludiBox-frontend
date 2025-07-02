@@ -72,6 +72,7 @@ import { ModalDenunciaComponent } from './components/modal-denuncia/modal-denunc
 import { QrCodeComponent } from './components/qr-code/qr-code.component';
 import { TelaAdmValorBrutoComponent } from './pages/tela-adm-valor-bruto/tela-adm-valor-bruto.component';
 import { TotpModalComponent } from './components/totp-modal/totp-modal.component';
+import { StateAbbrPipe } from './utils/pipeSiglaEstado';
 
 export const MY_FORMATS = {
   parse: {
@@ -125,7 +126,8 @@ export const MY_FORMATS = {
     AvaliacaoModalComponent,
     QrCodeComponent,
     TelaAdmValorBrutoComponent,
-    TotpModalComponent
+    TotpModalComponent,
+    StateAbbrPipe
   ],
   imports: [
     BrowserModule,
