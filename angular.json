@@ -36,6 +36,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "static.json",
+                "input": "src",
+                "output": "."
               }
             ],
             "styles": [
