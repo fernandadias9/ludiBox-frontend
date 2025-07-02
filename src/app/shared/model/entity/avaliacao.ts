@@ -8,4 +8,5 @@ export class Avaliacao {
   avaliador: Pessoa;
   dataAvaliacao: string;
   ativo: boolean;
+  comentario: string;
 }
