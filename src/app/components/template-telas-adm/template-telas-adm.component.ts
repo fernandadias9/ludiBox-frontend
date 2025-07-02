@@ -16,6 +16,9 @@ export class TemplateTelasAdmComponent implements OnInit {
       { label: 'Dashboard', route: '/dashboard' },
       { label: 'Administradores', route: '/administradores' },
       { label: 'Denúncias', route: '/denuncias' },
+      { label: 'Valor Bruto', route: '/valor-bruto' },
+      { label: 'Locações Realizadas', route: '/locacoes-realizadas' },
+      { label: 'Pagamentos', route: '/pagamentos' },
     ];
   }
 }

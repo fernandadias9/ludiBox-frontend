@@ -15,4 +15,12 @@ export class PagamentoAnuncianteService {
   salvarPagamento(pagamento: any): Observable<any> {
     return this.http.post(`${this.API}`, pagamento);
   }
+
+  listarComFiltro(filtro: any): Observable<any[]> {
+    return this.http.post<any[]>(`${this.API}/filtrar`, filtro);
+  }
+
+  pagar(id: number): Observable<any> {
+    return this.http.put(`${this.API}/pagar/${id}`, null);
+  }
 }
