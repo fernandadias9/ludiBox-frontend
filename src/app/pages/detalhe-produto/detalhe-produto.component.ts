@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DetalheAnuncioDto } from '../../shared/model/dto/detalheAnuncioDto';
 import { AnuncioService } from '../../shared/service/anuncio.service';
 import { CalendarEvent, CalendarView } from 'angular-calendar';
@@ -42,7 +42,8 @@ export class DetalheProdutoComponent implements OnInit {
     private locacaoService: LocacaoService,
     private loginService: LoginService,
     private denunciaService: DenunciaService,
-    private avaliacaoService: AvaliacaoService
+    private avaliacaoService: AvaliacaoService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -276,5 +277,9 @@ export class DetalheProdutoComponent implements OnInit {
   private carregarMedia(produtoId: number): void {
     this.avaliacaoService.obterMediaPorProduto(produtoId)
       .subscribe(m => this.mediaAvaliacoes = m, _ => this.mediaAvaliacoes = null);
+  }
+
+  goToHome() {
+    this.router.navigate(['/']);
   }
 }

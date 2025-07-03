@@ -13,6 +13,8 @@ export class CardAnunciosComponent {
   @Input() itemPrice: number = 0;
   @Input() userImage: string = '';
   @Input() userName: string = '';
+  @Input() itemCidade: string = '';
+  @Input() itemEstado: string = '';
 
   constructor(private router: Router) {}
   abrirAnuncio() {
