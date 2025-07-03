@@ -13,7 +13,7 @@
         <div class="text-lg font-bold text-gray-700">R$ {{itemPrice}}</div>
 
         <div class="flex items-center gap-2 mt-3 mb-2">
-          <img [src]="userImage || '/images/person-circle.svg'" alt="Imagem de usuário" [class]="'rounded-full w-8 h-8 ' + (userImage ? 'object-cover' : 'bg-gray-500')" />
+          <img [src]="'data:image/jpeg;base64,' + userImage || '/images/person-circle.svg'" alt="Imagem de usuário" [class]="'rounded-full w-8 h-8 ' + (userImage ? 'object-cover' : 'bg-gray-500')" />
           <span class="text-base font-medium">{{userNameReduzido}}</span>
         </div>
 
