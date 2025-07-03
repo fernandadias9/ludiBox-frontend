@@ -5,7 +5,7 @@
       <p class="text-placeholder_color font-bold text-xs lg:text-base">Faça seu login</p>
     </header>
 
-    <form [formGroup]="loginForm" (ngSubmit)="realizarLogin()" class="grid gap-1.5 w-full px-4 sm:px-40 lg:px-16 xl:px-36 mb-2 lg:gap-3">
+    <form [formGroup]="loginForm" class="grid gap-1.5 w-full px-4 sm:px-40 lg:px-16 xl:px-36 mb-2 lg:gap-3">
       <app-input
         formControlName="email"
         for="email"
@@ -39,7 +39,7 @@
     </a>
     <app-button-primary
       title="Entrar"
-      (action )="realizarLogin()"
+      (action)="realizarLogin()"
     ></app-button-primary>
     
     <div class="flex flex-col items-center mt-4 xl:mt-7 gap-1 lg:gap-2">
