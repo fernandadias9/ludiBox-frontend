@@ -77,7 +77,6 @@
           id="email"
           name="email"
           label="Email *"
-          placeholder="exemplo@gmail.com"
           [required]="true"
           class="w-full md:w-3/5"
           [invalid]="
@@ -92,7 +91,6 @@
           id="phone"
           name="phone"
           label="Telefone *"
-          placeholder="(99) 99999-9999"
           [required]="true"
           class="w-full md:w-2/5"
           [invalid]="
@@ -104,6 +102,7 @@
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
         <app-input
+          class="w-full md:w-3/5"
           formControlName="senha"
           [(value)]="pessoa.senha"
           id="password"
@@ -130,6 +129,7 @@
         />
 
         <app-input
+          class="w-full md:w-2/5"
           formControlName="confirmarSenha"
           [(value)]="confirmarSenha"
           id="passwordConfirm"
@@ -137,7 +137,6 @@
           label="Confirmar Senha *"
           [required]="true"
           type="password"
-          placeholder="Confirmar Senha *"
           [invalid]="isFieldInvalid('confirmarSenha')"
         />
       </div>
