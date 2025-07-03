@@ -278,4 +278,8 @@ export class DetalheProdutoComponent implements OnInit {
     this.avaliacaoService.obterMediaPorProduto(produtoId)
       .subscribe(m => this.mediaAvaliacoes = m, _ => this.mediaAvaliacoes = null);
   }
+
+  goToHome() {
+    this.router.navigate(['/']);
+  }
 }
