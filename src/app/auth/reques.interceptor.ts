@@ -13,7 +13,8 @@ export class RequestInterceptor implements HttpInterceptor {
     '/auth/login',
     '/auth/cadastrar_adm',
     '/auth/nova-pessoa',
-    '/api/password/reset'
+    '/api/password/reset',
+    '/^\/avaliacoes\/produto\/\d+$/'
   ];
 
   constructor(private loginService: LoginService, private router: Router) { }
