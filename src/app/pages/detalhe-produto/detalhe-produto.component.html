@@ -62,13 +62,13 @@
       <div class="grid mx-4 mb-5">
         <p class="text-sm italic text-gray-700">Anunciado por</p>
         <div class="flex items-center mb-1">
-          <img [src]="anuncio?.imagemAnunciante" alt="Foto do anunciante"
-            class="w-12 h-12 rounded-full mr-3 shadow-sm border border-gray-200" />
+          <img [src]="'data:image/jpeg;base64,' + anuncio?.imagemAnunciante" alt="Foto do anunciante"
+            class="w-12 h-12 rounded-full mr-3 shadow-sm border border-gray-200 object-cover" />
           <span class="font-base text-gray-700">{{
             anuncio?.nomeAnunciante
             }}</span>
         </div>
-        <p>Florianópolis/SC</p>
+        <p>{{ anuncio?.endereco?.cidade }}/{{ anuncio?.endereco?.estado | stateAbbr }}</p>
       </div>
     </div>
 
@@ -93,7 +93,7 @@
           Alugar
         </button>
 
-        <app-button-secondary title="Voltar para página inicial" [routerLink]="['/']"></app-button-secondary>
+        <app-button-secondary title="Voltar para página inicial" (click)="goToHome()"></app-button-secondary>
       </div>
     </div>
 
@@ -107,7 +107,7 @@
   <div class="mt-6 mx-4">
     <h2 class="text-xl font-semibold mb-4">
       Avaliações
-      <span *ngIf="mediaAvaliacoes !== null" class="text-lg text-gray-600">
+      <span *ngIf="mediaAvaliacoes !== null && avaliacoes?.length > 0" class="text-lg text-gray-600">
         ({{ mediaAvaliacoes | number:'1.1-1' }}/5)
       </span>
     </h2>
