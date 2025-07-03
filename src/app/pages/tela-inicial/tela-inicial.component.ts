@@ -21,9 +21,11 @@ export class TelaInicialComponent implements OnInit {
   anuncios: AnuncioLeituraDto[] = []
   public perfil: PerfilDTO = new PerfilDTO()
   public idUsuario: number
-  private searchSubject = new Subject<string>()
+  private searchSubject = new Subject<string>();
+  private cidadeSubject = new Subject<string>();
 
   currentSearchTerm = ""
+  currentCidadeFiltro = "";
   currentPage = 0
   loading = false
   allLoaded = false
@@ -39,10 +41,18 @@ export class TelaInicialComponent implements OnInit {
     this.searchSubject.pipe(debounceTime(500), distinctUntilChanged()).subscribe((term) => {
       this.handleSearch(term as string)
     })
+
+    this.cidadeSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe((cidade) => {
+      this.handleCidadeFilter(cidade as string);
+    });
   }
 
   ngOnDestroy() {
-    this.searchSubject.complete()
+    this.searchSubject.complete();
+    this.cidadeSubject.complete();
   }
 
   carregarAnuncios(): void {
@@ -50,7 +60,7 @@ export class TelaInicialComponent implements OnInit {
 
     this.loading = true
 
-    this.anuncioService.listarComFiltro(this.currentSearchTerm, this.currentPage, 12).subscribe(
+    this.anuncioService.listarComFiltro(this.currentSearchTerm, this.currentCidadeFiltro, this.currentPage, 12).subscribe(
       (res: any) => {
         const novos = res.content
         if (novos.length === 0) {
@@ -70,6 +80,7 @@ export class TelaInicialComponent implements OnInit {
         this.loading = false
       },
     )
+
   }
 
   private handleSearch(searchTerm: string): void {
@@ -77,6 +88,12 @@ export class TelaInicialComponent implements OnInit {
     this.currentSearchTerm = searchTerm.trim()
 
     this.carregarAnuncios()
+  }
+
+  private handleCidadeFilter(cidade: string): void {
+    this.resetPaginationState();
+    this.currentCidadeFiltro = cidade.trim();
+    this.carregarAnuncios();
   }
 
   private resetPaginationState(): void {
@@ -88,6 +105,10 @@ export class TelaInicialComponent implements OnInit {
 
   onSearch(term: string) {
     this.searchSubject.next(term)
+  }
+
+  onCidadeFilter(cidade: string) {
+    this.cidadeSubject.next(cidade);
   }
 
   toggleMenu() {

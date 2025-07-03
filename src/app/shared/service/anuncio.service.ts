@@ -21,11 +21,15 @@ export class AnuncioService {
     return this.http.get<DetalheAnuncioDto>(`${this.API}/buscar/${idProduto}`);
   }
 
-  listarComFiltro(nome = "", page = 0, size = 12): Observable<any> {
+  listarComFiltro(nome = "", cidade = "", page = 0, size = 12): Observable<any> {
     let params = new HttpParams().set("page", page.toString()).set("size", size.toString())
 
     if (nome && nome.trim() !== "") {
       params = params.set("nome", nome.trim())
+    }
+
+    if (cidade && cidade.trim() !== "") {
+      params = params.set("cidade", cidade.trim());
     }
 
     return this.http.get(`${this.API}/listarComFiltro`, { params })
