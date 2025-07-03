@@ -1,8 +1,6 @@
 <app-template-telas-iniciais [withOverflow]="isPessoaJuridica || withOverflow">
   <div class="grid justify-items-center w-full lg:pt-24">
-    <header
-      class="grid justify-items-center gap-1.5 mb-4 pt-5 lg:gap-3 lg:mb-6 lg:pt-10"
-    >
+    <header class="grid justify-items-center gap-1.5 mb-4 pt-5 lg:gap-3 lg:mb-6 lg:pt-10">
       <h1 class="text-xl font-extrabold drop-shadow-lg lg:text-3xl">
         Cadastre-se
       </h1>
@@ -10,171 +8,290 @@
 
     <div class="w-full md:px-11 lg:px-0 xl:px-12 mb-1">
       <label class="inline-flex items-center cursor-pointer">
-        <input
-          type="checkbox"
-          (change)="togglePessoaJuridica($event)"
-          value=""
-          class="sr-only peer"
-        />
+        <input type="checkbox" (change)="togglePessoaJuridica($event)" value="" class="sr-only peer" />
         <div
-          class="relative w-12 h-7 bg-white border-primary border-2 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-primary peer-checked:after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
-        ></div>
+          class="relative w-12 h-7 bg-white border-primary border-2 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-primary peer-checked:after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+        </div>
         <span class="ms-3 text-base lg:text-lg font-semibold text-[#C6C2C2]">
           Pessoa jurídica
         </span>
       </label>
     </div>
 
-    <form
-      [formGroup]="cadastroForm"
-      (ngSubmit)="cadastrarUsuario()"
-      class="grid gap-1.5 w-full sm:px-40 md:px-11 lg:px-0 xl:px-12 mb-2 lg:gap-3"
-    >
+    <form [formGroup]="cadastroForm" (ngSubmit)="cadastrarUsuario()"
+      class="grid gap-1.5 w-full sm:px-40 md:px-11 lg:px-0 xl:px-12 mb-2 lg:gap-3">
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-        <app-input
-          formControlName="nome"
-          [(value)]="pessoa.nome"
-          id="name"
-          name="name"
-          [label]="isPessoaJuridica ? 'Razão Social *' : 'Nome Completo *'"
-          [required]="true"
-          class="w-full md:w-3/5"
+        <app-input formControlName="nome" [(value)]="pessoa.nome" id="name" name="name"
+          [label]="isPessoaJuridica ? 'Razão Social *' : 'Nome Completo *'" [required]="true" class="w-full md:w-3/5"
           [invalid]="
             cadastroForm.get('nome')?.invalid &&
             cadastroForm.get('nome')?.touched
-          "
-          [customErrorMsg]="
+          " [customErrorMsg]="
             cadastroForm.get('nome')?.hasError('minlength')
               ? 'Mínimo de 10 caracteres'
               : cadastroForm.get('nome')?.hasError('maxlength')
               ? 'Máximo de 50 caracteres'
               : ''
-          "
-          [showCustomError]="
+          " [showCustomError]="
             (cadastroForm.get('nome')?.hasError('minlength') ||
               cadastroForm.get('nome')?.hasError('maxlength')) &&
             cadastroForm.get('nome')?.touched
-          "
-        />
+          " />
 
-        <app-input
-          formControlName="valorDocumento"
-          [(value)]="pessoa.valorDocumento"
-          id="document"
-          name="document"
-          [label]="isPessoaJuridica ? 'CNPJ *' : 'CPF *'"
-          [required]="true"
-          class="w-full md:w-2/5"
+        <app-input formControlName="valorDocumento" [(value)]="pessoa.valorDocumento" id="document" name="document"
+          [label]="isPessoaJuridica ? 'CNPJ *' : 'CPF *'" [required]="true" class="w-full md:w-2/5"
           [invalid]="isFieldInvalid('valorDocumento')"
-          [mask]="isPessoaJuridica ? '99.999.999/9999-99' : '999.999.999-99'"
-        />
+          [mask]="isPessoaJuridica ? '99.999.999/9999-99' : '999.999.999-99'" />
       </div>
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-        <app-input
-          formControlName="email"
-          [(value)]="pessoa.email"
-          id="email"
-          name="email"
-          label="Email *"
-          placeholder="exemplo@gmail.com"
-          [required]="true"
-          class="w-full md:w-3/5"
-          [invalid]="
+        <app-input formControlName="email" [(value)]="pessoa.email" id="email" name="email" label="Email *"
+          placeholder="exemplo@gmail.com" [required]="true" class="w-full md:w-3/5" [invalid]="
             cadastroForm.get('email')?.invalid &&
             cadastroForm.get('email')?.touched
-          "
-        />
+          " />
 
-        <app-input
-          formControlName="telefone"
-          [(value)]="pessoa.telefone"
-          id="phone"
-          name="phone"
-          label="Telefone *"
-          placeholder="(99) 9999-9999"
-          [required]="true"
-          class="w-full md:w-2/5"
-          [invalid]="
+        <app-input formControlName="telefone" [(value)]="pessoa.telefone" id="phone" name="phone" label="Telefone *"
+          placeholder="(99) 99999-9999" [required]="true" class="w-full md:w-2/5" [invalid]="
             cadastroForm.get('telefone')?.invalid &&
-            cadastroForm.get('telefone')?.touched"
-          mask="(99) 9999-9999"
-        />
+            cadastroForm.get('telefone')?.touched" mask="(99) 99999-9999" />
       </div>
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-        <app-input
-          formControlName="senha"
-          [(value)]="pessoa.senha"
-          id="password"
-          name="password"
-          label="Senha *"
-          type="password"
-          [required]="true"
-          [invalid]="
+        <app-input formControlName="senha" [(value)]="pessoa.senha" id="password" name="password" label="Senha *"
+          type="password" [required]="true" [invalid]="
             cadastroForm.get('senha')?.invalid &&
             cadastroForm.get('senha')?.touched
-          "
-          [customErrorMsg]="
+          " [customErrorMsg]="
             cadastroForm.get('senha')?.hasError('minlength')
               ? 'Mínimo de 6 caracteres'
               : cadastroForm.get('senha')?.hasError('maxlength')
               ? 'Máximo de 10 caracteres'
               : ''
-          "
-          [showCustomError]="
+          " [showCustomError]="
             (cadastroForm.get('senha')?.hasError('minlength') ||
               cadastroForm.get('senha')?.hasError('maxlength')) &&
             cadastroForm.get('senha')?.touched
-          "
-        />
+          " />
 
-        <app-input
-          formControlName="confirmarSenha"
-          [(value)]="confirmarSenha"
-          id="passwordConfirm"
-          name="passwordConfirm"
-          label="Confirmar Senha *"
-          [required]="true"
-          type="password"
-          placeholder="Confirmar Senha *"
-          [invalid]="isFieldInvalid('confirmarSenha')"
-        />
+        <app-input formControlName="confirmarSenha" [(value)]="confirmarSenha" id="passwordConfirm"
+          name="passwordConfirm" label="Confirmar Senha *" [required]="true" type="password"
+          placeholder="Confirmar Senha *" [invalid]="isFieldInvalid('confirmarSenha')" />
       </div>
 
       <div class="flex items-start mt-2 lg:mt-4 mb-5 px-2">
-        <input
-          type="checkbox"
-          formControlName="aceitaTermos"
-          name="agreeTerms"
-          class="h-5 w-5 cursor-pointer"
-          (change)="onTermsChange($event)"
-          [class.border-red-500]="isFieldInvalid('aceitaTermos')"
-          required
-        />
+        <input type="checkbox" formControlName="aceitaTermos" name="agreeTerms" class="h-5 w-5 cursor-pointer"
+          (change)="onTermsChange($event)" [class.border-red-500]="isFieldInvalid('aceitaTermos')" required />
 
-        <label
-          class="text-xs md:text-sm lg:text-base ml-2"
-          [class.text-red-500]="isFieldInvalid('aceitaTermos')"
-        >
+        <label class="text-xs md:text-sm lg:text-base ml-2" [class.text-red-500]="isFieldInvalid('aceitaTermos')">
           Eu concordo com os
-          <a
-            href="#"
-            class="text-xs md:text-sm lg:text-base text-blue-600 underline"
-            >Termos de Serviço</a
-          >,
-          <a
-            href="#"
-            class="text-xs md:text-sm lg:text-base text-blue-600 underline"
-            >Termos e Condições Gerais</a
-          >
-          e
-          <a
-            href="#"
-            class="text-xs md:text-sm lg:text-base text-blue-600 underline"
-            >Política de Privacidade</a
-          >.
+          <a href="#" class="text-xs md:text-sm lg:text-base text-blue-600 underline"
+            (click)="openTermsModal(); $event.preventDefault()">Termos de Uso e Política de Privacidade</a>
+          .
         </label>
+
+        <div *ngIf="showTermsModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div class="bg-white rounded-lg w-11/12 md:w-2/3 lg:w-1/2 p-6 relative max-h-[80vh] overflow-y-auto">
+            <button type="button" (click)="closeTermsModal()"
+              class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl leading-none"
+              aria-label="Fechar">&times;</button>
+
+            <h2 class="text-xl font-bold mb-4">
+              Termos de Uso e Política de Privacidade
+            </h2>
+
+            <div class="space-y-4 text-sm leading-relaxed">
+              <h1 class="text-2xl font-bold">Política de Privacidade e Termos de Uso – LudiBox</h1>
+              <p class="text-xs text-gray-600">Última atualização: 04 de junho de 2025</p>
+
+              <h2 class="text-xl font-semibold">1. Introdução</h2>
+              <p>Este documento estabelece os Termos de Uso e a Política de Privacidade da plataforma
+                <strong>LudiBox</strong>, um marketplace voltado para o aluguel de brinquedos de festa. Ao utilizar a
+                LudiBox, o usuário concorda integralmente com os termos e condições aqui descritos. Caso não concorde, o
+                uso da plataforma deve ser interrompido imediatamente.</p>
+
+              <h2 class="text-xl font-semibold">2. Política de Privacidade</h2>
+              <p>Esta Política de Privacidade descreve como o LudiBox coleta, usa, armazena e compartilha suas
+                informações pessoais. Nosso compromisso é proteger sua privacidade e garantir a segurança dos seus
+                dados.</p>
+
+              <h3 class="text-lg font-medium">2.1 Coleta de Dados Pessoais</h3>
+              <p>Para que você possa alugar ou anunciar produtos em nossa plataforma, coletamos as seguintes
+                informações:</p>
+              <ul class="list-disc list-inside space-y-2">
+                <li><strong>No cadastro:</strong>
+                  <ul class="list-disc list-inside ml-4">
+                    <li><strong>Nome completo</strong>: Para identificação do usuário.</li>
+                    <li><strong>Documento (CPF ou CNPJ)</strong>: Para validação da identidade do usuário e cumprimento
+                      de obrigações legais. Importante: Cada CPF/CNPJ só pode estar associado a um único cadastro em
+                      nossa plataforma.</li>
+                    <li><strong>Telefone</strong>: Para comunicação e contato.</li>
+                    <li><strong>E-mail</strong>: Para comunicação, notificações e acesso à conta. Importante: Cada
+                      e-mail só pode estar associado a um único cadastro em nossa plataforma.</li>
+                  </ul>
+                </li>
+                <li><strong>Ao alugar um produto:</strong>
+                  <ul class="list-disc list-inside ml-4">
+                    <li><strong>Endereço de entrega e retirada</strong>: Para que o produto possa ser entregue e
+                      recolhido no local desejado.</li>
+                  </ul>
+                </li>
+              </ul>
+
+              <h3 class="text-lg font-medium">2.2 Uso dos Dados Pessoais</h3>
+              <p>Utilizamos seus dados pessoais para as seguintes finalidades:</p>
+              <ul class="list-disc list-inside space-y-2">
+                <li><strong>Identificação e autenticação</strong>: Para permitir o acesso à sua conta e garantir que
+                  você é o titular do cadastro.</li>
+                <li><strong>Viabilização das transações:</strong>
+                  <ul class="list-disc list-inside ml-4">
+                    <li><strong>Para o anunciante</strong>: Seu nome completo, telefone, e-mail e endereço de
+                      entrega/retirada serão compartilhados com o anunciante do produto que você alugou para que ele
+                      possa providenciar a entrega e a comunicação necessária.</li>
+                    <li><strong>Para o locatário</strong>: O nome completo e e-mail do anunciante serão exibidos para
+                      você, o locatário, para que você possa se comunicar e identificar o responsável pelo anúncio.</li>
+                  </ul>
+                </li>
+                <li><strong>Comunicação</strong>: Envio de notificações sobre transações, atualizações da plataforma,
+                  avisos e informações relevantes.</li>
+                <li><strong>Melhoria da plataforma</strong>: Análise de dados anonimizados para aprimorar nossos
+                  serviços e a experiência do usuário.</li>
+                <li><strong>Cumprimento de obrigações legais</strong>: Atendimento a requisitos legais e regulatórios.
+                </li>
+                <li><strong>Manutenção de histórico</strong>: Seus dados serão mantidos por pelo menos um ano após a
+                  exclusão da conta para fins de histórico e conformidade legal.</li>
+              </ul>
+
+              <h3 class="text-lg font-medium">2.3 Compartilhamento de Dados Pessoais</h3>
+              <p>Seus dados pessoais são compartilhados apenas nas situações descritas abaixo:</p>
+              <ul class="list-disc list-inside space-y-2">
+                <li><strong>Com anunciantes</strong>: Conforme detalhado no item 2.2, para viabilizar as transações de
+                  aluguel.</li>
+                <li><strong>Com autoridades legais</strong>: Caso haja uma requisição legal ou ordem judicial.</li>
+                <li><strong>Com prestadores de serviço</strong>: Empresas parceiras que nos auxiliam na operação da
+                  plataforma, como serviços de pagamento e hospedagem de dados, sempre mediante contrato que garanta a
+                  segurança e o sigilo de seus dados.</li>
+              </ul>
+
+              <h3 class="text-lg font-medium">2.4 Armazenamento e Segurança dos Dados</h3>
+              <p>Seus dados são armazenados em servidores seguros, com medidas técnicas e administrativas apropriadas
+                para proteger suas informações contra acesso não autorizado, uso indevido, divulgação, alteração ou
+                destruição. Nosso compromisso é com a segurança dos seus dados.</p>
+
+              <h3 class="text-lg font-medium">2.5 Seus Direitos como Titular dos Dados</h3>
+              <p>Em conformidade com a LGPD, você possui os seguintes direitos em relação aos seus dados pessoais:</p>
+              <ul class="list-disc list-inside space-y-2">
+                <li>Confirmação da existência de tratamento</li>
+                <li>Acesso aos dados</li>
+                <li>Correção de dados incompletos, inexatos ou desatualizados</li>
+                <li>Anonimização, bloqueio ou eliminação de dados desnecessários, excessivos ou tratados em
+                  desconformidade com a LGPD</li>
+                <li>Portabilidade dos dados a outro fornecedor de serviço ou produto</li>
+                <li>Eliminação dos dados pessoais tratados com o consentimento do titular</li>
+                <li>Informação sobre as entidades públicas e privadas com as quais o controlador realizou uso
+                  compartilhado de dados</li>
+                <li>Informação sobre a possibilidade de não fornecer consentimento e sobre as consequências da negativa
+                </li>
+                <li>Revogação do consentimento</li>
+              </ul>
+              <p>Para exercer qualquer um desses direitos, entre em contato conosco através do e-mail <a
+                  href="mailto:ludibox&#64;gmail.com">ludibox&#64;gmail.com</a>.</p>
+
+              <h3 class="text-lg font-medium">2.6 Retenção de Dados</h3>
+              <p>Mesmo após a exclusão da sua conta, manteremos seus dados por um período mínimo de um ano para fins de
+                cumprimento de obrigações legais, auditoria e manutenção de histórico, conforme previsto em lei.</p>
+
+              <h2 class="text-xl font-semibold">3. Termos de Uso</h2>
+              <p>Estes Termos de Uso regem o acesso e a utilização da plataforma LudiBox, bem como os serviços
+                oferecidos.</p>
+
+              <h3 class="text-lg font-medium">3.1 Cadastro e Conta de Usuário</h3>
+              <ul class="list-disc list-inside space-y-2">
+                <li>Para alugar ou anunciar produtos, você deve criar uma conta, fornecendo informações verdadeiras,
+                  precisas e atualizadas.</li>
+                <li>Você é o único responsável pela segurança da sua senha e por todas as atividades realizadas em sua
+                  conta.</li>
+                <li>É proibido o uso de CPF/CNPJ ou e-mail que já estejam cadastrados na plataforma.</li>
+              </ul>
+
+              <h3 class="text-lg font-medium">3.2 Aluguel de Produtos</h3>
+              <ul class="list-disc list-inside space-y-2">
+                <li>Ao alugar um produto, você concorda em fornecer o endereço correto para entrega e retirada.</li>
+                <li>A comunicação entre locatário e anunciante ocorrerá de forma transparente, com o compartilhamento
+                  dos dados essenciais para a transação, conforme detalhado na Política de Privacidade.</li>
+              </ul>
+
+              <h3 class="text-lg font-medium">3.3 Cancelamento de Locação</h3>
+              <ul class="list-disc list-inside space-y-2">
+                <li>Você pode cancelar uma locação já paga, desde que seja antes do primeiro dia do período escolhido
+                  para o aluguel.</li>
+                <li>Caso o cancelamento ocorra com menos de 3 (três) dias de antecedência ao início do período de
+                  aluguel, será aplicada uma multa de 10% (dez por cento) sobre o valor total do aluguel. Após o
+                  pagamento da multa, o processo de estorno será iniciado e efetivado em até 10 dias úteis.</li>
+              </ul>
+
+              <h3 class="text-lg font-medium">3.4 Remuneração da Plataforma e Anunciante</h3>
+              <ul class="list-disc list-inside space-y-2">
+                <li>O anunciante receberá 90% (noventa por cento) do valor do aluguel de seu produto.</li>
+                <li>Os 10% (dez por cento) restantes do valor do aluguel serão retidos pela plataforma como taxa de
+                  serviço.</li>
+                <li>O repasse ao anunciante será efetuado 30 (trinta) dias após a efetivação do pagamento pelo
+                  locatário.</li>
+                <li>O repasse será feito exclusivamente por Pix, sendo que o anunciante deve informar qual chave Pix
+                  deseja utilizar.</li>
+              </ul>
+
+              <h3 class="text-lg font-medium">3.5 Anúncios e Conteúdo</h3>
+              <ul class="list-disc list-inside space-y-2">
+                <li>Anúncios podem ser denunciados por qualquer usuário e serão avaliados pelos administradores da
+                  plataforma.</li>
+                <li>Anúncios indevidos ou que contenham dados de contato serão bloqueados sem aviso prévio, garantindo
+                  que toda a comunicação ocorra dentro da plataforma.</li>
+                <li>Você é responsável pelo conteúdo dos seus anúncios, garantindo que não infrinjam direitos de
+                  terceiros ou legislação aplicável.</li>
+              </ul>
+
+              <h3 class="text-lg font-medium">3.6 Conduta do Usuário</h3>
+              <ul class="list-disc list-inside space-y-2">
+                <li>Você concorda em utilizar a plataforma de forma ética, respeitando os demais usuários e a legislação
+                  brasileira.</li>
+                <li>É proibido qualquer tipo de fraude, disseminação de conteúdo ilegal, ofensivo ou prejudicial.</li>
+              </ul>
+
+              <h3 class="text-lg font-medium">3.7 Propriedade Intelectual</h3>
+              <p>Todo o conteúdo da plataforma, incluindo textos, imagens e logotipos, é de propriedade exclusiva do
+                LudiBox ou de seus licenciadores, sendo protegido por leis de direitos autorais e propriedade
+                industrial.</p>
+
+              <h3 class="text-lg font-medium">3.8 Limitação de Responsabilidade</h3>
+              <ul class="list-disc list-inside space-y-2">
+                <li>O LudiBox atua como intermediário entre locatários e anunciantes, não se responsabilizando por danos
+                  ou prejuízos decorrentes da utilização dos produtos alugados ou da conduta dos usuários.</li>
+                <li>Não garantimos disponibilidade ininterrupta da plataforma, embora nos esforcemos para oferecer um
+                  serviço de qualidade.</li>
+              </ul>
+
+              <h3 class="text-lg font-medium">3.9 Rescisão</h3>
+              <p>Podemos rescindir ou suspender seu acesso à plataforma a qualquer momento e sem aviso prévio, caso haja
+                violação destes Termos de Uso ou da legislação aplicável.</p>
+
+              <h3 class="text-lg font-medium">3.10 Alterações nos Termos e Políticas</h3>
+              <p>Reservamo-nos o direito de modificar esta Política de Privacidade e os Termos de Uso a qualquer
+                momento. Quaisquer alterações serão comunicadas na plataforma ou por e‑mail. O uso contínuo da
+                plataforma após as alterações significa sua aceitação dos novos termos.</p>
+
+              <h3 class="text-lg font-medium">3.11 Legislação e Foro</h3>
+              <p>Estes Termos de Uso e a Política de Privacidade são regidos pelas leis da República Federativa do
+                Brasil. Fica eleito o foro da comarca de Florianópolis/SC para dirimir quaisquer dúvidas ou litígios
+                decorrentes deste documento.</p>
+
+              <p>Ao utilizar o LudiBox, você concorda integralmente com a nossa Política de Privacidade e nossos Termos
+                de Uso.</p>
+              <p class="text-center font-medium">Agradecemos por escolher nossa plataforma.</p>
+
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="flex flex-col w-full items-center gap-3 pb-3">
