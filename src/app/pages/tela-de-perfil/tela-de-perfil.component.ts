@@ -352,7 +352,7 @@ export class TelaDePerfilComponent implements OnInit {
   
       this.loginService.confirmar2FA(code).subscribe({
         next: (res) => {
-          console.log('Resposta:', res); 
+          this.showQrCodeComponent = false;
           Swal.fire({
             icon: 'success',
             title: '2FA confirmado com sucesso!'

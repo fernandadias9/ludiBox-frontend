@@ -52,9 +52,9 @@
           " />
 
         <app-input formControlName="telefone" [(value)]="pessoa.telefone" id="phone" name="phone" label="Telefone *"
-          placeholder="(99) 99999-9999" [required]="true" class="w-full md:w-2/5" [invalid]="
+          placeholder="(99) 9999-9999" [required]="true" class="w-full md:w-2/5" [invalid]="
             cadastroForm.get('telefone')?.invalid &&
-            cadastroForm.get('telefone')?.touched" mask="(99) 99999-9999" />
+            cadastroForm.get('telefone')?.touched" mask="(99) 9999-9999" />
       </div>
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
