@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, type FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '../../shared/service/LoginService';
 import type { Pessoa } from '../../shared/model/entity/pessoa';
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './cadastro-usuario.component.html',
   styleUrl: './cadastro-usuario.component.scss',
 })
-export class CadastroUsuarioComponent {
+export class CadastroUsuarioComponent implements OnInit {
   isPessoaJuridica = false;
   aceitaTermos = false;
   snChecked = false;
@@ -19,6 +19,7 @@ export class CadastroUsuarioComponent {
   confirmarSenha = '';
   cadastroForm: FormGroup;
   formSubmitted = false;
+  registrarDisabled = false;
 
   public pessoa: Pessoa = {
     id: 0,
@@ -37,6 +38,10 @@ export class CadastroUsuarioComponent {
   ) {
     this.updateWithOverflow(window.innerWidth);
     this.initForm();
+  }
+
+  ngOnInit(): void {
+    this.registrarDisabled = false;
   }
 
   initForm(): void {
@@ -113,6 +118,7 @@ export class CadastroUsuarioComponent {
       } else {
         this.pessoa.tipoDocumento = EnumDocumento.CPF;
       }
+      this.registrarDisabled = true;
 
       this.loginService.cadastrar(this.pessoa).subscribe({
         next: (response) => {

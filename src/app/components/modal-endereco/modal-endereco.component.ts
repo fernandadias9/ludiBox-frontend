@@ -25,6 +25,7 @@ export class ModalEnderecoComponent implements OnInit {
     return this._enderecoEditando;
   }
   private _enderecoEditando: any = null;
+  registrarDisabled = false;
 
   enderecoForm: FormGroup;
 
@@ -73,6 +74,7 @@ export class ModalEnderecoComponent implements OnInit {
 
   ngOnInit(): void {
     this.setupSemNumeroListener();
+    this.registrarDisabled = false;
   }
 
   setupSemNumeroListener() {
@@ -144,6 +146,7 @@ export class ModalEnderecoComponent implements OnInit {
 
   salvar() {
     if (this.enderecoForm.valid) {
+      this.registrarDisabled = true;
       const dados = this.enderecoForm.value;
       dados.cep = Number(String(dados.cep).replace(/\D/g, ''));
 
