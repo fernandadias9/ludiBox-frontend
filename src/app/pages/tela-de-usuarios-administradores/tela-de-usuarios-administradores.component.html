@@ -3,8 +3,8 @@
     <a routerLink="/cadastro-adm" class="self-start mb-4 ml-4 font-semibold hover:underline">
       + Adicionar Administrador
     </a>
-
-    <div class="w-full max-w-4xl overflow-x-auto">
+ 
+    <div class="w-full max-w-5xl overflow-x-auto">
       <table class="table-auto w-full text-left border border-gray-300">
         <thead class="bg-primary text-gray-900">
           <tr>
@@ -20,13 +20,20 @@
           <tr *ngFor="let adm of administradores" class="hover:border border-gray-300">
             <td class="px-4 py-2 border-2 border-gray-300 text-center">{{ adm.nome }}</td>
             <td class="px-4 py-2 border-2 border-gray-300 text-center">{{ adm.email }}</td>
-            <td class="px-4 py-2 border-2 border-gray-300 text-center">{{ adm.valorDocumento }}</td>
-            <td class="px-4 py-2 border-2 border-gray-300 text-center">{{ adm.telefone }}</td>
-            <td class="px-4 py-2 border-2 border-gray-300 text-center">✏️</td>
-            <td class="px-4 py-2 border-2 border-gray-300 text-center">🗑️</td>
+            <td class="px-4 py-2 border-2 border-gray-300 text-center">{{ mascaraDocumento(adm.valorDocumento) }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300 text-center">{{ mascaraTelefone(adm.telefone) }}</td>
+            <td class="px-4 py-2 border-2 border-gray-300 text-center cursor-pointer" (click)="abrirModal(adm)">✏️</td>
+            <td class="px-4 py-2 border-2 border-gray-300 text-center cursor-pointer" (click)="excluirAdm(adm.id)">🗑️</td>
           </tr>
         </tbody>
       </table>
     </div>
+ 
+    <app-modal-editar-adm
+      *ngIf="isModalOpen"
+      [adm]="admSelecionado"
+      (onClose)="fecharModal()"
+      (salvar)="salvarAlteracoes($event)">
+    </app-modal-editar-adm>
   </div>
 </app-template-telas-adm>
