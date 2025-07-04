@@ -122,8 +122,12 @@ export class DetalheProdutoComponent implements OnInit {
 
     const periodo = this.form.value.periodoLocacao;
     if (!periodo.inicio || !periodo.final) {
-      alert('Selecione um período válido!');
-      return;
+      Swal.fire({
+        icon: 'warning',
+        title: 'Período inválido',
+        text: 'Selecione um período válido!',
+        confirmButtonText: 'Ok'
+      });
     }
 
     const produtoLocacao = {
