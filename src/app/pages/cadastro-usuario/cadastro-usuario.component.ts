@@ -20,6 +20,7 @@ export class CadastroUsuarioComponent implements OnInit {
   cadastroForm: FormGroup;
   formSubmitted = false;
   registrarDisabled = false;
+  showTermsModal = false;
 
   public pessoa: Pessoa = {
     id: 0,
@@ -46,12 +47,25 @@ export class CadastroUsuarioComponent implements OnInit {
 
   initForm(): void {
     this.cadastroForm = this.formBuilder.group({
-      nome: [this.pessoa.nome, [Validators.required, Validators.minLength(10), Validators.maxLength(50)]],
+      nome: [
+        this.pessoa.nome,
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(50),
+        ],
+      ],
       valorDocumento: [this.pessoa.valorDocumento, Validators.required],
       email: [this.pessoa.email, [Validators.required, Validators.email]],
       telefone: [this.pessoa.telefone, Validators.required],
-      senha: [this.pessoa.senha, [Validators.required, Validators.minLength(6), Validators.maxLength(10)]
-    ],
+      senha: [
+        this.pessoa.senha,
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(10),
+        ],
+      ],
       confirmarSenha: [this.confirmarSenha, Validators.required],
       aceitaTermos: [this.aceitaTermos, Validators.requiredTrue],
     });
@@ -209,5 +223,13 @@ export class CadastroUsuarioComponent implements OnInit {
   onTermsChange(event: any): void {
     this.aceitaTermos = event.target.checked;
     this.f['aceitaTermos'].setValue(this.aceitaTermos);
+  }
+
+  openTermsModal(): void {
+    this.showTermsModal = true;
+  }
+
+  closeTermsModal(): void {
+    this.showTermsModal = false;
   }
 }
