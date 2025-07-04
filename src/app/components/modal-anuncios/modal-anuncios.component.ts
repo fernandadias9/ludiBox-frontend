@@ -67,8 +67,8 @@ export class ModalAnunciosComponent implements OnInit {
   }
 
 salvar() {
-  this.registrarDisabled = true;
   if (this.produtoForm.valid) {
+    this.registrarDisabled = true;
     const produto: Produto = this.produtoForm.value;
     produto.imagens = [...this.imagensExistentes];
 
@@ -90,7 +90,7 @@ salvar() {
             Swal.fire({
               icon: 'error',
               title: 'Não foi possível editar anúncio',
-              text: err.error?.message || err.message,
+              text: err.error,
               showConfirmButton: false,
               timer: 2000
             });
@@ -109,7 +109,7 @@ salvar() {
           this.fechar();
         },
         error: (err) => {
-          console.log('Erro:', err);
+          console.log('err', err);
 
           const mensagem =
             err.error?.detalhes ||
@@ -129,8 +129,7 @@ salvar() {
           } else {
             Swal.fire({
               icon: 'error',
-              title: 'Não foi possível criar anúncio',
-              text: mensagem,
+              text: err.error,
               showConfirmButton: false,
               timer: 3000
             });

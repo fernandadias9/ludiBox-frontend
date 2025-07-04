@@ -1,0 +1,44 @@
+<div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg transition-all duration-300 ease-in-out">
+    <div class="px-8 py-6 border-b border-gray-200">
+      <h2 class="text-3xl font-bold text-gray-800 text-center tracking-tight">Editar Administrador</h2>
+      <p class="text-center text-sm text-gray-500 mt-1">Atualize as informações abaixo</p>
+    </div>
+    <div class="px-8 py-6">
+      <form class="space-y-5">
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">Nome <span class="text-red-500">*</span></label>
+          <app-input type="text" [(ngModel)]="adm.nome" name="nome" placeholder="Digite o nome completo" class="w-full"></app-input>
+        </div>
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">E-mail <span class="text-red-500">*</span></label>
+          <app-input type="email" [(ngModel)]="adm.email" name="email" placeholder="Digite o e-mail" class="w-full"></app-input>
+        </div>
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">Telefone <span class="text-red-500">*</span></label>
+          <app-input type="tel" [(ngModel)]="adm.telefone" name="telefone" placeholder="Digite o telefone" class="w-full" mask="(00) 0000-0000"></app-input>
+        </div>
+      </form>
+    </div>
+    <div class="px-8 py-5 bg-gray-50 rounded-b-2xl border-t border-gray-200">
+      <div class="flex justify-between items-center flex-wrap gap-4">
+        <button type="button"
+          class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-orangeHover active:bg-orangeActive transition-all duration-300 transform hover:scale-105"
+          (click)="abrirModal()">
+          <i class="bi bi-key mr-2"></i>
+          Alterar Senha
+        </button>
+        <div class="flex gap-4 ml-auto">
+          <app-button-secondary class="mt-1" title="Cancelar" (click)="onCancelar()"></app-button-secondary>
+          <app-button-primary title="Salvar" (click)="onSalvar()"></app-button-primary>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-editar-senha-adm
+  *ngIf="isModalSenhaOpen"
+  [idUsuario]="adm.id"
+  (onClose)="fecharModalSenha()">
+</app-modal-editar-senha-adm>

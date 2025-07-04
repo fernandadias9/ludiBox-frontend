@@ -74,6 +74,8 @@ import { TelaAdmValorBrutoComponent } from './pages/tela-adm-valor-bruto/tela-ad
 import { TotpModalComponent } from './components/totp-modal/totp-modal.component';
 import { StateAbbrPipe } from './utils/pipeSiglaEstado';
 import { TelaPagamentosAdmComponent } from './pages/tela-pagamentos-adm/tela-pagamentos-adm.component';
+import { ModalEditarAdmComponent } from './components/modal-editar-adm/modal-editar-adm.component';
+import { ModalEditarSenhaAdmComponent } from './components/modal-editar-senha-adm/modal-editar-senha-adm.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -129,7 +131,9 @@ export const MY_FORMATS = {
     TelaAdmValorBrutoComponent,
     TotpModalComponent,
     StateAbbrPipe,
-    TelaPagamentosAdmComponent
+    TelaPagamentosAdmComponent,
+    ModalEditarAdmComponent,
+    ModalEditarSenhaAdmComponent
   ],
   imports: [
     BrowserModule,

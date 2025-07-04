@@ -7,7 +7,7 @@
     <form [formGroup]="enderecoForm" (ngSubmit)="salvar()" class="grid gap-3 mt-4">
       <div class="flex gap-2 w-full">
         <app-input formControlName="nome" id="nome" name="nome" label="Nome do endereço *"
-          placeholder="Casa, festa da Nina... *" [required]="true" [maxlength]="100" for="nome" class="w-2/3"
+          [required]="true" [maxlength]="100" for="nome" class="w-2/3"
           [invalid]="enderecoForm.get('nome')?.invalid && enderecoForm.get('nome')?.touched" />
 
         <app-input formControlName="cep" id="cep" name="cep" label="CEP *" for="cep" class="w-1/3" [required]="true"
@@ -57,7 +57,7 @@
 
       <div class="flex items-center justify-end gap-3 pt-4">
         <app-button-secondary title="Voltar" (click)="fechar()"></app-button-secondary>
-        <app-button-primary title="{{ enderecoEditando ? 'Salvar' : 'Registrar' }}"></app-button-primary>
+        <app-button-primary title="{{ enderecoEditando ? 'Salvar' : 'Registrar' }}" [disabled]="registrarDisabled"></app-button-primary>
       </div>
     </form>
   </div>

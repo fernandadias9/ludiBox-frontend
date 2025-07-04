@@ -9,10 +9,9 @@
       <app-input
         formControlName="email"
         for="email"
-        label="E-mail"
+        label="E-mail *"
         id="email"
         type="email"
-        placeholder="E-mail *"
         aria-placeholder="digite seu e-mail"
         name="email"
         [invalid]="isFieldInvalid('email')"
@@ -21,10 +20,9 @@
       <app-input
         formControlName="senha"
         for="password"
-        label="Senha"
+        label="Senha *"
         id="password"
         type="password"
-        placeholder="Senha *"
         aria-placeholder="digite sua senha"
         name="password"
         [invalid]="isFieldInvalid('senha')"
@@ -41,7 +39,7 @@
       title="Entrar"
       (action)="realizarLogin()"
     ></app-button-primary>
-    
+
     <div class="flex flex-col items-center mt-4 xl:mt-7 gap-1 lg:gap-2">
       <p class="text-placeholder_color font-bold text-xs lg:text-sm">Não possui uma conta?</p>
       <app-button-secondary
