@@ -36,7 +36,18 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "static.json",
+                "input": "src",
+                "output": "."
+              },
+              {
+                "glob": "_redirects",
+                "input": "src",
+                "output": "."
               }
+              
             ],
             "styles": [
               "src/styles.scss",
