@@ -8,14 +8,13 @@ import { ValorBrutoMesDTO } from '../../shared/model/dto/ValorBrutoMesDTO';
   templateUrl: './tela-adm-valor-bruto.component.html',
   styleUrl: './tela-adm-valor-bruto.component.scss'
 })
-
 export class TelaAdmValorBrutoComponent implements OnInit {
   valorBrutoMes: ValorBrutoMesDTO[] = [];
+  totalPeriodo: number = 0;
+
   filtro = {
     dataInicio: '',
-    dataFim: '',
-    valorMax: '',
-    valorMin: ''
+    dataFim: ''
   };
 
   constructor(private locacaoService: LocacaoService) { }
@@ -25,50 +24,58 @@ export class TelaAdmValorBrutoComponent implements OnInit {
   }
 
   buscarComFiltroMensal() {
-  if (!this.filtro.dataInicio || !this.filtro.dataFim) {
-    this.locacaoService.listarValorBrutoMensal('', '')
+    if (!this.filtro.dataInicio || !this.filtro.dataFim) {
+      this.locacaoService.listarValorBrutoMensal('', '')
+        .subscribe({
+          next: (dados) => {
+            this.valorBrutoMes = dados;
+            this.calcularTotalPeriodo();
+          },
+          error: (err) => {
+            console.error('Erro ao buscar valores brutos', err);
+            this.valorBrutoMes = [];
+            this.totalPeriodo = 0;
+          }
+        });
+      return;
+    }
+
+    const [inicioAno, inicioMes] = this.filtro.dataInicio.split('-').map(Number);
+    const [fimAno, fimMes] = this.filtro.dataFim.split('-').map(Number);
+
+    const dataInicio = `${inicioAno}-${String(inicioMes).padStart(2, '0')}-01`;
+    const ultimoDia = new Date(fimAno, fimMes, 0).getDate();
+    const dataFim = `${fimAno}-${String(fimMes).padStart(2, '0')}-${ultimoDia}`;
+
+    this.locacaoService.listarValorBrutoMensal(dataInicio, dataFim)
       .subscribe({
         next: (dados) => {
           this.valorBrutoMes = dados;
+          this.calcularTotalPeriodo();
+          console.log('Dados carregados:', dados);
         },
         error: (err) => {
           console.error('Erro ao buscar valores brutos', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro ao carregar dados',
+            text: 'Tente novamente mais tarde.',
+            confirmButtonText: 'Ok',
+          });
+          this.valorBrutoMes = [];
+          this.totalPeriodo = 0;
         }
       });
-    return;
   }
 
-  const [inicioAno, inicioMes] = this.filtro.dataInicio.split('-').map(Number);
-  const [fimAno, fimMes] = this.filtro.dataFim.split('-').map(Number);
-
-  const dataInicio = `${inicioAno}-${String(inicioMes).padStart(2, '0')}-01`;
-  const ultimoDia = new Date(fimAno, fimMes, 0).getDate();
-  const dataFim = `${fimAno}-${String(fimMes).padStart(2, '0')}-${ultimoDia}`;
-
-  this.locacaoService.listarValorBrutoMensal(dataInicio, dataFim)
-    .subscribe({
-      next: (dados) => {
-        this.valorBrutoMes = dados;
-        console.log('Dados carregados:', dados);
-      },
-      error: (err) => {
-        console.error('Erro ao buscar valores brutos', err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Erro ao carregar dados',
-          text: 'Tente novamente mais tarde.',
-          confirmButtonText: 'Ok',
-        });
-      }
-    });
-}
+  calcularTotalPeriodo() {
+    this.totalPeriodo = this.valorBrutoMes.reduce((soma, item) => soma + (item.valor || 0), 0);
+  }
 
   limparFiltros() {
     this.filtro = {
       dataInicio: '',
-      dataFim: '',
-      valorMin: null,
-      valorMax: null
+      dataFim: ''
     };
     this.buscarComFiltroMensal();
   }
