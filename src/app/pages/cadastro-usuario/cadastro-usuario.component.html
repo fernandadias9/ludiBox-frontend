@@ -45,21 +45,43 @@
       </div>
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-        <app-input formControlName="email" [(value)]="pessoa.email" id="email" name="email" label="Email *"
-          placeholder="exemplo@gmail.com" [required]="true" class="w-full md:w-3/5" [invalid]="
+        <app-input
+          formControlName="email"
+          [(value)]="pessoa.email"
+          id="email"
+          name="email"
+          label="Email *"
+          [required]="true"
+          class="w-full md:w-3/5"
+          [invalid]="
             cadastroForm.get('email')?.invalid &&
             cadastroForm.get('email')?.touched
           " />
 
-        <app-input formControlName="telefone" [(value)]="pessoa.telefone" id="phone" name="phone" label="Telefone *"
-          placeholder="(99) 99999-9999" [required]="true" class="w-full md:w-2/5" [invalid]="
+        <app-input
+          formControlName="telefone"
+          [(value)]="pessoa.telefone"
+          id="phone"
+          name="phone"
+          label="Telefone *"
+          [required]="true"
+          class="w-full md:w-2/5"
+          [invalid]="
             cadastroForm.get('telefone')?.invalid &&
             cadastroForm.get('telefone')?.touched" mask="(99) 99999-9999" />
       </div>
 
       <div class="grid gap-1.5 md:flex xl:gap-2 w-full">
-        <app-input formControlName="senha" [(value)]="pessoa.senha" id="password" name="password" label="Senha *"
-          type="password" [required]="true" [invalid]="
+        <app-input
+          class="w-full md:w-3/5"
+          formControlName="senha"
+          [(value)]="pessoa.senha"
+          id="password"
+          name="password"
+          label="Senha *"
+          type="password"
+          [required]="true"
+          [invalid]="
             cadastroForm.get('senha')?.invalid &&
             cadastroForm.get('senha')?.touched
           " [customErrorMsg]="
@@ -74,9 +96,17 @@
             cadastroForm.get('senha')?.touched
           " />
 
-        <app-input formControlName="confirmarSenha" [(value)]="confirmarSenha" id="passwordConfirm"
-          name="passwordConfirm" label="Confirmar Senha *" [required]="true" type="password"
-          placeholder="Confirmar Senha *" [invalid]="isFieldInvalid('confirmarSenha')" />
+        <app-input
+          class="w-full md:w-2/5"
+          formControlName="confirmarSenha"
+          [(value)]="confirmarSenha"
+          id="passwordConfirm"
+          name="passwordConfirm"
+          label="Confirmar Senha *"
+          [required]="true"
+          type="password"
+          [invalid]="isFieldInvalid('confirmarSenha')"
+        />
       </div>
 
       <div class="flex items-start mt-2 lg:mt-4 mb-5 px-2">
@@ -295,7 +325,7 @@
       </div>
 
       <div class="flex flex-col w-full items-center gap-3 pb-3">
-        <app-button-primary title="Registrar" />
+        <app-button-primary title="Registrar" [disabled]="registrarDisabled"/>
 
         <app-button-secondary title="Voltar" routerLink="/login" />
       </div>

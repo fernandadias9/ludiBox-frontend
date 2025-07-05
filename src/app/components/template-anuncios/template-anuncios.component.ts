@@ -35,6 +35,8 @@ export class TemplateAnunciosComponent implements OnInit {
   showCartMenu = false;
   valorTotalLocacao: number = 0;
   hasLocacao: boolean = false;
+  showFilterModal = false;
+  cidadeFiltro: string = '';
   @ViewChild('cartContainer', { read: ElementRef }) cartContainer!: ElementRef;
   @ViewChild("scrollContainer", { static: true }) scrollContainer!: ElementRef
 
@@ -42,6 +44,7 @@ export class TemplateAnunciosComponent implements OnInit {
 
   @Output() scrollEvent = new EventEmitter<void>()
   @Output() searchTermChange = new EventEmitter<string>();
+  @Output() cidadeFilterChange = new EventEmitter<string>();
   searchTerm: string = '';
 
   constructor(
@@ -65,6 +68,34 @@ export class TemplateAnunciosComponent implements OnInit {
 
   onInputChange() {
     this.searchTermChange.emit(this.searchTerm);
+  }
+
+  toggleFilterModal() {
+    this.showFilterModal = !this.showFilterModal;
+  }
+
+  onCidadeFilterChange() {
+    this.cidadeFilterChange.emit(this.cidadeFiltro);
+  }
+
+  limparFiltros() {
+    this.cidadeFiltro = '';
+    this.searchTerm = '';
+    this.searchTermChange.emit('');
+    this.cidadeFilterChange.emit('');
+    this.showFilterModal = false;
+  }
+
+  aplicarFiltros() {
+    this.onCidadeFilterChange();
+    this.showFilterModal = false;
+  }
+
+  // Método para fechar modal ao clicar fora
+  closeFilterModal(event: Event) {
+    if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
+      this.showFilterModal = false;
+    }
   }
 
   usuarioLogado() {
