@@ -4,28 +4,28 @@ import { Observable } from "rxjs";
 import { Pessoa } from "../model/entity/pessoa";
 import { PerfilDTO } from "../model/dto/PerfilDTO";
 import { environment } from "../../../environments/environment";
-
+ 
 @Injectable({
   providedIn: 'root'
 })
 export class PessoaService {
-
+ 
   private readonly API = `${environment.apiURL}/pessoa`;
-
+ 
   constructor(private httpCliente: HttpClient) { }
-
+ 
   buscarPerfilPorId(id: number): Observable<PerfilDTO> {
     return this.httpCliente.get<PerfilDTO>(`${this.API}/buscar_perfil/${id}`);
   }
-
+ 
   atualizarPerfil(id: number, dadosAtualizados: any): Observable<any> {
     return this.httpCliente.patch(`${this.API}/atualizar/${id}`, dadosAtualizados);
   }
-
+ 
   excluirPessoa(id: number): Observable<any> {
     return this.httpCliente.put(`${this.API}/excluir/${id}`, {});
   }
-
+ 
   atualizarFoto(id: number, foto: File): Observable<any> {
     const formData = new FormData();
     formData.append('imagem', foto);
@@ -35,12 +35,24 @@ export class PessoaService {
       responseType: 'text' as 'json'
     });
   }
-
+ 
   buscarAdministradores(): Observable<Pessoa[]> {
     return this.httpCliente.get<Pessoa[]>(`${this.API}/buscarAdministradores`);
   }
-
+ 
   buscarUsuariosAtivos(): Observable<Pessoa[]> {
     return this.httpCliente.get<Pessoa[]>(`${this.API}/quantidade-ativos`);
+  }
+ 
+  atualizarAdministrador(id: number, dados: Partial<Pessoa>): Observable<Pessoa> {
+    return this.httpCliente.patch<Pessoa>(`${this.API}/atualizarAdministrador/${id}`, dados);
+  }
+ 
+  alterarSenhaAdm(id: number, novaSenha: string): Observable<any> {
+    return this.httpCliente.patch(`${this.API}/alterarSenhaAdm/${id}`, { novaSenha });
+  }
+ 
+  excluirAdm(id: number): Observable<any> {
+    return this.httpCliente.delete(`${this.API}/excluirAdm/${id}`);
   }
 }

@@ -23,7 +23,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() placeholder = ""
   @Input() name = ""
   @Input() required = false
-  @Input() invalid = false 
+  @Input() invalid = false
   @Input() mask?: string
   @Input() maxlength?: number;
   @Input() numericOnly = false;
@@ -46,7 +46,16 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   writeValue(value: any): void {
-    this.value = value
+    this.value = value;
+
+    if (this.currencyFormat) {
+      if (value === null || value === '' || value === undefined) {
+        this.rawValue = "";
+      } else {
+        const centavos = Math.round(value * 100);
+        this.rawValue = centavos.toString();
+      }
+    }
   }
 
   registerOnChange(fn: any): void {

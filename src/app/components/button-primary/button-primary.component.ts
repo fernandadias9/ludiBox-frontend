@@ -10,11 +10,11 @@ export class ButtonPrimaryComponent {
   @Input() disabled = false
   @Input() type = "submit"
 
-  @Output() click: EventEmitter<void> = new EventEmitter<void>()
+  @Output() action: EventEmitter<void> = new EventEmitter<void>()
 
   onClick() {
     if (!this.disabled) {
-      this.click.emit()
+      this.action.emit()
     }
   }
 }

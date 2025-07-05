@@ -7,7 +7,7 @@ export class AnuncioLeituraDto {
   preco: number;
   idAnunciante: number;
   nomeAnunciante: string;
-  imagemanunciante: string;
+  imagemAnunciante: string;
   status: StatusAnuncio;
   imagem: string;
   endereco: Endereco;

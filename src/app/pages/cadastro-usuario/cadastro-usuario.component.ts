@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, type FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '../../shared/service/LoginService';
 import type { Pessoa } from '../../shared/model/entity/pessoa';
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './cadastro-usuario.component.html',
   styleUrl: './cadastro-usuario.component.scss',
 })
-export class CadastroUsuarioComponent {
+export class CadastroUsuarioComponent implements OnInit {
   isPessoaJuridica = false;
   aceitaTermos = false;
   snChecked = false;
@@ -19,6 +19,8 @@ export class CadastroUsuarioComponent {
   confirmarSenha = '';
   cadastroForm: FormGroup;
   formSubmitted = false;
+  registrarDisabled = false;
+  showTermsModal = false;
 
   public pessoa: Pessoa = {
     id: 0,
@@ -39,14 +41,31 @@ export class CadastroUsuarioComponent {
     this.initForm();
   }
 
+  ngOnInit(): void {
+    this.registrarDisabled = false;
+  }
+
   initForm(): void {
     this.cadastroForm = this.formBuilder.group({
-      nome: [this.pessoa.nome, [Validators.required, Validators.minLength(10), Validators.maxLength(50)]],
+      nome: [
+        this.pessoa.nome,
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(50),
+        ],
+      ],
       valorDocumento: [this.pessoa.valorDocumento, Validators.required],
       email: [this.pessoa.email, [Validators.required, Validators.email]],
       telefone: [this.pessoa.telefone, Validators.required],
-      senha: [this.pessoa.senha, [Validators.required, Validators.minLength(6), Validators.maxLength(10)]
-    ],
+      senha: [
+        this.pessoa.senha,
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(10),
+        ],
+      ],
       confirmarSenha: [this.confirmarSenha, Validators.required],
       aceitaTermos: [this.aceitaTermos, Validators.requiredTrue],
     });
@@ -113,6 +132,7 @@ export class CadastroUsuarioComponent {
       } else {
         this.pessoa.tipoDocumento = EnumDocumento.CPF;
       }
+      this.registrarDisabled = true;
 
       this.loginService.cadastrar(this.pessoa).subscribe({
         next: (response) => {
@@ -203,5 +223,13 @@ export class CadastroUsuarioComponent {
   onTermsChange(event: any): void {
     this.aceitaTermos = event.target.checked;
     this.f['aceitaTermos'].setValue(this.aceitaTermos);
+  }
+
+  openTermsModal(): void {
+    this.showTermsModal = true;
+  }
+
+  closeTermsModal(): void {
+    this.showTermsModal = false;
   }
 }
