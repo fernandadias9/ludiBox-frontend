@@ -8,35 +8,42 @@ import { LoginService } from "../shared/service/LoginService";
 export class RequestInterceptor implements HttpInterceptor {
   private PUBLIC_PATHS = [
     '/produto/listar',
-    '/^\/produto\/listarComFiltro(\?.*)?$/',
     '/produto/buscar',
     '/auth/login',
     '/auth/cadastrar_adm',
     '/auth/nova-pessoa',
     '/api/password/reset',
-    '/^\/avaliacoes\/produto\/\d+$/'
   ];
 
-  constructor(private loginService: LoginService, private router: Router) { }
+  private PUBLIC_REGEX_PATHS = [
+    /^\/produto\/listarComFiltro(\?.*)?$/,
+    /^\/avaliacoes\/produto\/\d+$/,
+  ];
+
+  constructor(private loginService: LoginService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
     if (req.method === 'OPTIONS') {
       return next.handle(req);
     }
 
-    if (this.PUBLIC_PATHS.some(path => req.url.includes(path))) {
+    const requestPath = new URL(req.url, 'http://dummybase').pathname;
+
+    const isPublic = this.PUBLIC_PATHS.some(path => requestPath.includes(path)) ||
+                     this.PUBLIC_REGEX_PATHS.some(regex => regex.test(requestPath));
+
+    if (isPublic) {
       return next.handle(req);
     }
 
     const token = this.loginService.token;
-
     if (token) {
       const cloned = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${token}`)
       });
       return next.handle(cloned);
     }
+
     return next.handle(req);
   }
 }
