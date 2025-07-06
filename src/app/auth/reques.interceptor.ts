@@ -8,7 +8,7 @@ import { LoginService } from "../shared/service/LoginService";
 export class RequestInterceptor implements HttpInterceptor {
   private PUBLIC_PATHS = [
     '/produto/listar',
-    '/produto/listarComFiltro',
+    '/^\/produto\/listarComFiltro(\?.*)?$/',
     '/produto/buscar',
     '/auth/login',
     '/auth/cadastrar_adm',
