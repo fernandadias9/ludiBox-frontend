@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ProdutoService } from '../../shared/service/produto.service';
 import { Produto } from '../../shared/model/entity/produto';
 import Swal from 'sweetalert2';
@@ -9,9 +9,10 @@ import Swal from 'sweetalert2';
   templateUrl: './modal-anuncios.component.html',
   styleUrl: './modal-anuncios.component.scss',
 })
-export class ModalAnunciosComponent {
+export class ModalAnunciosComponent implements OnInit {
   @Output() onClose = new EventEmitter<void>();
   @Output() onProdutoAdicionado = new EventEmitter<void>();
+  registrarDisabled = false;
 
   @Input() set produtoEditando(value: Produto | null) {
     this._produtoEditando = value;
@@ -55,12 +56,19 @@ export class ModalAnunciosComponent {
       largura: [''],
       comprimento: [''],
       pesoSuportado: [''],
-      preco: ['', [Validators.required]],
+      preco: ['', [Validators.required]]
+    }, {
+      validators: this.imagensValidator.bind(this)
     });
+  }
+
+  ngOnInit(): void {
+    this.registrarDisabled = false;
   }
 
 salvar() {
   if (this.produtoForm.valid) {
+    this.registrarDisabled = true;
     const produto: Produto = this.produtoForm.value;
     produto.imagens = [...this.imagensExistentes];
 
@@ -82,65 +90,52 @@ salvar() {
             Swal.fire({
               icon: 'error',
               title: 'Não foi possível editar anúncio',
-              text: err.error?.message || err.message,
+              text: err.error,
               showConfirmButton: false,
               timer: 2000
             });
           }
         });
     } else {
-      if (this.arquivosImagens.length > 0) {
-        this.produtoService.salvar(produto, this.arquivosImagens).subscribe({
-          next: () => {
+      this.produtoService.salvar(produto, this.arquivosImagens).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Anúncio criado com sucesso',
+            showConfirmButton: false,
+            timer: 2000
+          });
+          this.onProdutoAdicionado.emit();
+          this.fechar();
+        },
+        error: (err) => {
+          console.log('err', err);
+
+          const mensagem =
+            err.error?.detalhes ||
+            err.error?.erro ||
+            err.error?.message ||
+            err.message ||
+            'Erro desconhecido';
+
+          if (err.status === 422) {
             Swal.fire({
-              icon: 'success',
-              title: 'Anúncio criado com sucesso',
+              icon: 'error',
+              title: 'Conteúdo inválido, Evite SPAM ou linguagem ofensiva.',
               showConfirmButton: false,
-              timer: 2000
+              timer: 3000,
+              timerProgressBar: true
             });
-            this.onProdutoAdicionado.emit();
-            this.fechar();
-          },
-          error: (err) => {
-            console.log('Erro:', err);
-
-            const mensagem =
-              err.error?.detalhes ||
-              err.error?.erro ||
-              err.error?.message ||
-              err.message ||
-              'Erro desconhecido';
-
-            if (err.status === 422) {
-              Swal.fire({
-                icon: 'error',
-                title: 'Conteúdo inválido, Evite SPAM ou linguagem ofensiva.',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true
-              });
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Não foi possível criar anúncio',
-                text: mensagem,
-                showConfirmButton: false,
-                timer: 3000
-              });
-            }
+          } else {
+            Swal.fire({
+              icon: 'error',
+              text: err.error,
+              showConfirmButton: false,
+              timer: 3000
+            });
           }
-        });
-      } else {
-        this.produtoForm.markAllAsTouched();
-        Swal.fire({
-          icon: 'error',
-          title: 'Selecione pelo menos uma imagem para o anúncio',
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true
-        });
-        return;
-      }
+        }
+      });
     }
   } else {
     this.produtoForm.markAllAsTouched();
@@ -149,6 +144,7 @@ salvar() {
 
   removerImagemExistente(index: number) {
     this.imagensExistentes.splice(index, 1);
+    this.produtoForm.updateValueAndValidity();
   }
 
   fechar() {
@@ -157,5 +153,26 @@ salvar() {
     this.arquivosImagens = [];
     this.produtoForm.reset();
     this.onClose.emit();
+  }
+
+  imagensValidator(control: AbstractControl): ValidationErrors | null {
+    if (this.produtoEditando && this.imagensExistentes.length > 0) {
+      return null;
+    }
+
+    if (!this.produtoEditando && this.arquivosImagens.length === 0) {
+      return { imagensObrigatorias: true };
+    }
+
+    if (this.produtoEditando && this.imagensExistentes.length === 0 && this.arquivosImagens.length === 0) {
+      return { imagensObrigatorias: true };
+    }
+
+    return null;
+  }
+
+  onArquivosAlterados(arquivos: File[]) {
+    this.arquivosImagens = arquivos;
+    this.produtoForm.updateValueAndValidity();
   }
 }

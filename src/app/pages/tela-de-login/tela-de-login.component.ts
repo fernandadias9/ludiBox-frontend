@@ -61,6 +61,7 @@ export class TelaDeLoginComponent implements OnInit {
   }
 
   realizarLogin() {
+    if (this.formSubmitted) return;
     this.formSubmitted = true;
 
     if (this.loginForm.invalid) {

@@ -1,9 +1,6 @@
-import { EnumDocumento } from "../enum/EnumDocumento";
-import { EnumPerfil } from "../enum/EnumPerfil";
-import { EnumStatus } from "../enum/EnumStatus";
-import { Endereco } from "./endereco";
+import { EnumDocumento } from '../enum/EnumDocumento';
 
-export class Pessoa{
+export class Pessoa {
   id: number;
   nome: string;
   email: string;
@@ -11,4 +8,5 @@ export class Pessoa{
   senha: string;
   tipoDocumento: EnumDocumento;
   valorDocumento: string;
+  imagemUsuarioEmBase64?: string;
 }

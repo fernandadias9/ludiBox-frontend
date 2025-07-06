@@ -1,3 +1,4 @@
+import { Endereco } from "../entity/endereco";
 import { StatusAnuncio } from "../enum/StatusAnuncio.enum";
 
 export class AnuncioLeituraDto {
@@ -6,7 +7,8 @@ export class AnuncioLeituraDto {
   preco: number;
   idAnunciante: number;
   nomeAnunciante: string;
-  imagemanunciante: string;
+  imagemAnunciante: string;
   status: StatusAnuncio;
   imagem: string;
+  endereco: Endereco;
 }

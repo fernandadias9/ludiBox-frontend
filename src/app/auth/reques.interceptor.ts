@@ -10,13 +10,14 @@ export class RequestInterceptor implements HttpInterceptor {
     '/produto/listar',
     '/produto/listarComFiltro',
     '/produto/buscar',
-    '/auth/authenticatePessoa',
+    '/auth/login',
     '/auth/cadastrar_adm',
     '/auth/nova-pessoa',
-    '/api/password/reset'
+    '/api/password/reset',
+    '/^\/avaliacoes\/produto\/\d+$/'
   ];
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -27,7 +28,9 @@ export class RequestInterceptor implements HttpInterceptor {
     if (this.PUBLIC_PATHS.some(path => req.url.includes(path))) {
       return next.handle(req);
     }
+
     const token = this.loginService.token;
+
     if (token) {
       const cloned = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${token}`)

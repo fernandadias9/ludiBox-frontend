@@ -1,8 +1,8 @@
-<app-template-anuncios (searchTermChange)="onSearch($event)" (scrollEvent)="carregarAnuncios()">
+<app-template-anuncios (searchTermChange)="onSearch($event)" (cidadeFilterChange)="onCidadeFilter($event)" (scrollEvent)="carregarAnuncios()">
   <div class="flex flex-wrap justify-center gap-9 p-6 w-full h-full">
     <ng-container *ngFor="let anuncio of anuncios">
       <app-card-anuncios [id]="anuncio.id" [imagem]="anuncio.imagem" [itemName]="anuncio.nome"
-        [itemPrice]="anuncio.preco" [userName]="anuncio.nomeAnunciante">
+        [itemPrice]="anuncio.preco" [userName]="anuncio.nomeAnunciante" [userImage]="anuncio?.imagemAnunciante" [itemCidade]="anuncio?.endereco?.cidade" [itemEstado]="anuncio?.endereco?.estado" >
       </app-card-anuncios>
     </ng-container>
 
