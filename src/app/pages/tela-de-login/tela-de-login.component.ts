@@ -30,6 +30,7 @@ export class TelaDeLoginComponent implements OnInit {
   loginForm: FormGroup;
   formSubmitted = false;
   public idUsuario: number;
+  registrarDisabled = false;
 
   constructor(
     private service: LoginService,
@@ -43,6 +44,7 @@ export class TelaDeLoginComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogado();
+    this.registrarDisabled = false;
   }
 
   initForm(): void {
@@ -71,6 +73,7 @@ export class TelaDeLoginComponent implements OnInit {
 
     const email = this.loginForm.value.email;
     const senha = this.loginForm.value.senha;
+    this.registrarDisabled = true;
 
     this.service.login(email, senha).subscribe({
       next: (res) => {
@@ -87,6 +90,7 @@ export class TelaDeLoginComponent implements OnInit {
         Swal.fire("Erro", mensagem, "error");
       }
     });
+    this.registrarDisabled = false;
   }
 
   abrirModalTotp(tempToken: string) {

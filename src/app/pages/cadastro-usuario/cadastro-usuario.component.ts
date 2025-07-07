@@ -172,6 +172,7 @@ export class CadastroUsuarioComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+    this.registrarDisabled = false;
   }
 
   mostrarMensagemErroValidacao() {

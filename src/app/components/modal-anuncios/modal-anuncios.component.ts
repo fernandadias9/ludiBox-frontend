@@ -140,6 +140,7 @@ salvar() {
   } else {
     this.produtoForm.markAllAsTouched();
   }
+  this.registrarDisabled = false;
 }
 
   removerImagemExistente(index: number) {

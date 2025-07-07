@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="relative">
-        <img [src]="'data:image/jpeg;base64,' + perfil?.imagemUsuarioEmBase64" alt="Usuário"
+        <img [src]="isLoggedIn ? 'data:image/jpeg;base64,' + perfil?.imagemUsuarioEmBase64 : '/images/person-circle.svg'" alt="Usuário"
           class="w-[40px] h-auto md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full bg-gray-500 cursor-pointer object-cover"
           (click)="toggleMenu()" />
         <div *ngIf="menuOpen"

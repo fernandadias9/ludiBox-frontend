@@ -38,6 +38,7 @@
     <app-button-primary
       title="Entrar"
       (action)="realizarLogin()"
+      [disabled]="registrarDisabled"
     ></app-button-primary>
 
     <div class="flex flex-col items-center mt-4 xl:mt-7 gap-1 lg:gap-2">
